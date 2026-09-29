@@ -238,10 +238,10 @@ public class PlayerMovementTests
         Assert.IsTrue(player.IsGrounded, "바닥에 서지 못함");
     }
 
-    // 여우(CharacterController)는 빼고 타일만 찾는다.
+    // 여우(CharacterController)와 코인(트리거)은 빼고 타일만 찾는다.
     static bool GroundBelow(Vector3 point, out float y)
     {
-        foreach (var hit in Physics.RaycastAll(point + Vector3.up * 5f, Vector3.down, 20f))
+        foreach (var hit in Physics.RaycastAll(point + Vector3.up * 5f, Vector3.down, 20f, ~0, QueryTriggerInteraction.Ignore))
             if (hit.collider is not CharacterController)
             {
                 y = hit.point.y;

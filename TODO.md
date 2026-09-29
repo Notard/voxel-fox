@@ -4,7 +4,7 @@
 > 체크 후 `python tools/make_todo_html.py` 실행 → 진행률 갱신 + [todo.html](todo.html) 재생성.
 > 작업별 상세 결과: [WORKLOG.md](WORKLOG.md)
 
-**진행률: 61 / 75**
+**진행률: 67 / 76**
 
 ---
 
@@ -90,11 +90,12 @@
 - [x] EditMode 20/20 · PlayMode 21/21 통과 ✅ 완료 기준
 
 ## 5. 아이템
-- [ ] 복셀 코인 프리팹 제작
-- [ ] `Collectible.cs`: 회전 + 둥실 효과, Trigger 획득, 파티클
-- [ ] MapBuilder로 코인 4개 배치
-- [ ] `GameUI.cs`: 좌상단 `아이템 0 / 4` 카운터
-- [ ] 획득하면 카운트가 오르고 코인이 사라지는지 확인 ✅ 완료 기준
+- [x] 복셀 코인 프리팹 제작
+- [x] `Collectible.cs`: 회전 + 둥실 효과, Trigger 획득, 파티클
+- [x] MapBuilder로 코인 4개 배치
+- [x] `GameUI.cs`: 좌상단 `아이템 0 / 4` 카운터
+- [x] 미리보기: 코인 근접 이미지 + 코인 2개를 먹는 이동 녹화(카운터 포함) → [map_preview.html](map_preview.html)
+- [x] 획득하면 카운트가 오르고 코인이 사라지는지 확인 ✅ 완료 기준
 
 ## 6. 게임 종료 / 성공
 - [ ] `GameManager.cs`: Playing / GameOver / Clear 상태
@@ -128,3 +129,4 @@
 | 2026-09-29 | 4-2. 카메라 거리 · 가운데 고정 | 사용자 피드백: 카메라를 1.5배 멀리, 여우를 가운데에 → 16.5m, 수평 지연 제거 · 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 4-2 되돌림 | Game 창 Scale 5배 때문에 크게 보였던 것 → 4-1 카메라로 복귀 · 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 4-3. 점프 거리 | 사용자 피드백: 점프가 짧아 구멍에 잘 빠짐 → 높이 1.5m·중력 -15, 2.08m → 2.68m · 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |
+| 2026-09-29 | 5. 아이템 | 6/6 완료 · 복셀 코인 4개 · 반짝이 · 한글 카운터(맑은 고딕) · EditMode 23/23 · PlayMode 26/26 · 상세: [WORKLOG.md](WORKLOG.md) |

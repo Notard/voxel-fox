@@ -48,7 +48,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .steps{margin:14px 0 0;padding:12px 0 0 18px;border-top:1px solid var(--line);font-size:.88rem}
 .steps li{margin:2px 0}
 
-.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 @media (max-width:760px){.gallery{grid-template-columns:1fr}}
 .gallery figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .gallery img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--stage)}
@@ -68,8 +68,8 @@ th{color:var(--muted);font-weight:600}
 </head>
 <body>
 <div class="wrap">
-  <h1>🟩 4x4 타일맵 + 이동 · 애니메이션 미리보기</h1>
-  <p class="muted">3·4단계 · Unity Play 모드에서 캡처 (<code>MovementPreviewRecorder</code>) · <a href="todo.html">할 일</a> · <a href="worklog.html">작업 기록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a></p>
+  <h1>🟩 4x4 타일맵 · 이동 · 애니메이션 · 아이템 미리보기</h1>
+  <p class="muted">3~5단계 · Unity Play 모드에서 캡처 (<code>MovementPreviewRecorder</code>) · <a href="todo.html">할 일</a> · <a href="worklog.html">작업 기록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a></p>
 
   <div class="player">
     <div>
@@ -93,8 +93,9 @@ th{color:var(--muted);font-weight:600}
       <ol class="steps">
         <li>시작 칸 (0, 3)에서 대기</li>
         <li>동쪽으로 걷다가 Space 점프 (높이 1.5m)</li>
-        <li>(2, 3)에서 남쪽으로 꺾음</li>
-        <li>구멍 (2, 1)에 빠져 아래로 떨어짐</li>
+        <li>코인 (3, 3) 획득 → 아이템 1 / 4</li>
+        <li>남쪽으로 코인 (3, 1) 획득 → 2 / 4</li>
+        <li>서쪽 구멍 (2, 1)에 빠져 아래로 떨어짐</li>
       </ol>
       <p class="muted" style="margin:12px 0 0">멈춰 있으면 Idle, 걸으면 Walk(이동 속도에 맞춰 약 3.5배속), Space를 누르면 Jump입니다. 착지할 때 움직이고 있으면 바로 Walk로 이어집니다.</p>
     </div>
@@ -105,6 +106,7 @@ th{color:var(--muted);font-weight:600}
     <figure><img src="preview/map/map_quarter.png" alt="쿼터뷰"><figcaption>게임 화면 (여우를 따라가는 쿼터뷰)</figcaption></figure>
     <figure><img src="preview/map/map_top.png" alt="위에서 본 맵"><figcaption>위에서 본 레이아웃</figcaption></figure>
     <figure><img src="preview/map/map_start_close.png" alt="시작 지점 근접"><figcaption>시작 지점 (여우 크기 비교)</figcaption></figure>
+    <figure><img src="preview/map/coin_close.png" alt="코인 근접"><figcaption>복셀 코인 (지름 0.6m, 돌면서 둥실)</figcaption></figure>
   </div>
 
   <h2>맵 · 조작 정보</h2>
@@ -117,7 +119,7 @@ th{color:var(--muted);font-weight:600}
         <span class="c">C</span><span></span><span class="h">H</span><span class="c">C</span>
         <span></span><span></span><span></span><span class="c">C</span>
       </div>
-      <p class="muted" style="margin:0">S 시작 · H 구멍 · C 아이템 자리 (코인은 5단계에서 놓음)</p>
+      <p class="muted" style="margin:0">S 시작 · H 구멍 · C 코인</p>
     </div>
     <div class="card">
       <table>
@@ -127,6 +129,7 @@ th{color:var(--muted);font-weight:600}
         <tr><td>이동</td><td>3 m/s · ↑ 북쪽, → 동쪽 (격자 축) · 회전 720°/s</td></tr>
         <tr><td>점프</td><td>높이 1.5m · 중력 -15 m/s² · 체공 0.89초 · 달리며 뛰면 2.68m</td></tr>
         <tr><td>애니메이션</td><td>Walk 배속 = 이동 속도 ÷ 0.87 m/s → 발 미끄러짐 최대 1.3cm</td></tr>
+        <tr><td>아이템</td><td>복셀 코인 4개 · 회전 120°/s · 둥실 ±0.1m · 닿으면 반짝이 + 카운터 증가</td></tr>
         <tr><td>충돌</td><td>CharacterController 높이 0.8m · 반지름 0.3m</td></tr>
         <tr><td>카메라</td><td>여우를 따라가는 쿼터뷰 · 45° · 방향 30° · 거리 11m · 화각 40°</td></tr>
         <tr><td>조작</td><td>WASD / 방향키 / 게임패드 · Space 점프</td></tr>

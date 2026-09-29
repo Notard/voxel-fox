@@ -1,11 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-// 문자열 레이아웃으로 타일맵을 만들고 여우를 시작 지점에 놓는다.
+// 문자열 레이아웃으로 타일맵과 아이템(코인)을 만들고 여우를 시작 지점에 놓는다.
 // 맵 중심이 이 오브젝트 위치이고, 타일 윗면이 y = 0이다.
 public class MapBuilder : MonoBehaviour
 {
     public const float TileSize = 2f;
     public const float TileHeight = 0.5f;
+    // 코인 중심 높이: 여우 몸통(0.5m)과 귀 끝(0.84m) 사이라 걷기만 해도 닿는다.
+    public const float CoinHeight = 0.6f;
 
     [Tooltip("첫 줄이 가장 먼 줄. S 시작 · H 구멍 · C 아이템 · . 타일")]
     [SerializeField] string[] layout =
@@ -16,6 +19,7 @@ public class MapBuilder : MonoBehaviour
         "...C",
     };
     [SerializeField] GameObject tilePrefab;
+    [SerializeField] GameObject coinPrefab;
     [SerializeField] PlayerController player;
     [Tooltip("체커 패턴에서 어두운 칸의 밝기")]
     [SerializeField, Range(0.5f, 1f)] float checkerShade = 0.9f;
@@ -23,6 +27,8 @@ public class MapBuilder : MonoBehaviour
     MapLayout parsed;
     public MapLayout Layout => parsed ??= MapLayout.Parse(layout);
     public Transform TileRoot { get; private set; }
+    public Transform ItemRoot { get; private set; }
+    public readonly List<Collectible> Coins = new();
     public PlayerController Player => player;
 
     void Awake() => Build();
@@ -33,8 +39,12 @@ public class MapBuilder : MonoBehaviour
     {
         parsed = null;
         if (TileRoot != null) DestroyObject(TileRoot.gameObject);
+        if (ItemRoot != null) DestroyObject(ItemRoot.gameObject);
         TileRoot = new GameObject("Tiles").transform;
         TileRoot.SetParent(transform, false);
+        ItemRoot = new GameObject("Items").transform;
+        ItemRoot.SetParent(transform, false);
+        Coins.Clear();
 
         var block = new MaterialPropertyBlock();
         foreach (var cell in Layout.Tiles)
@@ -49,6 +59,14 @@ public class MapBuilder : MonoBehaviour
                 tile.GetComponent<Renderer>().SetPropertyBlock(block);
             }
         }
+
+        if (coinPrefab != null)
+            foreach (var cell in Layout.Coins)
+            {
+                var coin = Instantiate(coinPrefab, CellToWorld(cell) + Vector3.up * CoinHeight, Quaternion.identity, ItemRoot);
+                coin.name = $"Coin_{cell.x}_{cell.y}";
+                Coins.Add(coin.GetComponent<Collectible>());
+            }
 
         if (player != null) PlaceAtStart(player);
     }
@@ -93,7 +111,7 @@ public class MapBuilder : MonoBehaviour
             Gizmos.DrawLine(c + new Vector3(-1, 0, 1), c + new Vector3(1, 0, -1));
         }
         Gizmos.color = Color.yellow;
-        foreach (var cell in map.Coins) Gizmos.DrawWireSphere(CellToWorld(cell) + Vector3.up * 0.5f, 0.3f);
+        foreach (var cell in map.Coins) Gizmos.DrawWireSphere(CellToWorld(cell) + Vector3.up * CoinHeight, 0.3f);
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(CellToWorld(map.StartCell) + Vector3.up * 0.5f, 0.4f);
     }

@@ -450,3 +450,52 @@ Unity에서 직접 플레이해 본 사용자가 두 가지를 요청했다.
   - `JumpDistance_IsWellOverHoleWidth`: 이동 속도 × 체공 시간 > 구멍 너비 × 1.3
 - 기존 테스트도 모두 통과했다. 점프 최고 높이 1.5m(±0.1), 점프 후 Idle/Walk 전환, 구멍·가장자리 낙하(3초 안에 y < -5), 발 미끄러짐 최대 1.3cm.
 - 결과 파일: `logs/04e_editmode_results.xml`, `logs/04e_playmode_results.xml`
+
+---
+
+## 5단계. 아이템 — ✅ 완료 (2026-09-29)
+
+미리보기: **[map_preview.html](map_preview.html)** (코인 근접 이미지, 코인 2개를 먹는 이동 녹화 + 카운터)
+
+### 결과 요약
+| 항목 | 결과 |
+|---|---|
+| 코인 모델 | `Prefabs/Coin.prefab`: 복셀 240개(1복셀 0.05m), 지름 0.6m, 두께 0.1m + 가운데 마름모 무늬가 앞뒤로 0.05m씩 도드라짐. 보이는 면만 메시로 만들었다(면 336). 팔레트 4색(테두리·금색·무늬·반짝임), 살짝 스스로 빛남(Emission) |
+| `Collectible.cs` | 120°/s로 돌고, ±0.1m 폭으로 초당 0.8번 둥실. 코인마다 위치로 박자를 달리한다. 여우(PlayerController)가 트리거에 닿으면 반짝이를 남기고 `Collected` 이벤트를 보낸 뒤 사라진다 |
+| 반짝이 | `Prefabs/CoinBurst.prefab`: 금색 작은 큐브 24개가 사방으로 튀었다가 작아지며 사라지는 파티클. 한 번만 재생하고 스스로 지워진다 |
+| 배치 | `MapBuilder`가 레이아웃의 `C` 칸 4곳에 코인을 높이 0.6m로 놓는다 (`Items` 아래) |
+| `GameManager.cs` | 코인 수(4)와 먹은 수를 센다. 6단계에서 Playing / GameOver / Clear 상태를 더할 자리다 |
+| `GameUI.cs` | 화면 좌상단 반투명 판 위에 `아이템 0 / 4` (금색 글자) |
+| 설정 자동화 | `Editor/ItemSetup.cs`(메뉴 VoxelFox > Item Setup). `tools/build_map.sh`의 2단계로 실행 |
+
+### 설계 메모
+- **한글 글꼴:** TMP 기본 글꼴(LiberationSans)에는 한글이 없어 `아이템`이 네모로 나온다. 맑은 고딕은 재배포가 허용되지 않아 공개 저장소에 넣을 수 없다. 게임이 Windows 전용이므로 실행할 때 설치된 맑은 고딕(굵게)으로 TMP 글꼴을 만든다(`TMP_FontAsset.CreateFontAsset`). 맑은 고딕이 없으면 Noto Sans KR을 쓰고, 둘 다 없으면 경고를 남기고 기본 글꼴을 쓴다.
+- **코인 높이 0.6m, 트리거 반지름 0.4m:** 여우 몸통(0.5m)과 귀 끝(0.84m) 사이에 있어서 걷기만 해도 닿는다. 트리거를 코인(반지름 0.3m)보다 조금 크게 잡아 스치기만 해도 먹힌다.
+- **Kinematic Rigidbody:** 코인이 둥실거리며 움직이므로, 트리거 판정이 정확하도록 Kinematic Rigidbody를 붙였다.
+- **카운터 연결:** `Collectible.Collected`(정적 이벤트) → `GameManager`가 개수를 세고 `ItemsChanged` 이벤트 → `GameUI`가 글자를 갱신한다. 서로 직접 참조하지 않아서 6·7단계에서 재시작할 때 정리하기 쉽다.
+
+### 검증 (완료 기준)
+EditMode **23/23 통과**. 새 `ItemAssetTests` 3개:
+- 코인 프리팹: 크기 0.6 × 0.6 × 0.2m, 트리거, Kinematic Rigidbody, Collectible, Point 필터 팔레트
+- 반짝이: 반복 없음, 자동 재생, 끝나면 스스로 삭제
+- Main 씬: MapBuilder에 코인 프리팹이, GameManager에 맵이 연결되어 있고, 카운터가 좌상단에 붙어 있음
+
+PlayMode **26/26 통과**. 새 `ItemTests` 5개:
+- 레이아웃의 코인 칸 4곳에 코인이 높이 0.6m로 있음
+- 시작하면 `아이템 0 / 4`이고, 글꼴에 한글·숫자가 모두 있음
+- 코인이 돌고, 위아래로 0.1~0.25m 폭으로 움직임
+- 동쪽으로 걸어 코인 (3, 3)에 닿으면: 코인이 사라지고 `아이템 1 / 4`, 반짝이가 생겼다가 1.5초 안에 사라짐
+- 코인 4개를 모두 먹으면 `아이템 4 / 4`, 코인이 모두 사라짐
+
+미리보기 녹화에서는 여우가 코인 (3, 3), (3, 1)을 먹을 때 카운터가 0 → 1 → 2로 오르고, 서쪽 구멍 (2, 1)에 떨어지는 것까지 확인했다. 결과 파일: `logs/05_editmode_results.xml`, `logs/05_playmode_results.xml`
+
+### 발생한 문제와 해결
+| 문제 | 원인 | 해결 |
+|---|---|---|
+| 기존 테스트 `Map_BuildsTilesAndHoles`가 코인 칸 높이를 잘못 잴 수 있음 | 아래로 쏘는 레이캐스트가 코인 트리거에 먼저 맞음 | 레이캐스트에서 트리거를 무시 (`QueryTriggerInteraction.Ignore`) |
+| 한글 글꼴 확인 테스트가 숫자를 "없음"으로 판단할 수 있음 | 실행 중에 만든 글꼴은 실제로 쓴 글자만 담고 있음 | `HasCharacters(..., tryAddCharacter: true)`로 확인 |
+| 녹화 화면에 카운터(UI)가 안 찍힘 | 화면 오버레이 UI는 카메라 렌더에 포함되지 않음 | 녹화하는 동안만 UI를 카메라 기준(Screen Space Camera)으로 바꾸고, 카메라가 늘 녹화용 텍스처에 그리게 함 |
+| 테스트 컴파일 에러 CS0019 | `HasCharacters`의 이 오버로드는 없는 글자를 `uint[]`로 돌려줌 | 타입에 맞게 고침 |
+
+### 로그 파일
+- `logs/05_map_setup.log`, `logs/05_item_setup.log`, `logs/05_editmode.log`, `logs/05_playmode.log`, 결과 `logs/05_*_results.xml`
