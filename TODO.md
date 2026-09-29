@@ -4,7 +4,7 @@
 > 체크 후 `python tools/make_todo_html.py` 실행 → 진행률 갱신 + [todo.html](todo.html) 재생성.
 > 작업별 상세 결과: [WORKLOG.md](WORKLOG.md)
 
-**진행률: 5 / 38**
+**진행률: 12 / 45**
 
 ---
 
@@ -14,6 +14,15 @@
 - [x] TextMeshPro 설치 (Essential Resources 임포트)
 - [x] 폴더 구조 생성 (`Art`, `Prefabs`, `Scenes`, `Scripts`)
 - [x] `Scenes/Main.unity` 생성 후 Play 모드에서 에러 없이 실행 확인 ✅ 완료 기준
+- [x] 템플릿 샘플 정리 (`SampleScene`, `TutorialInfo`, `Readme` 삭제)
+
+## 1-1. Git 저장소 연결
+- [x] `C:\sample`에서 `git init` (기본 브랜치 `main`)
+- [x] `.gitignore` 작성 (Unity 자동 생성 폴더, IDE 파일, `logs/*.log` 제외)
+- [x] `.gitattributes` 작성 (줄바꿈 정리, 바이너리는 Git LFS)
+- [x] 첫 커밋 (`d5ca66f`)
+- [x] GitHub 저장소 `Notard/voxel-fox` (Public) 생성 후 `origin`으로 연결
+- [x] `main` push 후 `origin/main`과 동기화 확인 ✅ 완료 기준
 
 ## 2. 복셀 여우 캐릭터 (Blender Python)
 - [ ] `C:\sample\Blender\make_fox.py` 작성: 파츠별 복셀 데이터 정의 (몸통, 머리, 귀, 다리 4개, 꼬리)
