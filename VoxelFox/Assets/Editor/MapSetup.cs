@@ -7,13 +7,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
-// 3단계 타일맵 설정: 잔디 타일(팔레트·메시·머티리얼·프리팹), Player 프리팹, Main 씬 배치.
-// 여러 번 실행해도 안전하다. 메시와 팔레트는 GUID를 유지한 채 내용만 다시 만든다.
+// 3단계 타일맵 설정: 잔디 타일(색·노멀 텍스처, 메시, 머티리얼, 프리팹), Player 프리팹, Main 씬 배치.
+// 여러 번 실행해도 안전하다. 메시와 텍스처는 GUID를 유지한 채 내용만 다시 만든다.
 // 배치 실행: Unity.exe -batchmode -quit -projectPath . -executeMethod MapSetup.Run
 public static class MapSetup
 {
     public const string TileDir = "Assets/Art/Tiles";
-    public const string PalettePath = TileDir + "/Tile_Palette.png";
+    public const string AlbedoPath = TileDir + "/Tile_Albedo.png";
+    public const string NormalPath = TileDir + "/Tile_Normal.png";
     public const string MeshPath = TileDir + "/GrassTile_Mesh.asset";
     public const string MaterialPath = TileDir + "/Tile.mat";
     public const string TilePrefabPath = "Assets/Prefabs/GrassTile.prefab";
@@ -24,21 +25,32 @@ public static class MapSetup
     // 1복셀 = 0.125m → 타일 16 × 4 × 16 복셀 (2m × 0.5m × 2m)
     const int Voxels = 16;
     const int Layers = 4;
-    const float Voxel = MapBuilder.TileSize / Voxels;
 
-    // 팔레트 4×4, 칸 번호 = y * 4 + x
+    // 텍스처 아틀라스 512 × 256, 복셀 한 칸 = 16픽셀
+    //   왼쪽 256 × 256: 윗면 (16 × 16 복셀)
+    //   오른쪽 256 × 64 네 줄: 옆면 +X, -X, +Z, -Z (16 × 4 복셀)
+    const int Px = 16;
+    const int AtlasW = 512, AtlasH = 256;
+    const int SideX = 256, SideH = Layers * Px;
+
+    // 노멀맵용 높이 (픽셀 단위): 경계 경사 폭, 면 바깥(모서리) 높이
+    const float BevelWidth = 3f;
+    const float BevelDepth = 3f;
+
     static readonly Color32[] Palette =
     {
         Hex(0x6FBF47), Hex(0x83CF55), Hex(0x5CA83B), Hex(0x58A03A), // 잔디 3톤, 잔디 옆면
-        Hex(0x8D5B3B), Hex(0x9C6A47), Hex(0x7B4D31), Hex(0x5E3D28), // 흙 3톤, 바닥
+        Hex(0x8D5B3B), Hex(0x9C6A47), Hex(0x7B4D31),                // 흙 3톤
     };
-    const int GrassSide = 3, Bottom = 7;
+    // 색마다 복셀 높이: 밝은 복셀은 튀어나오고 어두운 복셀은 들어가 보이게 한다.
+    static readonly float[] Heights = { 1.5f, 3f, 0f, 2f, 1f, 2f, 0f };
+    const int GrassSide = 3;
 
     [MenuItem("VoxelFox/Map Setup")]
     public static void Run()
     {
-        var palette = CreatePalette();
-        var material = CreateMaterial(palette);
+        var (albedo, normal) = CreateTextures();
+        var material = CreateMaterial(albedo, normal);
         var mesh = CreateMesh();
         var tile = CreateTilePrefab(mesh, material);
         var player = CreatePlayerPrefab();
@@ -49,67 +61,12 @@ public static class MapSetup
 
     static Color32 Hex(int rgb) => new((byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb, 255);
 
-    static Texture2D CreatePalette()
+    // 복셀마다 색과 높이를 칠한 뒤, 높이맵의 기울기로 노멀맵을 만든다.
+    static (Texture2D albedo, Texture2D normal) CreateTextures()
     {
-        var tex = new Texture2D(4, 4, TextureFormat.RGBA32, false);
-        var pixels = new Color32[16];
-        for (int i = 0; i < pixels.Length; i++)
-            pixels[i] = i < Palette.Length ? Palette[i] : Palette[Bottom];
-        tex.SetPixels32(pixels);
-        File.WriteAllBytes(PalettePath, tex.EncodeToPNG());
-        Object.DestroyImmediate(tex);
-        AssetDatabase.ImportAsset(PalettePath);
-
-        var importer = (TextureImporter)AssetImporter.GetAtPath(PalettePath);
-        importer.filterMode = FilterMode.Point;
-        importer.mipmapEnabled = false;
-        importer.wrapMode = TextureWrapMode.Clamp;
-        importer.textureCompression = TextureImporterCompression.Uncompressed;
-        importer.SaveAndReimport();
-        Debug.Log($"[MapSetup] 팔레트: {PalettePath}");
-        return AssetDatabase.LoadAssetAtPath<Texture2D>(PalettePath);
-    }
-
-    static Material CreateMaterial(Texture2D palette)
-    {
-        var mat = AssetDatabase.LoadAssetAtPath<Material>(MaterialPath);
-        if (mat == null)
-        {
-            mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-            AssetDatabase.CreateAsset(mat, MaterialPath);
-        }
-        mat.SetTexture("_BaseMap", palette);
-        mat.SetColor("_BaseColor", Color.white);
-        mat.SetFloat("_Smoothness", 0f);
-        mat.SetFloat("_Metallic", 0f);
-        EditorUtility.SetDirty(mat);
-        return mat;
-    }
-
-    // 보이는 면만 만든다: 윗면은 복셀마다, 옆면은 복셀 층마다, 바닥은 한 장.
-    // 원점 = 윗면 중앙 (윗면 y = 0, 바닥 y = -0.5)
-    static Mesh CreateMesh()
-    {
-        var verts = new List<Vector3>();
-        var normals = new List<Vector3>();
-        var uvs = new List<Vector2>();
-        var tris = new List<int>();
+        var colors = new Color32[AtlasW * AtlasH];
+        var height = new float[AtlasW * AtlasH];
         var rng = new System.Random(7); // 고정 시드 → 매번 같은 무늬
-
-        // p, p+u, p+u+v, p+v 순서, 법선 = u × v (Unity 앞면 = 시계 방향)
-        void Quad(Vector3 p, Vector3 u, Vector3 v, int color)
-        {
-            int start = verts.Count;
-            var n = Vector3.Cross(u, v).normalized;
-            var uv = new Vector2((color % 4 + 0.5f) / 4f, (color / 4 + 0.5f) / 4f);
-            foreach (var corner in new[] { p, p + u, p + u + v, p + v })
-            {
-                verts.Add(corner);
-                normals.Add(n);
-                uvs.Add(uv);
-            }
-            tris.AddRange(new[] { start, start + 1, start + 2, start, start + 2, start + 3 });
-        }
 
         int Grass() => rng.NextDouble() switch { < 0.55 => 0, < 0.8 => 1, _ => 2 };
         int Dirt() => rng.NextDouble() switch { < 0.5 => 4, < 0.75 => 5, _ => 6 };
@@ -118,27 +75,154 @@ public static class MapSetup
             : layer == Layers - 2 && rng.NextDouble() < 0.3 ? GrassSide
             : Dirt();
 
-        float half = MapBuilder.TileSize / 2f;
-        float bottom = -MapBuilder.TileHeight;
-        var x = Vector3.right * Voxel;
-        var y = Vector3.up * Voxel;
-        var z = Vector3.forward * Voxel;
+        // 한 면(복셀 w × h개)을 칠한다. 높이가 다른 이웃과의 경계에만 경사를 두고,
+        // 같은 높이끼리는 평평하게 이어 붙인다. 면 바깥은 낮은 것으로 보고 모서리를 둥글게 깎는다.
+        void Face(int x0, int y0, int w, int h, int[,] voxel)
+        {
+            float VH(int vx, int vy) =>
+                vx < 0 || vy < 0 || vx >= w || vy >= h ? -BevelDepth : Heights[voxel[vx, vy]];
+            for (int vx = 0; vx < w; vx++)
+                for (int vy = 0; vy < h; vy++)
+                {
+                    float own = VH(vx, vy);
+                    for (int py = 0; py < Px; py++)
+                        for (int px = 0; px < Px; px++)
+                        {
+                            float hgt = own;
+                            // 이웃 쪽 가장자리로 갈수록 두 높이의 중간값에 가까워진다.
+                            void Blend(float neighbor, float dist) =>
+                                hgt += (neighbor - own) * 0.5f * Mathf.Clamp01(1f - dist / BevelWidth);
+                            Blend(VH(vx - 1, vy), px + 0.5f);
+                            Blend(VH(vx + 1, vy), Px - px - 0.5f);
+                            Blend(VH(vx, vy - 1), py + 0.5f);
+                            Blend(VH(vx, vy + 1), Px - py - 0.5f);
+                            int i = (y0 + vy * Px + py) * AtlasW + x0 + vx * Px + px;
+                            colors[i] = Palette[voxel[vx, vy]];
+                            height[i] = hgt;
+                        }
+                }
+        }
 
+        var top = new int[Voxels, Voxels];
         for (int i = 0; i < Voxels; i++)
             for (int j = 0; j < Voxels; j++)
-                Quad(new Vector3(-half + i * Voxel, 0, -half + j * Voxel), z, x, Grass());
+                top[i, j] = Grass();
+        Face(0, 0, Voxels, Voxels, top);
+        for (int side = 0; side < 4; side++)
+        {
+            var wall = new int[Voxels, Layers];
+            for (int i = 0; i < Voxels; i++)
+                for (int layer = 0; layer < Layers; layer++)
+                    wall[i, layer] = Side(layer);
+            Face(SideX, side * SideH, Voxels, Layers, wall);
+        }
 
-        for (int i = 0; i < Voxels; i++)
-            for (int k = 0; k < Layers; k++)
+        // 접선 공간 노멀: x = 텍스처 u 방향, y = v 방향 (Texture2D는 행 0이 v 0)
+        float H(int x, int y) => height[Mathf.Clamp(y, 0, AtlasH - 1) * AtlasW + Mathf.Clamp(x, 0, AtlasW - 1)];
+        var normals = new Color[AtlasW * AtlasH];
+        for (int y = 0; y < AtlasH; y++)
+            for (int x = 0; x < AtlasW; x++)
             {
-                float a = -half + i * Voxel, h = bottom + k * Voxel;
-                Quad(new Vector3(half, h, a), y, z, Side(k));   // +X
-                Quad(new Vector3(-half, h, a), z, y, Side(k));  // -X
-                Quad(new Vector3(a, h, half), x, y, Side(k));   // +Z
-                Quad(new Vector3(a, h, -half), y, x, Side(k));  // -Z
+                var n = new Vector3(
+                    -(H(x + 1, y) - H(x - 1, y)) / 2f,
+                    -(H(x, y + 1) - H(x, y - 1)) / 2f,
+                    1f).normalized;
+                normals[y * AtlasW + x] = new Color(n.x * 0.5f + 0.5f, n.y * 0.5f + 0.5f, n.z * 0.5f + 0.5f, 1f);
             }
 
-        Quad(new Vector3(-half, bottom, -half), Vector3.right * 2 * half, Vector3.forward * 2 * half, Bottom);
+        var albedo = new Texture2D(AtlasW, AtlasH, TextureFormat.RGBA32, false);
+        albedo.SetPixels32(colors);
+        var normal = new Texture2D(AtlasW, AtlasH, TextureFormat.RGBA32, false, true);
+        normal.SetPixels(normals);
+        File.WriteAllBytes(AlbedoPath, albedo.EncodeToPNG());
+        File.WriteAllBytes(NormalPath, normal.EncodeToPNG());
+        Object.DestroyImmediate(albedo);
+        Object.DestroyImmediate(normal);
+        AssetDatabase.ImportAsset(AlbedoPath);
+        AssetDatabase.ImportAsset(NormalPath);
+
+        // 색: 복셀 경계가 번지지 않게 Point 필터
+        var albedoImporter = (TextureImporter)AssetImporter.GetAtPath(AlbedoPath);
+        albedoImporter.textureType = TextureImporterType.Default;
+        albedoImporter.filterMode = FilterMode.Point;
+        albedoImporter.wrapMode = TextureWrapMode.Clamp;
+        albedoImporter.textureCompression = TextureImporterCompression.Uncompressed;
+        albedoImporter.SaveAndReimport();
+        // 노멀: 경사가 부드럽게 이어지도록 Bilinear
+        var normalImporter = (TextureImporter)AssetImporter.GetAtPath(NormalPath);
+        normalImporter.textureType = TextureImporterType.NormalMap;
+        normalImporter.filterMode = FilterMode.Bilinear;
+        normalImporter.wrapMode = TextureWrapMode.Clamp;
+        normalImporter.SaveAndReimport();
+
+        Debug.Log($"[MapSetup] 텍스처: {AlbedoPath}, {NormalPath}");
+        return (AssetDatabase.LoadAssetAtPath<Texture2D>(AlbedoPath),
+                AssetDatabase.LoadAssetAtPath<Texture2D>(NormalPath));
+    }
+
+    static Material CreateMaterial(Texture2D albedo, Texture2D normal)
+    {
+        var mat = AssetDatabase.LoadAssetAtPath<Material>(MaterialPath);
+        if (mat == null)
+        {
+            mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+            AssetDatabase.CreateAsset(mat, MaterialPath);
+        }
+        mat.SetTexture("_BaseMap", albedo);
+        mat.SetColor("_BaseColor", Color.white);
+        mat.SetTexture("_BumpMap", normal);
+        mat.SetFloat("_BumpScale", 1f);
+        mat.EnableKeyword("_NORMALMAP"); // 스크립트로 텍스처를 넣으면 키워드가 저절로 켜지지 않는다
+        mat.SetFloat("_Smoothness", 0.1f);
+        mat.SetFloat("_Metallic", 0f);
+        EditorUtility.SetDirty(mat);
+        return mat;
+    }
+
+    // 면 6장(윗면, 옆면 4, 바닥). 복셀 무늬와 입체감은 텍스처가 맡는다.
+    // 원점 = 윗면 중앙 (윗면 y = 0, 바닥 y = -0.5)
+    static Mesh CreateMesh()
+    {
+        var verts = new List<Vector3>();
+        var normals = new List<Vector3>();
+        var uvs = new List<Vector2>();
+        var tris = new List<int>();
+        float half = MapBuilder.TileSize / 2f;
+        float bottom = -MapBuilder.TileHeight;
+
+        // 모서리 4개는 시계 방향(Unity 앞면). uv는 모서리 위치로 계산한다.
+        void Quad(Vector3[] corners, System.Func<Vector3, Vector2> uv)
+        {
+            int start = verts.Count;
+            var n = Vector3.Cross(corners[1] - corners[0], corners[3] - corners[0]).normalized;
+            foreach (var c in corners)
+            {
+                verts.Add(c);
+                normals.Add(n);
+                uvs.Add(uv(c));
+            }
+            tris.AddRange(new[] { start, start + 1, start + 2, start, start + 2, start + 3 });
+        }
+
+        float U(float s) => (s + half) / (2f * half); // -1..1 → 0..1
+        Vector2 Atlas(float px, float py) => new(px / AtlasW, py / AtlasH);
+        Vector2 SideUV(int side, float s, float y) =>
+            Atlas(SideX + U(s) * Voxels * Px, side * SideH + (y - bottom) / MapBuilder.TileHeight * SideH);
+        Vector3 V(float x, float y, float z) => new(x, y, z);
+
+        Quad(new[] { V(-half, 0, -half), V(-half, 0, half), V(half, 0, half), V(half, 0, -half) },
+            c => Atlas(U(c.x) * Voxels * Px, U(c.z) * Voxels * Px));
+        Quad(new[] { V(half, bottom, -half), V(half, 0, -half), V(half, 0, half), V(half, bottom, half) },
+            c => SideUV(0, c.z, c.y)); // +X
+        Quad(new[] { V(-half, bottom, -half), V(-half, bottom, half), V(-half, 0, half), V(-half, 0, -half) },
+            c => SideUV(1, c.z, c.y)); // -X
+        Quad(new[] { V(-half, bottom, half), V(half, bottom, half), V(half, 0, half), V(-half, 0, half) },
+            c => SideUV(2, c.x, c.y)); // +Z
+        Quad(new[] { V(-half, bottom, -half), V(-half, 0, -half), V(half, 0, -half), V(half, bottom, -half) },
+            c => SideUV(3, c.x, c.y)); // -Z
+        // 바닥은 거의 보이지 않으므로 +X 옆면 맨 아래 흙 줄을 늘여 쓴다.
+        Quad(new[] { V(-half, bottom, -half), V(half, bottom, -half), V(half, bottom, half), V(-half, bottom, half) },
+            c => Atlas(SideX + U(c.x) * Voxels * Px, U(c.z) * Px));
 
         var mesh = AssetDatabase.LoadAssetAtPath<Mesh>(MeshPath);
         if (mesh == null)
@@ -153,7 +237,7 @@ public static class MapSetup
         mesh.SetUVs(0, uvs);
         mesh.SetTriangles(tris, 0);
         mesh.RecalculateBounds();
-        mesh.RecalculateTangents();
+        mesh.RecalculateTangents(); // 노멀맵에 필요
         EditorUtility.SetDirty(mesh);
         Debug.Log($"[MapSetup] 타일 메시: 면 {tris.Count / 6}, 정점 {verts.Count}");
         return mesh;

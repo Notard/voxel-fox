@@ -60,11 +60,11 @@ th{color:var(--muted)}
 <body>
 <div class="wrap">
   <h1>🦊 복셀 여우 · 할 일 목록</h1>
-  <p class="muted">원본: TODO.md · 상세 계획: <a href="plan.html">plan.html</a> · 여우 미리보기: <a href="fox_preview.html">fox_preview.html</a> · 맵 미리보기: <a href="map_preview.html">map_preview.html</a> · 작업 기록: <a href="worklog.html">worklog.html</a> · 마지막 갱신 2026-09-29 12:38</p>
+  <p class="muted">원본: TODO.md · 상세 계획: <a href="plan.html">plan.html</a> · 여우 미리보기: <a href="fox_preview.html">fox_preview.html</a> · 맵 미리보기: <a href="map_preview.html">map_preview.html</a> · 작업 기록: <a href="worklog.html">worklog.html</a> · 마지막 갱신 2026-09-29 12:47</p>
 
   <div class="hero">
-    <div class="big">66% <small>35 / 53 완료</small></div>
-    <div class="bar"><i style="width:66%"></i></div>
+    <div class="big">69% <small>40 / 58 완료</small></div>
+    <div class="bar"><i style="width:69%"></i></div>
   </div>
 
   
@@ -113,6 +113,15 @@ th{color:var(--muted)}
   <div class="sbar"><i style="width:100%"></i></div>
   <ul><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">복셀 잔디 타일 프리팹 (2m × 0.5m × 2m)</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt"><code>MapBuilder.cs</code>: 문자열 레이아웃으로 타일, 구멍 2개, 시작점 생성</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt"><code>PlayerController.cs</code>: WASD/방향키 이동, 회전, 중력, Space 점프</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt"><code>CameraRig.cs</code>: 고정 쿼터뷰 카메라, 카메라 기준 입력 방향 변환</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">미리보기 만들기: Play 모드 캡처(정지 3장 + 이동 녹화) → <a href="map_preview.html">map_preview.html</a></span></li><li class="item done gate"><span class="box" aria-hidden="true"></span><span class="txt">걷기, 점프, 구멍 낙하 동작 확인<span class="tag">완료 기준</span></span></li></ul>
 </section>
+<section class="stage complete">
+  <div class="shead">
+    <span class="n">3-1</span>
+    <h2>바닥 입체감: 노멀맵</h2>
+    <span class="cnt">5 / 5</span>
+  </div>
+  <div class="sbar"><i style="width:100%"></i></div>
+  <ul><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">타일 텍스처를 4×4 팔레트에서 색·노멀 아틀라스(512×256, 복셀 1칸 16px)로 변경, 메시 513면 → 6면</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">노멀맵: 높이가 다른 복셀 경계에만 턱, 타일 바깥 모서리는 둥글게</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">미리보기 다시 만들기 → <a href="map_preview.html">map_preview.html</a></span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">변경 이유 기록 → <a href="worklog.html">WORKLOG.md</a></span></li><li class="item done gate"><span class="box" aria-hidden="true"></span><span class="txt">재생성 후 EditMode 19/19 · PlayMode 11/11 통과<span class="tag">완료 기준</span></span></li></ul>
+</section>
 <section class="stage ">
   <div class="shead">
     <span class="n">4</span>
@@ -160,7 +169,7 @@ th{color:var(--muted)}
 </section>
 
   <h3>완료 기록</h3>
-  <table><tr><th>날짜</th><th>단계</th><th>메모</th></tr><tr><td>2026-09-29</td><td>1. Unity 프로젝트 생성</td><td>5/5 완료 · PlayMode 스모크 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>1. 추가 정리</td><td>템플릿 샘플(SampleScene, TutorialInfo, Readme) 삭제 · 재검증 통과 · 이유: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>Git 연결</td><td>GitHub <code>Notard/voxel-fox</code> (Public) 생성 · push · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>2. 복셀 여우 캐릭터</td><td>11/11 완료 · EditMode 9/9 · PlayMode 1/1 통과 · 미리보기 <a href="fox_preview.html">fox_preview.html</a> · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>2-1. 흰 여우 · 0.9배</td><td>더 예쁜 여우로 만들기 위해 붉은 여우 → 흰 여우, 크기 0.9배 · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>3. 4x4 타일맵 + 이동</td><td>6/6 완료 · EditMode 18/18 · PlayMode 11/11 통과 · 미리보기 <a href="map_preview.html">map_preview.html</a> · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr></table>
+  <table><tr><th>날짜</th><th>단계</th><th>메모</th></tr><tr><td>2026-09-29</td><td>1. Unity 프로젝트 생성</td><td>5/5 완료 · PlayMode 스모크 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>1. 추가 정리</td><td>템플릿 샘플(SampleScene, TutorialInfo, Readme) 삭제 · 재검증 통과 · 이유: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>Git 연결</td><td>GitHub <code>Notard/voxel-fox</code> (Public) 생성 · push · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>2. 복셀 여우 캐릭터</td><td>11/11 완료 · EditMode 9/9 · PlayMode 1/1 통과 · 미리보기 <a href="fox_preview.html">fox_preview.html</a> · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>2-1. 흰 여우 · 0.9배</td><td>더 예쁜 여우로 만들기 위해 붉은 여우 → 흰 여우, 크기 0.9배 · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>3. 4x4 타일맵 + 이동</td><td>6/6 완료 · EditMode 18/18 · PlayMode 11/11 통과 · 미리보기 <a href="map_preview.html">map_preview.html</a> · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>3-1. 바닥 노멀맵</td><td>바닥이 평평해 보여서 노멀맵으로 입체감 추가(사용자 요청) · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr></table>
 </div>
 </body>
 </html>

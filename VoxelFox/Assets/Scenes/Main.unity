@@ -154,7 +154,7 @@ MonoBehaviour:
   - C.HC
   - ...C
   tilePrefab: {fileID: 7082293857977079147, guid: b343a0d037fc7614485f93dcf0223bd0, type: 3}
-  player: {fileID: 864920908}
+  player: {fileID: 736411883}
   checkerShade: 0.9
 --- !u!4 &587528911
 Transform:
@@ -171,7 +171,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &864920907
+--- !u!1001 &736411882
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -232,10 +232,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46f64ed42f739064c843ebcaeb97ae96, type: 3}
---- !u!114 &864920908 stripped
+--- !u!114 &736411883 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8997347150076841083, guid: 46f64ed42f739064c843ebcaeb97ae96, type: 3}
-  m_PrefabInstance: {fileID: 864920907}
+  m_PrefabInstance: {fileID: 736411882}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -456,4 +456,4 @@ SceneRoots:
   - {fileID: 1719065934}
   - {fileID: 1985478374}
   - {fileID: 587528911}
-  - {fileID: 864920907}
+  - {fileID: 736411882}

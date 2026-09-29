@@ -4,7 +4,7 @@
 > 체크 후 `python tools/make_todo_html.py` 실행 → 진행률 갱신 + [todo.html](todo.html) 재생성.
 > 작업별 상세 결과: [WORKLOG.md](WORKLOG.md)
 
-**진행률: 35 / 53**
+**진행률: 40 / 58**
 
 ---
 
@@ -53,6 +53,13 @@
 - [x] 미리보기 만들기: Play 모드 캡처(정지 3장 + 이동 녹화) → [map_preview.html](map_preview.html)
 - [x] 걷기, 점프, 구멍 낙하 동작 확인 ✅ 완료 기준
 
+## 3-1. 바닥 입체감: 노멀맵
+- [x] 타일 텍스처를 4×4 팔레트에서 색·노멀 아틀라스(512×256, 복셀 1칸 16px)로 변경, 메시 513면 → 6면
+- [x] 노멀맵: 높이가 다른 복셀 경계에만 턱, 타일 바깥 모서리는 둥글게
+- [x] 미리보기 다시 만들기 → [map_preview.html](map_preview.html)
+- [x] 변경 이유 기록 → [WORKLOG.md](WORKLOG.md)
+- [x] 재생성 후 EditMode 19/19 · PlayMode 11/11 통과 ✅ 완료 기준
+
 ## 4. 애니메이션 연결
 - [ ] PlayerController에서 Animator 파라미터(Speed, IsGrounded, Jump) 갱신
 - [ ] 상태 전환 설정: Idle ⇄ Walk, Any → Jump → Idle
@@ -92,3 +99,4 @@
 | 2026-09-29 | 2. 복셀 여우 캐릭터 | 11/11 완료 · EditMode 9/9 · PlayMode 1/1 통과 · 미리보기 [fox_preview.html](fox_preview.html) · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 2-1. 흰 여우 · 0.9배 | 더 예쁜 여우로 만들기 위해 붉은 여우 → 흰 여우, 크기 0.9배 · 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 3. 4x4 타일맵 + 이동 | 6/6 완료 · EditMode 18/18 · PlayMode 11/11 통과 · 미리보기 [map_preview.html](map_preview.html) · 상세: [WORKLOG.md](WORKLOG.md) |
+| 2026-09-29 | 3-1. 바닥 노멀맵 | 바닥이 평평해 보여서 노멀맵으로 입체감 추가(사용자 요청) · 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |

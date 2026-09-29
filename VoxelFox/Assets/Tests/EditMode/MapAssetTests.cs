@@ -65,6 +65,21 @@ public class MapAssetTests
     }
 
     [Test]
+    public void TileMaterial_HasNormalMapAndMeshHasTangents()
+    {
+        var tile = AssetDatabase.LoadAssetAtPath<GameObject>(TilePrefabPath);
+        var mat = tile.GetComponent<MeshRenderer>().sharedMaterial;
+        var bump = mat.GetTexture("_BumpMap");
+        Assert.IsNotNull(bump, "노멀맵 없음");
+        var importer = (TextureImporter)AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(bump));
+        Assert.AreEqual(TextureImporterType.NormalMap, importer.textureType, "노멀맵 타입으로 임포트");
+        Assert.IsTrue(mat.IsKeywordEnabled("_NORMALMAP"), "_NORMALMAP 키워드가 꺼져 있으면 노멀맵이 무시됨");
+
+        var mesh = tile.GetComponent<MeshFilter>().sharedMesh;
+        Assert.AreEqual(mesh.vertexCount, mesh.tangents.Length, "접선이 없으면 노멀맵 방향이 틀어짐");
+    }
+
+    [Test]
     public void PlayerPrefab_HasControllerAndFox()
     {
         var player = AssetDatabase.LoadAssetAtPath<GameObject>(PlayerPrefabPath);
