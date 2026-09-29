@@ -170,7 +170,7 @@ footer{border-top:1px solid var(--border);padding-top:24px;font-size:12px;color:
   <header class="hero">
     <p class="overline">결과 보고서 · 2026-09-29</p>
     <h1>복셀 여우 타일 게임</h1>
-    <p class="sub">흰 복셀 여우가 구멍 2개가 뚫린 4×4 타일맵에서 코인 4개를 모으는 짧은 3D 게임입니다. 계획서의 1~8단계를 모두 마치고, Windows 실행 파일을 직접 플레이해 확인했습니다.</p>
+    <p class="sub">흰 복셀 여우가 구멍 2개가 뚫린 4×4 타일맵에서 코인 4개를 모으는 짧은 3D 게임입니다. 계획서의 1~8단계를 모두 마치고 Windows 실행 파일을 직접 플레이해 확인했습니다.</p>
     <div class="meta"><span class="chip">Unity 6000.5.7f1</span><span class="chip">URP</span><span class="chip">Blender 5.2</span><span class="chip">Windows</span><span class="chip ok">완료 81 / 81</span></div>
   </header>
 
@@ -217,7 +217,7 @@ footer{border-top:1px solid var(--border);padding-top:24px;font-size:12px;color:
           <tr><td>맵</td><td>4×4 타일(한 칸 2m), 구멍 2개, 둘레는 낭떠러지. 잔디 블록에 노멀맵으로 입체감</td></tr>
           <tr><td>조작</td><td>WASD·방향키·게임패드로 이동(타일 격자 방향으로 곧게), Space 점프, R 재시작</td></tr>
           <tr><td>카메라</td><td>여우를 화면 가운데에 두고 따라가는 쿼터뷰 (내려다보는 각 45°, 방향 30°, 거리 11m)</td></tr>
-          <tr><td>아이템</td><td>복셀 코인 4개. 돌면서 둥실거리고, 닿으면 금색 반짝이와 함께 사라짐. 좌상단 <code>아이템 n / 4</code></td></tr>
+          <tr><td>아이템</td><td>복셀 코인 4개. 돌면서 둥실거리고 닿으면 금색 반짝이와 함께 사라짐. 좌상단 <code>아이템 n / 4</code></td></tr>
           <tr><td>결과</td><td>y &lt; -5로 떨어지면 GAME OVER, 코인 4개를 모두 모으면 CLEAR!(걸린 시간). 결과가 나오면 조작·시간 정지</td></tr>
           <tr><td>재시작</td><td>R 키(언제든) 또는 [다시 하기] 버튼 → 여우·코인·카운터·시간이 모두 처음 상태로</td></tr>
         </tbody>
@@ -275,9 +275,9 @@ footer{border-top:1px solid var(--border);padding-top:24px;font-size:12px;color:
       <div class="card"><h3>모든 에셋을 스크립트로</h3><p>여우는 Blender Python, 타일·코인·UI·씬 배치는 Unity 에디터 스크립트가 만든다. 값을 바꾸고 다시 실행하면 똑같이 재현된다.</p></div>
       <div class="card"><h3>발 미끄러짐을 계산으로</h3><p>Walk 클립에서 보폭을 재 1배속 속도(0.868 m/s)를 구하고, 실제 속도 ÷ 이 값으로 재생 배속을 정한다. 다리 각도는 26°에서 40°로 늘렸다.</p></div>
       <div class="card"><h3>타일은 실행할 때 생성</h3><p>레이아웃 문자열 네 줄만 고치면 맵이 바뀐다. 에디터에서는 기즈모로 배치를 보여 준다.</p></div>
-      <div class="card"><h3>한글 글꼴은 설치된 글꼴로</h3><p>맑은 고딕은 재배포할 수 없어 저장소에 넣지 않고, 실행할 때 Windows에 설치된 글꼴을 불러온다.</p></div>
-      <div class="card"><h3>재시작은 씬 다시 불러오기</h3><p>정적 이벤트를 꼭 떼어 두어, 여러 번 재시작해도 코인을 두 번 세지 않는다.</p></div>
-      <div class="card"><h3>미리보기는 Play 모드에서</h3><p>편집 모드에서는 여우가 잘못 그려져서, 실제 게임과 같은 조건에서 캡처해 단계마다 눈으로 확인했다.</p></div>
+      <div class="card"><h3>한글 글꼴은 설치된 글꼴로</h3><p>맑은 고딕은 재배포할 수 없어 저장소에 넣지 않고 실행할 때 Windows에 설치된 글꼴을 불러온다.</p></div>
+      <div class="card"><h3>재시작은 씬 다시 불러오기</h3><p>정적 이벤트를 꼭 떼어 두어 여러 번 재시작해도 코인을 두 번 세지 않는다.</p></div>
+      <div class="card"><h3>미리보기는 Play 모드에서</h3><p>편집 모드에서는 여우가 잘못 그려져서 실제 게임과 같은 조건에서 캡처해 단계마다 눈으로 확인했다.</p></div>
     </div>
   </section>
 
