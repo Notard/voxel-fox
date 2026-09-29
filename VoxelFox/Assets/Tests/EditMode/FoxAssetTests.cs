@@ -95,12 +95,16 @@ public class FoxAssetTests
         var ctrl = AssetDatabase.LoadAssetAtPath<AnimatorController>(ControllerPath);
         Assert.IsNotNull(ctrl);
         CollectionAssert.AreEquivalent(
-            new[] { "Speed", "IsGrounded", "Jump" }, ctrl.parameters.Select(p => p.name));
+            new[] { "Speed", "IsGrounded", "Jump", "WalkSpeed" }, ctrl.parameters.Select(p => p.name));
         var states = ctrl.layers[0].stateMachine.states.Select(s => s.state).ToArray();
         CollectionAssert.AreEquivalent(new[] { "Idle", "Walk", "Jump" }, states.Select(s => s.name));
         Assert.IsTrue(states.All(s => s.motion != null), "모든 상태에 클립 연결");
         Assert.AreEqual("Idle", ctrl.layers[0].stateMachine.defaultState.name);
     }
+
+    [Test]
+    public void Prefab_AnimatorAlwaysAnimates() =>
+        Assert.AreEqual(AnimatorCullingMode.AlwaysAnimate, fox.GetComponent<Animator>().cullingMode);
 
     [Test]
     public void Prefab_UsesPaletteMaterial()

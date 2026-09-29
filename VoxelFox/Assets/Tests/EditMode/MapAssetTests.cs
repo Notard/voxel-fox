@@ -94,6 +94,11 @@ public class MapAssetTests
         Assert.IsNotNull(animator, "Fox 모델 없음");
         Assert.AreEqual("Fox", animator.name);
         Assert.IsFalse(animator.applyRootMotion);
+
+        var controller = player.GetComponent<PlayerController>();
+        Assert.AreSame(animator, controller.Animator, "PlayerController에 Fox Animator 연결");
+        // 다리 0.225m, ±40° → 보폭 2 × 0.225 × sin40° = 0.289m, 한 주기(0.667초)에 두 번 → 약 0.87m/s
+        Assert.AreEqual(0.87f, controller.WalkCycleSpeed, 0.05f, "Walk 1배속 이동 속도");
     }
 
     [Test]

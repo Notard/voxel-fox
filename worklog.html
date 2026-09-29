@@ -70,7 +70,7 @@ article hr{display:none}
 </head>
 <body>
 <div class="wrap">
-  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · 마지막 갱신 2026-09-29 12:47</p>
+  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · 마지막 갱신 2026-09-29 14:37</p>
   <article><h1>작업 기록 — 복셀 여우 타일 게임</h1>
 <blockquote>
 <p>단계별로 실제로 한 일, 결과, 검증 방법, 발생한 문제를 남긴다. 체크리스트: <a href="todo.html">TODO.md</a></p>
@@ -614,6 +614,114 @@ article hr{display:none}
 <li>EditMode <strong>19/19 통과</strong>. <code>TileMaterial_HasNormalMapAndMeshHasTangents</code>를 새로 추가했다. 노멀맵이 NormalMap 타입인지, <code>_NORMALMAP</code> 키워드가 켜져 있는지(스크립트로 텍스처를 넣으면 저절로 켜지지 않음), 메시에 접선이 있는지 확인한다.</li>
 <li>PlayMode <strong>11/11 통과</strong>. 타일 크기와 콜라이더는 그대로라 이동·낙하 결과도 같다.</li>
 <li>쿼터뷰와 근접 이미지에서 잔디 덩어리의 턱, 둥근 타일 모서리, 흰 여우를 눈으로 확인했다.</li>
+</ul>
+<hr />
+<h2>4단계. 애니메이션 연결 — ✅ 완료 (2026-09-29)</h2>
+<p>미리보기: <strong><a href="map_preview.html">map_preview.html</a></strong> (게임 화면 + 여우 근접 녹화, 30fps)</p>
+<h3>결과 요약</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>파라미터 갱신</td>
+<td><code>PlayerController.UpdateAnimator</code>: 이동한 <strong>뒤의</strong> 실제 속도로 <code>Speed</code>(수평 속도), <code>IsGrounded</code>, <code>WalkSpeed</code>를 넣고, 점프한 프레임에 <code>Jump</code> 트리거</td>
+</tr>
+<tr>
+<td>상태 전환</td>
+<td>Idle ⇄ Walk (Speed 0.1 기준) · Any → Jump · Jump → Idle (착지 + 멈춤) · <strong>Jump → Walk (착지 + 이동 중, 새로 추가)</strong></td>
+</tr>
+<tr>
+<td>Walk 배속</td>
+<td>새 파라미터 <code>WalkSpeed</code> = 이동 속도 ÷ 0.868 m/s. 3 m/s면 3.46배속</td>
+</tr>
+<tr>
+<td>Jump</td>
+<td>도약 직전(프레임 6, offset 0.3)부터 0.7배속으로 튼다. 남은 동작이 체공 시간(0.69초)에 맞는다</td>
+</tr>
+<tr>
+<td>Walk 동작</td>
+<td>다리 흔드는 각도 <strong>±26° → ±40°</strong> (<code>make_fox.py</code>의 <code>WALK_SWING</code>)</td>
+</tr>
+<tr>
+<td>Animator 컬링</td>
+<td>Cull Update Transforms → <strong>Always Animate</strong></td>
+</tr>
+<tr>
+<td>에디터 메뉴</td>
+<td>VoxelFox &gt; Play Main Scene (<code>PlayMain.cs</code>): Main 씬을 열고 바로 Play</td>
+</tr>
+</tbody>
+</table>
+<h3>설계 메모</h3>
+<ul>
+<li><strong>발 미끄러짐을 막는 방법:</strong> 걷는 동안 디딘 발은 땅에 붙어 있어야 한다. 그러려면 발이 반 주기 동안 몸 기준으로 뒤로 미는 거리(보폭)만큼 몸이 앞으로 가야 한다. <code>MapSetup</code>이 Walk 클립을 샘플링해 앞왼다리 발끝의 앞뒤 폭을 재고, "1배속일 때 맞는 이동 속도" = 보폭 × 2 ÷ 클립 길이를 계산해 Player 프리팹에 넣는다. 게임 중에는 실제 속도 ÷ 이 값으로 Walk 배속을 정한다.</li>
+<li><strong>다리 각도를 40°로 바꾼 이유:</strong> 26°일 때 보폭은 0.197m이고 1배속 이동 속도는 0.59 m/s다. 3 m/s에 맞추려면 5.1배속이 되어 다리가 1초에 7.6번 왕복한다. 너무 정신없어 보인다. 40°로 늘리면 보폭 0.289m, 0.868 m/s, 3.46배속(1초에 약 5번 왕복)이 된다. 짧은 다리로 종종걸음 치는 느낌이다. 이동 속도 3 m/s(계획서)는 그대로 두었다.</li>
+<li><strong>점프 후 exit time 제거:</strong> 2단계에서는 "점프 직후 한 프레임은 아직 땅에 붙어 있다"는 이유로 Jump → Idle에 exit time 0.5를 두었다. 이제 <code>IsGrounded</code>를 이동한 <strong>뒤에</strong> 넣으므로 점프한 프레임부터 false다. exit time 없이 착지하는 순간 넘어간다.</li>
+<li><strong>착지할 때 움직이고 있으면 Walk로:</strong> 계획서에는 Jump → Idle만 있었다. 걸으면서 점프하면 착지 순간 잠깐 Idle이 끼어 멈칫해 보이므로 Jump → Walk 전환을 더했다.</li>
+<li><strong>Always Animate:</strong> FBX 기본값은 화면에 안 그려지는 동안 뼈를 움직이지 않는다. 플레이어는 늘 움직여야 하고, 떨어져서 화면 밖에 있을 때도 마찬가지다.</li>
+</ul>
+<h3>검증 (완료 기준)</h3>
+<p>EditMode <strong>20/20 통과</strong>
+- Animator 파라미터 4개(<code>WalkSpeed</code> 추가)
+- Fox 프리팹 Animator = Always Animate
+- Player 프리팹: PlayerController에 Fox Animator가 연결되어 있고, Walk 1배속 속도가 0.87 m/s (±0.05)</p>
+<p>PlayMode <strong>17/17 통과</strong>. 새로 추가한 <code>FoxAnimationTests</code> 6개:
+- 서 있으면 Idle
+- 걸으면 Walk이고, 재생 배속 = 이동 속도 ÷ 1배속 속도
+- 멈추면 0.3초 안에 Idle
+- 점프하면 Jump(공중에서 IsGrounded = false), 착지 후 Idle
+- 걸으면서 점프하면 착지 후 바로 Walk
+- <strong>발 미끄러짐:</strong> 1초 동안 걸으며 앞왼다리 발끝의 월드 위치를 240fps로 기록한다. 디딤(발이 가장 앞 → 가장 뒤)마다 땅에서 밀린 거리를 잰다. 결과는 보폭 0.301m, 디딤 4번, <strong>미끄러짐 최대 0.013m, 평균 0.010m</strong>. 1배속으로 틀었다면 디딤마다 약 0.7m 미끄러진다.</p>
+<p>결과 파일: <code>logs/04_editmode_results.xml</code>, <code>logs/04_playmode_results.xml</code></p>
+<p>근접 녹화에서 Idle → Walk(대각선 다리 교차) → Jump(다리를 뻗은 공중 자세) → 착지 후 Walk로 이어지는 것을 눈으로 확인했다.</p>
+<h3>발생한 문제와 해결</h3>
+<table>
+<thead>
+<tr>
+<th>문제</th>
+<th>원인</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>발 미끄러짐 테스트가 <code>WaitForEndOfFrame</code> 에러로 실패</td>
+<td>배치 모드 테스트에서는 WaitForEndOfFrame을 쓸 수 없음</td>
+<td>애니메이션이 적용된 뒤 도는 <code>LateUpdate</code>에서 기록하는 <code>FootRecorder</code> 컴포넌트를 붙임</td>
+</tr>
+<tr>
+<td>60fps 측정에서 미끄러짐이 0.05~0.15m로 들쭉날쭉</td>
+<td>디딤 한 번이 6프레임 정도라 발 끝점을 정확히 못 잡음</td>
+<td>이 테스트만 240fps로 측정</td>
+</tr>
+<tr>
+<td>끝점을 1초에 16번이나 잡음 (통과는 했지만 잘못된 측정)</td>
+<td>곡선의 작은 흔들림을 끝점으로 잡아 디딤이 쪼개짐</td>
+<td>앞뒤 ±10프레임 안의 최댓값/최솟값만 끝점으로 인정하고, 보폭의 70% 이상 움직인 구간만 디딤으로 셈</td>
+</tr>
+<tr>
+<td>고친 뒤 보폭이 0으로 나옴 → <strong>다리가 전혀 움직이지 않고 있었음</strong></td>
+<td>Animator 컬링(Cull Update Transforms) 때문에 화면 렌더링이 없는 배치 모드에서 뼈가 갱신되지 않았다. 앞의 "통과"는 발이 몸에 붙은 채 움직인 것을 잘못 잰 결과였다</td>
+<td>Fox 프리팹 Animator를 Always Animate로 바꾸고 테스트 추가. 그 뒤 보폭 0.301m, 미끄러짐 1.3cm로 제대로 측정됨</td>
+</tr>
+</tbody>
+</table>
+<h3>함께 바뀐 것</h3>
+<ul>
+<li><code>make_fox.py</code>의 Walk 각도가 바뀌어 <code>bash tools/build_fox.sh</code>로 여우를 다시 만들었다. 여우 미리보기 이미지와 fox_preview.html 설명(±40°)도 갱신했다.</li>
+<li><code>tools/build_fox.sh</code>, <code>tools/build_map.sh</code>: 로그 이름 앞머리를 <code>TAG</code> 환경 변수로 바꿀 수 있게 했다(예: <code>TAG=04 bash tools/build_map.sh</code>). 이전 단계 로그를 덮어쓰지 않기 위해서다.</li>
+<li>미리보기 녹화를 60fps 게임 → 30fps 저장으로 올렸다(Walk 한 주기 0.19초를 약 6장으로 담기 위해). 여우를 따라가는 근접 화면(<code>close_###.jpg</code>)도 추가했다.</li>
+</ul>
+<h3>로그 파일</h3>
+<ul>
+<li><code>logs/04_fox_setup.log</code>, <code>logs/04_unity_capture.log</code>: 여우 재생성</li>
+<li><code>logs/04_map_setup.log</code>: 플레이어 프리팹(보폭 측정값 포함)</li>
+<li><code>logs/04_editmode.log</code>, <code>logs/04_editmode_results.xml</code>, <code>logs/04_playmode.log</code>, <code>logs/04_playmode_results.xml</code></li>
 </ul></article>
 </div>
 </body>

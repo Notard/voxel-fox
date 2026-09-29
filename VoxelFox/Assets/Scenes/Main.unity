@@ -119,59 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &587528909
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 587528911}
-  - component: {fileID: 587528910}
-  m_Layer: 0
-  m_Name: Map
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &587528910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 587528909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5530a408e2d3512478cd7657a62dedc8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: VoxelFox::MapBuilder
-  layout:
-  - S..C
-  - .H..
-  - C.HC
-  - ...C
-  tilePrefab: {fileID: 7082293857977079147, guid: b343a0d037fc7614485f93dcf0223bd0, type: 3}
-  player: {fileID: 736411883}
-  checkerShade: 0.9
---- !u!4 &587528911
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 587528909}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &736411882
+--- !u!1001 &101123060
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -232,10 +180,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46f64ed42f739064c843ebcaeb97ae96, type: 3}
---- !u!114 &736411883 stripped
+--- !u!114 &101123061 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8997347150076841083, guid: 46f64ed42f739064c843ebcaeb97ae96, type: 3}
-  m_PrefabInstance: {fileID: 736411882}
+  m_PrefabInstance: {fileID: 101123060}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -243,6 +191,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59a44aa4d09af1d4f890de05a3295223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: VoxelFox::PlayerController
+--- !u!1 &587528909
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 587528911}
+  - component: {fileID: 587528910}
+  m_Layer: 0
+  m_Name: Map
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &587528910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 587528909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5530a408e2d3512478cd7657a62dedc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: VoxelFox::MapBuilder
+  layout:
+  - S..C
+  - .H..
+  - C.HC
+  - ...C
+  tilePrefab: {fileID: 7082293857977079147, guid: b343a0d037fc7614485f93dcf0223bd0, type: 3}
+  player: {fileID: 101123061}
+  checkerShade: 0.9
+--- !u!4 &587528911
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 587528909}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1719065931
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,4 +456,4 @@ SceneRoots:
   - {fileID: 1719065934}
   - {fileID: 1985478374}
   - {fileID: 587528911}
-  - {fileID: 736411882}
+  - {fileID: 101123060}

@@ -34,6 +34,8 @@ code{background:var(--accent-soft);padding:1px 6px;border-radius:4px;font-size:.
 @media (max-width:760px){.player{grid-template-columns:1fr}}
 .stage{background:var(--stage);border-radius:12px;aspect-ratio:16/9;overflow:hidden}
 .stage img{display:block;width:100%;height:100%;object-fit:contain}
+.closeup{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:center;margin-top:12px}
+@media (max-width:760px){.closeup{grid-template-columns:1fr}}
 .ctrl{display:flex;gap:8px;align-items:center;margin:0 0 12px}
 .btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 12px;font:inherit;cursor:pointer;min-width:44px}
 input[type=range]{width:100%;accent-color:var(--accent)}
@@ -66,11 +68,17 @@ th{color:var(--muted);font-weight:600}
 </head>
 <body>
 <div class="wrap">
-  <h1>🟩 4x4 타일맵 + 이동 미리보기</h1>
-  <p class="muted">3단계 · Unity Play 모드에서 캡처 (<code>MovementPreviewRecorder</code>) · <a href="todo.html">할 일</a> · <a href="worklog.html">작업 기록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a></p>
+  <h1>🟩 4x4 타일맵 + 이동 · 애니메이션 미리보기</h1>
+  <p class="muted">3·4단계 · Unity Play 모드에서 캡처 (<code>MovementPreviewRecorder</code>) · <a href="todo.html">할 일</a> · <a href="worklog.html">작업 기록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a></p>
 
   <div class="player">
-    <div class="stage"><img id="frame" alt="이동 녹화 프레임"></div>
+    <div>
+      <div class="stage"><img id="frame" alt="이동 녹화 프레임 (게임 화면)"></div>
+      <div class="closeup">
+        <div class="stage"><img id="close" alt="이동 녹화 프레임 (여우 근접)"></div>
+        <p class="muted">여우를 따라가는 근접 화면 · Idle / Walk / Jump 동작 확인용</p>
+      </div>
+    </div>
     <div class="card">
       <div class="ctrl">
         <button class="btn" id="play" aria-label="재생/일시정지">❚❚</button>
@@ -81,14 +89,14 @@ th{color:var(--muted);font-weight:600}
         <button class="btn" data-speed="1">1×</button>
       </div>
       <div class="phase" id="phase"></div>
-      <div class="meta">프레임 <b id="fnum">0</b> / <b id="fmax">0</b> · 15fps</div>
+      <div class="meta">프레임 <b id="fnum">0</b> / <b id="fmax">0</b> · 30fps</div>
       <ol class="steps">
         <li>시작 칸 (0, 3)에서 대기</li>
         <li>동쪽으로 걷다가 Space 점프 (높이 1.2m)</li>
         <li>(2, 3)에서 남쪽으로 꺾음</li>
         <li>구멍 (2, 1)에 빠져 아래로 떨어짐</li>
       </ol>
-      <p class="muted" style="margin:12px 0 0">걷는 동안에도 여우는 Idle 동작입니다. 이동에 맞춘 Walk/Jump 동작 연결은 4단계에서 합니다.</p>
+      <p class="muted" style="margin:12px 0 0">멈춰 있으면 Idle, 걸으면 Walk(이동 속도에 맞춰 약 3.5배속), Space를 누르면 Jump입니다. 착지할 때 움직이고 있으면 바로 Walk로 이어집니다.</p>
     </div>
   </div>
 
@@ -118,6 +126,7 @@ th{color:var(--muted);font-weight:600}
         <tr><td>입체감</td><td>노멀맵 (색·노멀 아틀라스 512×256) · 잔디 덩어리 턱 + 둥근 타일 모서리</td></tr>
         <tr><td>이동</td><td>3 m/s · 카메라 기준 방향 · 회전 720°/s</td></tr>
         <tr><td>점프</td><td>높이 1.2m · 중력 -20 m/s²</td></tr>
+        <tr><td>애니메이션</td><td>Walk 배속 = 이동 속도 ÷ 0.87 m/s → 발 미끄러짐 최대 1.3cm</td></tr>
         <tr><td>충돌</td><td>CharacterController 높이 0.8m · 반지름 0.3m</td></tr>
         <tr><td>카메라</td><td>고정 쿼터뷰 · 내려다보는 각 45° · 방향 30° · 화각 40°</td></tr>
         <tr><td>조작</td><td>WASD / 방향키 / 게임패드 · Space 점프</td></tr>
@@ -135,12 +144,17 @@ th{color:var(--muted);font-weight:600}
   var fnum = document.getElementById("fnum");
   var i = 0, playing = true, speed = 1, timer = null, hold = 0;
 
-  frames.forEach(function (f) { new Image().src = "preview/map/" + f.file; });
+  var close = document.getElementById("close");
+  frames.forEach(function (f) {
+    new Image().src = "preview/map/" + f.file;
+    new Image().src = "preview/map/" + f.file.replace("move_", "close_");
+  });
   scrub.max = frames.length - 1;
   document.getElementById("fmax").textContent = frames.length - 1;
 
   function show() {
     img.src = "preview/map/" + frames[i].file;
+    close.src = "preview/map/" + frames[i].file.replace("move_", "close_");
     phase.textContent = frames[i].phase;
     scrub.value = i;
     fnum.textContent = i;

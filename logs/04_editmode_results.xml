@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="20" result="Passed" total="20" passed="20" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.6859831">
+  <test-suite type="TestSuite" id="1000" name="VoxelFox" fullname="VoxelFox" runstate="Runnable" testcasecount="20" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.685983" total="20" passed="20" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1025" name="EditModeTests.dll" fullname="C:/sample/VoxelFox/Library/ScriptAssemblies/EditModeTests.dll" runstate="Runnable" testcasecount="20" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.678935" total="20" passed="20" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="22640" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestFixture" id="1001" name="FoxAssetTests" fullname="FoxAssetTests" classname="FoxAssetTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.085854" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="ParameterizedMethod" id="1005" name="Clip_ExistsWithLengthAndLoop" fullname="FoxAssetTests.Clip_ExistsWithLengthAndLoop" classname="FoxAssetTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.034382" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="1002" name="Clip_ExistsWithLengthAndLoop(&quot;Idle&quot;,40,True)" fullname="FoxAssetTests.Clip_ExistsWithLengthAndLoop(&quot;Idle&quot;,40,True)" methodname="Clip_ExistsWithLengthAndLoop" classname="FoxAssetTests" runstate="Runnable" seed="939754008" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.025311" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="1003" name="Clip_ExistsWithLengthAndLoop(&quot;Walk&quot;,20,True)" fullname="FoxAssetTests.Clip_ExistsWithLengthAndLoop(&quot;Walk&quot;,20,True)" methodname="Clip_ExistsWithLengthAndLoop" classname="FoxAssetTests" runstate="Runnable" seed="242814899" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.000845" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="1004" name="Clip_ExistsWithLengthAndLoop(&quot;Jump&quot;,20,False)" fullname="FoxAssetTests.Clip_ExistsWithLengthAndLoop(&quot;Jump&quot;,20,False)" methodname="Clip_ExistsWithLengthAndLoop" classname="FoxAssetTests" runstate="Runnable" seed="641451881" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.000561" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-case id="1010" name="Controller_HasParametersAndStates" fullname="FoxAssetTests.Controller_HasParametersAndStates" methodname="Controller_HasParametersAndStates" classname="FoxAssetTests" runstate="Runnable" seed="1807501213" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.004569" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1007" name="Mesh_IsRigidSkinned" fullname="FoxAssetTests.Mesh_IsRigidSkinned" methodname="Mesh_IsRigidSkinned" classname="FoxAssetTests" runstate="Runnable" seed="1759414929" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.013579" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1008" name="Model_IsUprightFacingForwardAndSized" fullname="FoxAssetTests.Model_IsUprightFacingForwardAndSized" methodname="Model_IsUprightFacingForwardAndSized" classname="FoxAssetTests" runstate="Runnable" seed="939700388" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.007224" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1011" name="Prefab_AnimatorAlwaysAnimates" fullname="FoxAssetTests.Prefab_AnimatorAlwaysAnimates" methodname="Prefab_AnimatorAlwaysAnimates" classname="FoxAssetTests" runstate="Runnable" seed="130037962" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.001308" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1012" name="Prefab_UsesPaletteMaterial" fullname="FoxAssetTests.Prefab_UsesPaletteMaterial" methodname="Prefab_UsesPaletteMaterial" classname="FoxAssetTests" runstate="Runnable" seed="577954350" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.012207" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1006" name="Rig_HasAllBones" fullname="FoxAssetTests.Rig_HasAllBones" methodname="Rig_HasAllBones" classname="FoxAssetTests" runstate="Runnable" seed="389551839" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.000901" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1009" name="Walk_MovesLegsInOpposition" fullname="FoxAssetTests.Walk_MovesLegsInOpposition" methodname="Walk_MovesLegsInOpposition" classname="FoxAssetTests" runstate="Runnable" seed="1468725547" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.001337" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1013" name="MapAssetTests" fullname="MapAssetTests" classname="MapAssetTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.592173" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1020" name="Layout_FirstRowIsFarthest" fullname="MapAssetTests.Layout_FirstRowIsFarthest" methodname="Layout_FirstRowIsFarthest" classname="MapAssetTests" runstate="Runnable" seed="967128248" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.002549" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1014" name="Layout_MainMap_Has14Tiles2Holes4CoinsAndStart" fullname="MapAssetTests.Layout_MainMap_Has14Tiles2Holes4CoinsAndStart" methodname="Layout_MainMap_Has14Tiles2Holes4CoinsAndStart" classname="MapAssetTests" runstate="Runnable" seed="122719954" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.287619" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-suite type="ParameterizedMethod" id="1019" name="Layout_RejectsBadInput" fullname="MapAssetTests.Layout_RejectsBadInput" classname="MapAssetTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.002906" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="1015" name="Layout_Rejects_UnevenRows" fullname="MapAssetTests.Layout_Rejects_UnevenRows" methodname="Layout_RejectsBadInput" classname="MapAssetTests" runstate="Runnable" seed="518992519" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.001332" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="1016" name="Layout_Rejects_UnknownChar" fullname="MapAssetTests.Layout_Rejects_UnknownChar" methodname="Layout_RejectsBadInput" classname="MapAssetTests" runstate="Runnable" seed="2084685337" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.000114" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="1017" name="Layout_Rejects_TwoStarts" fullname="MapAssetTests.Layout_Rejects_TwoStarts" methodname="Layout_RejectsBadInput" classname="MapAssetTests" runstate="Runnable" seed="2126946715" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.000056" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="1018" name="Layout_Rejects_NoStart" fullname="MapAssetTests.Layout_Rejects_NoStart" methodname="Layout_RejectsBadInput" classname="MapAssetTests" runstate="Runnable" seed="2039372147" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.000044" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-case id="1024" name="MainScene_IsWired" fullname="MapAssetTests.MainScene_IsWired" methodname="MainScene_IsWired" classname="MapAssetTests" runstate="Runnable" seed="1062225463" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.289633" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1023" name="PlayerPrefab_HasControllerAndFox" fullname="MapAssetTests.PlayerPrefab_HasControllerAndFox" methodname="PlayerPrefab_HasControllerAndFox" classname="MapAssetTests" runstate="Runnable" seed="1861718996" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.001716" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1022" name="TileMaterial_HasNormalMapAndMeshHasTangents" fullname="MapAssetTests.TileMaterial_HasNormalMapAndMeshHasTangents" methodname="TileMaterial_HasNormalMapAndMeshHasTangents" classname="MapAssetTests" runstate="Runnable" seed="1007921252" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.004750" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1021" name="TilePrefab_Is2x05x2_WithTopAtZero" fullname="MapAssetTests.TilePrefab_Is2x05x2_WithTopAtZero" methodname="TilePrefab_Is2x05x2_WithTopAtZero" classname="MapAssetTests" runstate="Runnable" seed="1884126126" result="Passed" start-time="2026-09-29 05:34:28Z" end-time="2026-09-29 05:34:28Z" duration="0.001110" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[Saving results to: C:/Users/elbre/AppData/LocalLow/DefaultCompany/VoxelFox\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

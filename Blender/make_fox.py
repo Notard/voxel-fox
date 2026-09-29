@@ -252,9 +252,15 @@ def idle_pose(f):
     return p
 
 
+# 다리 흔드는 각도. 2026-09-29 4단계에서 26° → 40°.
+# 이동 속도 3 m/s에 발을 맞추려면 26°로는 Walk를 5.1배속(초당 7.6주기)으로 틀어야 해서
+# 보폭을 키웠다. 40°면 3.5배속(초당 약 5주기)이다.
+WALK_SWING = 40
+
+
 def walk_pose(f):
     t = f / 20 * 2 * math.pi
-    swing = 26 * math.cos(t)
+    swing = WALK_SWING * math.cos(t)
     p = neutral()
     # 대각선 다리 쌍: FL+BR / FR+BL
     for name in ("Leg_FL", "Leg_BR"):

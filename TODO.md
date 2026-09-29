@@ -4,7 +4,7 @@
 > 체크 후 `python tools/make_todo_html.py` 실행 → 진행률 갱신 + [todo.html](todo.html) 재생성.
 > 작업별 상세 결과: [WORKLOG.md](WORKLOG.md)
 
-**진행률: 40 / 58**
+**진행률: 45 / 59**
 
 ---
 
@@ -61,10 +61,11 @@
 - [x] 재생성 후 EditMode 19/19 · PlayMode 11/11 통과 ✅ 완료 기준
 
 ## 4. 애니메이션 연결
-- [ ] PlayerController에서 Animator 파라미터(Speed, IsGrounded, Jump) 갱신
-- [ ] 상태 전환 설정: Idle ⇄ Walk, Any → Jump → Idle
-- [ ] 이동 속도에 맞춰 Walk 재생 속도 조정 (발 미끄러짐 최소화)
-- [ ] Idle / Walk / Jump 전환이 자연스러운지 확인 ✅ 완료 기준
+- [x] PlayerController에서 Animator 파라미터(Speed, IsGrounded, Jump) 갱신
+- [x] 상태 전환 설정: Idle ⇄ Walk, Any → Jump → Idle
+- [x] 이동 속도에 맞춰 Walk 재생 속도 조정 (발 미끄러짐 최소화)
+- [x] 미리보기에 여우 근접 녹화 추가 → [map_preview.html](map_preview.html)
+- [x] Idle / Walk / Jump 전환이 자연스러운지 확인 ✅ 완료 기준
 
 ## 5. 아이템
 - [ ] 복셀 코인 프리팹 제작
@@ -100,3 +101,4 @@
 | 2026-09-29 | 2-1. 흰 여우 · 0.9배 | 더 예쁜 여우로 만들기 위해 붉은 여우 → 흰 여우, 크기 0.9배 · 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 3. 4x4 타일맵 + 이동 | 6/6 완료 · EditMode 18/18 · PlayMode 11/11 통과 · 미리보기 [map_preview.html](map_preview.html) · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 3-1. 바닥 노멀맵 | 바닥이 평평해 보여서 노멀맵으로 입체감 추가(사용자 요청) · 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |
+| 2026-09-29 | 4. 애니메이션 연결 | 5/5 완료 · Walk 다리 각도 26°→40° · 발 미끄러짐 최대 1.3cm · EditMode 20/20 · PlayMode 17/17 · 상세: [WORKLOG.md](WORKLOG.md) |

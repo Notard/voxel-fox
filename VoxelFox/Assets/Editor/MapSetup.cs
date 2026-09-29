@@ -272,20 +272,50 @@ public static class MapSetup
         cc.slopeLimit = 45f;
         cc.minMoveDistance = 0f;
 
+        var fox = (GameObject)PrefabUtility.InstantiatePrefab(
+            AssetDatabase.LoadAssetAtPath<GameObject>(FoxSetup.PrefabPath));
+        fox.transform.SetParent(root.transform, false);
+
         var controller = root.AddComponent<PlayerController>();
         var so = new SerializedObject(controller);
         so.FindProperty("actions").objectReferenceValue =
             AssetDatabase.LoadAssetAtPath<InputActionAsset>(InputActionsPath);
+        so.FindProperty("animator").objectReferenceValue = fox.GetComponent<Animator>();
+        so.FindProperty("walkCycleSpeed").floatValue = MeasureWalkCycleSpeed();
         so.ApplyModifiedPropertiesWithoutUndo();
-
-        var fox = (GameObject)PrefabUtility.InstantiatePrefab(
-            AssetDatabase.LoadAssetAtPath<GameObject>(FoxSetup.PrefabPath));
-        fox.transform.SetParent(root.transform, false);
 
         var prefab = PrefabUtility.SaveAsPrefabAsset(root, PlayerPrefabPath);
         Object.DestroyImmediate(root);
         Debug.Log($"[MapSetup] 플레이어 프리팹: {PlayerPrefabPath}");
         return prefab;
+    }
+
+    // Walk 클립을 1배속으로 틀 때 발이 땅에 붙어 있으려면 몸이 얼마나 빨리 가야 하는지 잰다.
+    // 앞왼다리 발끝이 한 주기 동안 앞뒤로 움직인 폭(보폭)을 재면, 디딘 발이 반 주기 동안 뒤로 미는 거리가 된다.
+    // → 한 주기에 몸이 가는 거리 = 보폭 × 2, 속도 = 보폭 × 2 ÷ 클립 길이
+    static float MeasureWalkCycleSpeed()
+    {
+        var fox = Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(FoxSetup.PrefabPath));
+        var walk = AssetDatabase.LoadAllAssetRepresentationsAtPath(FoxSetup.FbxPath)
+            .OfType<AnimationClip>().First(c => c.name == "Walk");
+        var leg = fox.GetComponentsInChildren<Transform>().First(t => t.name == "Leg_FL");
+
+        walk.SampleAnimation(fox, 0);
+        float legLength = leg.position.y; // 다리 본은 엉덩이에서 위를 향하고, 발바닥이 y 0
+        float min = float.MaxValue, max = float.MinValue;
+        const int Samples = 60;
+        for (int i = 0; i < Samples; i++)
+        {
+            walk.SampleAnimation(fox, walk.length * i / Samples);
+            float footZ = (leg.position - leg.up * legLength).z; // 여우는 +Z를 바라본다
+            min = Mathf.Min(min, footZ);
+            max = Mathf.Max(max, footZ);
+        }
+        Object.DestroyImmediate(fox);
+
+        float speed = (max - min) * 2f / walk.length;
+        Debug.Log($"[MapSetup] Walk 보폭 {max - min:0.000}m, 1배속 이동 속도 {speed:0.000}m/s (다리 길이 {legLength:0.000}m)");
+        return speed;
     }
 
     static void SetupScene(GameObject tilePrefab, GameObject playerPrefab)
