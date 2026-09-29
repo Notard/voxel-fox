@@ -30,3 +30,7 @@
 
 # 셸 스크립트는 LF 유지 (CRLF면 bash에서 실패)
 *.sh text eol=lf
+
+# GitHub Pages(docs/)는 LFS 파일을 제공하지 못하므로 이 폴더의 이미지는 일반 파일로 둔다
+docs/**/*.jpg !filter !diff !merge binary
+docs/**/*.png !filter !diff !merge binary

@@ -1,6 +1,6 @@
 # 결과 보고서 — 복셀 여우 타일 게임
 
-> 작성일: 2026-09-29 · 저장소: [github.com/Notard/voxel-fox](https://github.com/Notard/voxel-fox) · 상세 기록: [WORKLOG.md](WORKLOG.md) · 계획서: [plan.md](plan.md) · 체크리스트: [TODO.md](TODO.md)
+> 작성일: 2026-09-29 · 웹 보고서: [notard.github.io/voxel-fox](https://notard.github.io/voxel-fox/) · 저장소: [github.com/Notard/voxel-fox](https://github.com/Notard/voxel-fox) · 상세 기록: [WORKLOG.md](WORKLOG.md) · 계획서: [plan.md](plan.md) · 체크리스트: [TODO.md](TODO.md)
 
 ## 1. 요약
 

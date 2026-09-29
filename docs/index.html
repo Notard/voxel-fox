@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="흰 복셀 여우 타일 게임(Unity 6) 결과 보고서: 플레이 장면, 핵심 수치, 진행 과정, 피드백 반영, 검증과 교훈">
+<link rel="icon" type="image/png" href="img/icon.png">
+<title>VoxelFox 결과 보고서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@700&family=DM+Sans:opsz,wght@9..40,400;9..40,700&family=JetBrains+Mono:wght@400&family=Noto+Sans+KR:wght@400;700&display=swap">
+<style>
+/* Genesis 디자인 시스템 적용. Layout: 고정 상단 내비 → 편집형 머리 → 플레이 장면 → 수치 카드 → 섹션들 (컨테이너 1280, 본문 폭 제한)
+   글꼴: General Sans(Fontshare)는 공유 페이지에서 불러올 수 없어 Manrope로 대신, 한글은 Noto Sans KR */
+:root{
+  --primary:#6366F1; --primary-hover:#4F46E5; --ring:rgba(99,102,241,.12); --glow:rgba(99,102,241,.35);
+  --neutral:#9C9C9C; --bg:#FAFAFA; --surface:#FFFFFF; --text:#0A0A0A; --text-2:#6B6B6B; --border:#E8E8EC;
+  --bg-alt:#F2F2F4; --chip:#F3F4F6; --chip-text:#4B5563;
+  --success:#10B981; --success-soft:#E7F8F1; --warning:#F59E0B; --warning-soft:#FEF4E2; --error:#EF4444; --error-soft:#FDECEC;
+  --nav-bg:rgba(250,250,250,.8); --lift:0 8px 30px rgba(0,0,0,.08);
+  --display:"Manrope","Noto Sans KR",system-ui,sans-serif;
+  --body:"DM Sans","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --primary:#818CF8; --primary-hover:#A5B4FC; --ring:rgba(129,140,248,.25); --glow:rgba(129,140,248,.35);
+    --neutral:#71717A; --bg:#0B0B0F; --surface:#141418; --text:#F2F2F4; --text-2:#A1A1AA; --border:#26262C;
+    --bg-alt:#1C1C22; --chip:#23232A; --chip-text:#C4C4CC;
+    --success:#34D399; --success-soft:#0F2A22; --warning:#FBBF24; --warning-soft:#2E2412; --error:#F87171; --error-soft:#331A1A;
+    --nav-bg:rgba(11,11,15,.75); --lift:0 8px 30px rgba(0,0,0,.45); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --primary:#818CF8; --primary-hover:#A5B4FC; --ring:rgba(129,140,248,.25); --glow:rgba(129,140,248,.35);
+  --neutral:#71717A; --bg:#0B0B0F; --surface:#141418; --text:#F2F2F4; --text-2:#A1A1AA; --border:#26262C;
+  --bg-alt:#1C1C22; --chip:#23232A; --chip-text:#C4C4CC;
+  --success:#34D399; --success-soft:#0F2A22; --warning:#FBBF24; --warning-soft:#2E2412; --error:#F87171; --error-soft:#331A1A;
+  --nav-bg:rgba(11,11,15,.75); --lift:0 8px 30px rgba(0,0,0,.45); color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.65;font-weight:400}
+b,strong{font-weight:700}
+a{color:var(--primary);text-decoration:none}
+a:hover{color:var(--primary-hover);text-decoration:underline;text-underline-offset:3px}
+:focus-visible{outline:none;box-shadow:0 0 0 3px var(--ring);border-radius:6px}
+code{font-family:var(--mono);font-size:13px;background:var(--bg-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.03em;margin:0;text-wrap:balance}
+
+/* 내비 */
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;height:56px;background:var(--nav-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+nav .in{max-width:1280px;margin:0 auto;padding-inline:24px;height:100%;display:flex;align-items:center;gap:24px}
+.logo{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:700;letter-spacing:-.03em;color:var(--text);font-size:15px}
+.logo img{width:28px;height:28px}
+.navlinks{display:flex;gap:4px;margin:0 auto;overflow-x:auto}
+.navlinks a{color:var(--text-2);font-size:14px;padding:6px 12px;border-radius:6px;white-space:nowrap}
+.navlinks a:hover{background:var(--bg-alt);color:var(--text);text-decoration:none}
+
+/* 버튼 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:38px;padding:0 16px;border-radius:6px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s,border-color .2s}
+.btn:hover{transform:translateY(-1px);text-decoration:none}
+.btn-primary{background:var(--primary);color:#FAFAFA;border:1px solid var(--primary)}
+.btn-primary:hover{background:var(--primary-hover);border-color:var(--primary-hover);color:#FAFAFA;box-shadow:0 4px 12px var(--glow)}
+.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+.btn-sm{height:32px;padding:0 12px}
+
+.wrap{max-width:1280px;margin:0 auto;padding-inline:24px;padding-block:64px 96px;display:grid;gap:64px}
+section{display:grid;gap:24px;min-width:0;scroll-margin-top:80px}
+.overline{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);margin:0}
+h2{font-size:32px;line-height:1.2}
+.sub{color:var(--text-2);margin:0;max-width:68ch}
+
+/* 머리 */
+.hero{display:grid;gap:16px;max-width:980px}
+.hero h1{font-size:clamp(40px,7vw,72px);line-height:1.05;letter-spacing:-.04em}
+.hero p.sub{font-size:17px}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+
+/* 칩 */
+.chip{display:inline-flex;align-items:center;padding:4px 12px;border-radius:9999px;font-size:12px;background:var(--chip);color:var(--chip-text);white-space:nowrap}
+.chip.ok{background:var(--success-soft);color:var(--success)}
+.chip.fb{background:var(--warning-soft);color:var(--warning)}
+.chip.rv{background:var(--error-soft);color:var(--error)}
+
+/* 플레이어 */
+.player{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start}
+.screen{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface);aspect-ratio:16/9;max-width:100%}
+.screen img{display:block;width:100%;height:100%;object-fit:cover}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;display:grid}
+.panel .top{padding:16px;display:grid;gap:12px;border-bottom:1px solid var(--border)}
+.phase{margin:0;font-weight:700;min-height:3.3em}
+.row{display:flex;gap:12px;align-items:center}
+input[type=range]{flex:1;min-width:0;accent-color:var(--primary)}
+.list{list-style:none;margin:0;padding:0}
+.list li{display:flex;justify-content:space-between;gap:16px;padding:12px 16px;border-top:1px solid var(--border);font-size:13px}
+.list li:first-child{border-top:0}
+.list li span:last-child{color:var(--text-2)}
+
+/* 수치 */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;display:grid;gap:4px;align-content:start}
+.stat b{font-family:var(--display);font-size:32px;letter-spacing:-.03em;line-height:1.15;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--text-2)}
+
+/* 표 */
+.table{overflow-x:auto;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:600px}
+th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);font-weight:400}
+tr:last-child td{border-bottom:0}
+td:first-child{white-space:nowrap}
+
+/* 갤러리 (이미지 영역 + 내용 영역 카드) */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px}
+.shot{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:grid;grid-template-rows:200px auto}
+.shot img{width:100%;height:200px;object-fit:cover;display:block;border-bottom:1px solid var(--border);background:var(--bg-alt)}
+.shot img.contain{object-fit:contain;padding:16px}
+.shot div{padding:12px 16px;display:grid;gap:2px}
+.shot b{font-size:14px}
+.shot span{font-size:13px;color:var(--text-2)}
+
+/* 진행 과정 (목록) */
+.timeline{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--border);border-radius:8px}
+.timeline li{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:16px;align-items:start;padding:12px 16px;border-top:1px solid var(--border)}
+.timeline li:first-child{border-top:0}
+.timeline time{font-family:var(--mono);font-size:13px;color:var(--neutral);padding-top:1px}
+.timeline b{display:block}
+.timeline p{margin:0;font-size:13px;color:var(--text-2)}
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+
+/* 설계 결정 */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;display:grid;gap:8px;align-content:start}
+.card h3{font-size:18px;letter-spacing:-.02em}
+.card p{margin:0;font-size:14px;color:var(--text-2)}
+
+.cmds{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--border);border-radius:8px}
+.cmds li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;padding:12px 16px;border-top:1px solid var(--border);align-items:center}
+.cmds li:first-child{border-top:0}
+.cmds code{overflow-wrap:anywhere}
+.todo{margin:0;padding-left:20px;display:grid;gap:4px;color:var(--text-2)}
+footer{border-top:1px solid var(--border);padding-top:24px;font-size:12px;color:var(--neutral);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
+
+@media (max-width:900px){.player{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .wrap{padding-block:32px 64px;gap:32px}
+  nav .in,.wrap{padding-inline:16px}
+  .navlinks{display:none}
+  nav .in{justify-content:space-between}
+  .timeline li{grid-template-columns:48px minmax(0,1fr)}
+  .timeline li .chip{grid-column:2;justify-self:start}
+  h2{font-size:24px}
+}
+@media (prefers-reduced-motion: reduce){.btn,.btn:hover{transition:none;transform:none}}
+</style>
+</head>
+<body>
+<nav aria-label="보고서 목차">
+  <div class="in">
+    <a class="logo" href="#top"><img src="img/icon.png" alt="">VoxelFox</a>
+    <div class="navlinks">
+      <a href="#play">플레이</a><a href="#game">게임 구성</a><a href="#timeline">진행 과정</a><a href="#feedback">피드백</a><a href="#qa">검증</a><a href="#run">실행</a>
+    </div>
+    <a class="btn btn-secondary btn-sm" href="https://github.com/Notard/voxel-fox">GitHub</a>
+  </div>
+</nav>
+
+<main class="wrap" id="top">
+  <header class="hero">
+    <p class="overline">결과 보고서 · 2026-09-29</p>
+    <h1>복셀 여우 타일 게임</h1>
+    <p class="sub">흰 복셀 여우가 구멍 2개가 뚫린 4×4 타일맵에서 코인 4개를 모으는 짧은 3D 게임입니다. 계획서의 1~8단계를 모두 마치고, Windows 실행 파일을 직접 플레이해 확인했습니다.</p>
+    <div class="meta"><span class="chip">Unity 6000.5.7f1</span><span class="chip">URP</span><span class="chip">Blender 5.2</span><span class="chip">Windows</span><span class="chip ok">완료 81 / 81</span></div>
+  </header>
+
+  <section id="play" aria-labelledby="play-h">
+    <h2 id="play-h">실제 플레이 장면</h2>
+    <div class="player">
+      <div class="screen"><img id="frame" src="play/000.jpg" alt="게임 녹화 프레임"></div>
+      <div class="panel">
+        <div class="top">
+          <p class="overline">녹화 장면 · 15fps</p>
+          <p class="phase" id="phase" aria-live="polite">대기 · 아이템 0 / 4</p>
+          <div class="row">
+            <button id="toggle" class="btn btn-primary btn-sm" type="button">일시정지</button>
+            <input id="scrub" type="range" min="0" value="0" aria-label="프레임 위치">
+          </div>
+        </div>
+        <ul class="list">
+          <li><span>동쪽으로 걷다가 점프</span><span>시작</span></li>
+          <li><span>코인 (3, 3)</span><span>1 / 4</span></li>
+          <li><span>남쪽 코인 (3, 1)</span><span>2 / 4</span></li>
+          <li><span>서쪽 구멍에 빠짐</span><span>GAME OVER</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="핵심 수치">
+    <div class="stats">
+      <div class="stat"><b>81 / 81</b><span>체크리스트 완료</span></div>
+      <div class="stat"><b>62</b><span>자동 테스트 통과 · EditMode 27, PlayMode 35</span></div>
+      <div class="stat"><b>1.3 cm</b><span>걸을 때 발 미끄러짐 최대값</span></div>
+      <div class="stat"><b>18</b><span>커밋 · 11:31 → 16:01</span></div>
+      <div class="stat"><b>102.7 MB</b><span>Windows 실행 파일 · 빌드 경고·에러 0</span></div>
+    </div>
+  </section>
+
+  <section id="game" aria-labelledby="game-h">
+    <h2 id="game-h">게임 구성</h2>
+    <div class="table">
+      <table>
+        <thead><tr><th>요소</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td>캐릭터</td><td>흰 복셀 여우 (복셀 612개, 코~꼬리 1.24m). Idle / Walk / Jump 동작을 Blender Python 스크립트로 생성</td></tr>
+          <tr><td>맵</td><td>4×4 타일(한 칸 2m), 구멍 2개, 둘레는 낭떠러지. 잔디 블록에 노멀맵으로 입체감</td></tr>
+          <tr><td>조작</td><td>WASD·방향키·게임패드로 이동(타일 격자 방향으로 곧게), Space 점프, R 재시작</td></tr>
+          <tr><td>카메라</td><td>여우를 화면 가운데에 두고 따라가는 쿼터뷰 (내려다보는 각 45°, 방향 30°, 거리 11m)</td></tr>
+          <tr><td>아이템</td><td>복셀 코인 4개. 돌면서 둥실거리고, 닿으면 금색 반짝이와 함께 사라짐. 좌상단 <code>아이템 n / 4</code></td></tr>
+          <tr><td>결과</td><td>y &lt; -5로 떨어지면 GAME OVER, 코인 4개를 모두 모으면 CLEAR!(걸린 시간). 결과가 나오면 조작·시간 정지</td></tr>
+          <tr><td>재시작</td><td>R 키(언제든) 또는 [다시 하기] 버튼 → 여우·코인·카운터·시간이 모두 처음 상태로</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="gallery">
+      <figure class="shot" style="margin:0"><img src="img/fox.jpg" alt="흰 복셀 여우 3/4 모습"><div><b>흰 여우</b><span>Blender Python으로 생성 · 본 8개</span></div></figure>
+      <figure class="shot" style="margin:0"><img src="img/coin.jpg" alt="금색 복셀 코인 근접"><div><b>복셀 코인</b><span>지름 0.6m · 복셀 240개</span></div></figure>
+      <figure class="shot" style="margin:0"><img class="contain" src="img/icon.png" alt="실행 파일 아이콘"><div><b>실행 파일 아이콘</b><span>Codex(ChatGPT 이미지 생성)로 제작</span></div></figure>
+      <figure class="shot" style="margin:0"><img src="img/gameover.jpg" alt="GAME OVER 화면과 다시 하기 버튼"><div><b>GAME OVER</b><span>[다시 하기 (R)] 버튼</span></div></figure>
+      <figure class="shot" style="margin:0"><img src="img/clear.jpg" alt="CLEAR 화면과 걸린 시간"><div><b>CLEAR!</b><span>코인 4개 · 걸린 시간 표시</span></div></figure>
+    </div>
+  </section>
+
+  <section id="timeline" aria-labelledby="time-h">
+    <h2 id="time-h">진행 과정</h2>
+    <div class="legend"><span class="chip ok">계획 단계</span><span class="chip fb">피드백으로 추가</span><span class="chip rv">되돌림</span></div>
+    <ol class="timeline">
+      <li><time>11:31</time><div><b>1. Unity 프로젝트</b><p>URP 템플릿, Input System, TextMeshPro, Main 씬, GitHub 공개 저장소(LFS)</p></div><span class="chip ok">계획</span></li>
+      <li><time>12:11</time><div><b>2. 복셀 여우 캐릭터</b><p>스크립트 하나로 모델 → 리그(본 8개) → 동작 3개 → FBX, Unity 설정 자동화</p></div><span class="chip ok">계획</span></li>
+      <li><time>12:20</time><div><b>2-1. 흰 여우 · 0.9배</b><p>"더 예쁜 여우로" → 붉은 여우를 흰 여우로, 크기 0.9배</p></div><span class="chip fb">피드백</span></li>
+      <li><time>12:39</time><div><b>3. 4×4 타일맵 + 이동</b><p>문자열 레이아웃으로 타일·구멍 생성, 이동·점프, 쿼터뷰 카메라</p></div><span class="chip ok">계획</span></li>
+      <li><time>12:47</time><div><b>3-1. 바닥 노멀맵</b><p>잔디 덩어리마다 턱, 타일 모서리를 둥글게 해서 입체감</p></div><span class="chip fb">피드백</span></li>
+      <li><time>14:37</time><div><b>4. 애니메이션 연결</b><p>Walk 재생 속도를 이동 속도에 맞춰 발 미끄러짐 최대 1.3cm</p></div><span class="chip ok">계획</span></li>
+      <li><time>15:05</time><div><b>4-1. 카메라 추적 · 격자 방향 이동</b><p>카메라가 여우를 따라가고, 화살표가 타일 줄을 따라 곧게</p></div><span class="chip fb">피드백</span></li>
+      <li><time>15:13</time><div><b>4-2. 카메라 거리 1.5배</b><p>원인이 Game 창 Scale 5배로 밝혀져 원래 카메라로 복귀, 이력은 남김</p></div><span class="chip rv">되돌림</span></li>
+      <li><time>15:17</time><div><b>4-3. 점프 거리</b><p>구멍에 잘 빠진다 → 달리며 뛴 거리 2.08m를 2.68m로 (구멍 너비 2m)</p></div><span class="chip fb">피드백</span></li>
+      <li><time>15:28</time><div><b>5. 아이템</b><p>복셀 코인, 획득 반짝이, 한글 카운터</p></div><span class="chip ok">계획</span></li>
+      <li><time>15:43</time><div><b>6. 게임 종료 / 성공</b><p>GAME OVER / CLEAR! 패널, 결과가 나오면 조작·시간 정지</p></div><span class="chip ok">계획</span></li>
+      <li><time>15:52</time><div><b>7. 재시작</b><p>R 키와 [다시 하기] 버튼, 씬을 다시 불러 처음 상태로</p></div><span class="chip ok">계획</span></li>
+      <li><time>16:01</time><div><b>8. Windows 빌드</b><p>아이콘을 넣어 실행 파일 완성, 사용자 플레이 확인</p></div><span class="chip ok">계획</span></li>
+    </ol>
+  </section>
+
+  <section id="feedback" aria-labelledby="fb-h">
+    <h2 id="fb-h">사용자 피드백으로 바뀐 것</h2>
+    <div class="table">
+      <table>
+        <thead><tr><th>요청</th><th>원인</th><th>조치</th></tr></thead>
+        <tbody>
+          <tr><td>더 예쁜 여우로</td><td>—</td><td>흰 털 3톤, 분홍 귀 안쪽, 크림색 볼, 크기 0.9배</td></tr>
+          <tr><td>바닥에 입체감</td><td>색 무늬만 있어 평평해 보임</td><td>색·노멀 텍스처 아틀라스, 잔디 덩어리 턱</td></tr>
+          <tr><td>카메라가 캐릭터를 따라가야</td><td>맵 전체를 비추는 고정 카메라</td><td>여우를 가운데 두고 따라가는 카메라</td></tr>
+          <tr><td>화살표가 대각선으로 감</td><td>카메라가 격자에서 30° 돌아가 있는데 입력은 화면 기준</td><td>입력을 가장 가까운 격자 축으로 (↑ 북쪽, → 동쪽)</td></tr>
+          <tr><td>카메라를 멀리, 여우를 가운데로</td><td>Game 창 Scale이 5배였음</td><td>바꿨다가 되돌림</td></tr>
+          <tr><td>점프가 짧아 구멍에 잘 빠짐</td><td>뛴 거리 2.08m ≈ 구멍 2m</td><td>높이 1.5m, 중력 -15 → 2.68m</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="dec-h">
+    <h2 id="dec-h">주요 설계 결정</h2>
+    <div class="cards">
+      <div class="card"><h3>모든 에셋을 스크립트로</h3><p>여우는 Blender Python, 타일·코인·UI·씬 배치는 Unity 에디터 스크립트가 만든다. 값을 바꾸고 다시 실행하면 똑같이 재현된다.</p></div>
+      <div class="card"><h3>발 미끄러짐을 계산으로</h3><p>Walk 클립에서 보폭을 재 1배속 속도(0.868 m/s)를 구하고, 실제 속도 ÷ 이 값으로 재생 배속을 정한다. 다리 각도는 26°에서 40°로 늘렸다.</p></div>
+      <div class="card"><h3>타일은 실행할 때 생성</h3><p>레이아웃 문자열 네 줄만 고치면 맵이 바뀐다. 에디터에서는 기즈모로 배치를 보여 준다.</p></div>
+      <div class="card"><h3>한글 글꼴은 설치된 글꼴로</h3><p>맑은 고딕은 재배포할 수 없어 저장소에 넣지 않고, 실행할 때 Windows에 설치된 글꼴을 불러온다.</p></div>
+      <div class="card"><h3>재시작은 씬 다시 불러오기</h3><p>정적 이벤트를 꼭 떼어 두어, 여러 번 재시작해도 코인을 두 번 세지 않는다.</p></div>
+      <div class="card"><h3>미리보기는 Play 모드에서</h3><p>편집 모드에서는 여우가 잘못 그려져서, 실제 게임과 같은 조건에서 캡처해 단계마다 눈으로 확인했다.</p></div>
+    </div>
+  </section>
+
+  <section id="qa" aria-labelledby="qa-h">
+    <h2 id="qa-h">품질 검증</h2>
+    <p class="sub">단계를 마칠 때마다 자동 테스트 전체를 다시 돌렸습니다. 프레임 간격을 고정해 매번 같은 결과가 나옵니다.</p>
+    <div class="table">
+      <table>
+        <thead><tr><th>영역</th><th>확인한 것</th></tr></thead>
+        <tbody>
+          <tr><td>에셋</td><td>여우 본·클립·크기, 타일·코인 크기와 콜라이더, 노멀맵 설정, 씬 연결</td></tr>
+          <tr><td>이동</td><td>이동 속도 3 m/s, 점프 높이 1.5m, 구멍·가장자리 낙하, 격자 방향 입력, 카메라 중앙 유지</td></tr>
+          <tr><td>애니메이션</td><td>Idle / Walk / Jump 전환, 240fps로 잰 발 미끄러짐</td></tr>
+          <tr><td>게임 흐름</td><td>코인 획득, GAME OVER / CLEAR, 조작·시간 정지, 가상 키보드 R 입력으로 재시작</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 style="font-size:24px">겪은 문제와 교훈</h3>
+    <div class="table">
+      <table>
+        <thead><tr><th>문제</th><th>교훈</th></tr></thead>
+        <tbody>
+          <tr><td style="white-space:normal">발 미끄러짐 테스트가 "통과"였지만 다리가 움직이지 않고 있었다 (Animator 컬링)</td><td>통과한 테스트도 측정값이 말이 되는지 확인한다</td></tr>
+          <tr><td style="white-space:normal">편집 모드 캡처에서 흰 여우가 갈색으로 보였다</td><td>실제 게임과 같은 조건(Play 모드)에서 확인한다</td></tr>
+          <tr><td style="white-space:normal">카메라가 가깝고 치우쳐 보인다는 피드백</td><td>원인은 Game 창 Scale 5배. 되돌릴 수 있게 커밋을 나누고 이유를 남긴다</td></tr>
+          <tr><td style="white-space:normal">자동 테스트에서 R 키 입력이 안 들어갔다</td><td>Input System은 창 포커스가 있어야 키보드를 받는다. 테스트 동안만 설정을 바꾸고 되돌린다</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="run" aria-labelledby="run-h">
+    <h2 id="run-h">실행 · 다시 만들기</h2>
+    <ul class="cmds">
+      <li><span>게임 실행</span><code>VoxelFox/Build/VoxelFox.exe</code></li>
+      <li><span>여우 다시 만들기</span><code>bash tools/build_fox.sh</code></li>
+      <li><span>씬 조립 + 테스트 + 미리보기</span><code>bash tools/build_map.sh</code></li>
+      <li><span>실행 파일 빌드</span><code>bash tools/build_windows.sh</code></li>
+    </ul>
+    <h3 style="font-size:24px">남은 과제 · 계획서 범위 밖</h3>
+    <ul class="todo">
+      <li>사운드와 배경음악 (코인 획득음, 점프음, 결과 효과음)</li>
+      <li>여러 스테이지, 움직이는 타일, 타이머 랭킹</li>
+      <li>떨어질 때 전용 동작 (지금은 걷던 자세 그대로 떨어진다)</li>
+      <li>Windows 외 플랫폼: 재배포 가능한 한글 글꼴(예: Noto Sans KR)을 저장소에 넣어야 한다</li>
+    </ul>
+  </section>
+
+  <footer><span>VoxelFox · 2026-09-29</span><span>상세 내용: <a href="https://github.com/Notard/voxel-fox/blob/main/WORKLOG.md">WORKLOG.md</a> · <a href="https://github.com/Notard/voxel-fox/blob/main/REPORT.md">REPORT.md</a></span></footer>
+</main>
+
+<script>
+(function () {
+  var phases = ["대기 · 아이템 0 / 4", "대기 · 아이템 0 / 4", "대기 · 아이템 0 / 4", "대기 · 아이템 0 / 4", "대기 · 아이템 0 / 4", "대기 · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "점프 · 아이템 0 / 4", "점프 · 아이템 0 / 4", "점프 · 아이템 0 / 4", "점프 · 아이템 0 / 4", "점프 · 아이템 0 / 4", "점프 · 아이템 0 / 4", "점프 · 아이템 0 / 4", "점프 · 아이템 0 / 4", "점프 · 아이템 0 / 4", "점프 · 아이템 0 / 4", "점프 · 아이템 0 / 4", "점프 · 아이템 0 / 4", "점프 · 아이템 0 / 4", "점프 · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 0 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 1 / 4", "동쪽으로 → 코인 (3, 3) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 1 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 2 / 4", "남쪽으로 → 코인 (3, 1) · 아이템 2 / 4", "서쪽으로 → 구멍 (2, 1) · 아이템 2 / 4", "서쪽으로 → 구멍 (2, 1) · 아이템 2 / 4", "서쪽으로 → 구멍 (2, 1) · 아이템 2 / 4", "서쪽으로 → 구멍 (2, 1) · 아이템 2 / 4", "서쪽으로 → 구멍 (2, 1) · 아이템 2 / 4", "서쪽으로 → 구멍 (2, 1) · 아이템 2 / 4", "서쪽으로 → 구멍 (2, 1) · 아이템 2 / 4", "구멍으로 낙하 · 아이템 2 / 4", "구멍으로 낙하 · 아이템 2 / 4", "구멍으로 낙하 · 아이템 2 / 4", "구멍으로 낙하 · 아이템 2 / 4", "구멍으로 낙하 · 아이템 2 / 4", "구멍으로 낙하 · 아이템 2 / 4", "구멍으로 낙하 · 아이템 2 / 4", "구멍으로 낙하 · 아이템 2 / 4", "구멍으로 낙하 · 아이템 2 / 4", "구멍으로 낙하 · 아이템 2 / 4", "구멍으로 낙하 · 아이템 2 / 4", "GAME OVER · 아이템 2 / 4", "GAME OVER · 아이템 2 / 4", "GAME OVER · 아이템 2 / 4", "GAME OVER · 아이템 2 / 4", "GAME OVER · 아이템 2 / 4", "GAME OVER · 아이템 2 / 4", "GAME OVER · 아이템 2 / 4", "GAME OVER · 아이템 2 / 4", "GAME OVER · 아이템 2 / 4", "GAME OVER · 아이템 2 / 4", "GAME OVER · 아이템 2 / 4", "GAME OVER · 아이템 2 / 4"];
+  var img = document.getElementById("frame");
+  var phase = document.getElementById("phase");
+  var scrub = document.getElementById("scrub");
+  var toggle = document.getElementById("toggle");
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var i = 0, playing = !reduce, hold = 0, timer = null;
+  scrub.max = phases.length - 1;
+  function src(n) { return "play/" + String(n).padStart(3, "0") + ".jpg"; }
+  for (var n = 0; n < phases.length; n++) new Image().src = src(n);
+  function show() { img.src = src(i); phase.textContent = phases[i]; scrub.value = i; }
+  function tick() {
+    if (i === phases.length - 1 && ++hold < 20) return;
+    hold = 0; i = (i + 1) % phases.length; show();
+  }
+  function setPlaying(p) {
+    playing = p;
+    toggle.textContent = p ? "일시정지" : "재생";
+    clearInterval(timer);
+    if (p) timer = setInterval(tick, 1000 / 15);
+  }
+  toggle.addEventListener("click", function () { setPlaying(!playing); });
+  scrub.addEventListener("input", function () { setPlaying(false); i = +scrub.value; show(); });
+  show(); setPlaying(playing);
+})();
+</script>
+
+</body>
+</html>
