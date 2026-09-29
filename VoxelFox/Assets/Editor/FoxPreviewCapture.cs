@@ -9,6 +9,7 @@ using UnityEngine;
 public static class FoxPreviewCapture
 {
     const int Size = 480;
+    const float Scale = 0.9f; // make_fox.py의 SCALE과 같게
 
     static readonly (string clip, float time)[] Shots =
     {
@@ -34,11 +35,12 @@ public static class FoxPreviewCapture
 
         var cam = new GameObject("Camera").AddComponent<Camera>();
         cam.orthographic = true;
-        cam.orthographicSize = 0.85f;
+        cam.orthographicSize = 0.85f * Scale;
         cam.clearFlags = CameraClearFlags.SolidColor;
-        cam.backgroundColor = new Color(0.98f, 0.96f, 0.94f, 1f);
+        // 흰 여우가 잘 보이도록 푸른 회색 배경
+        cam.backgroundColor = new Color(0.80f, 0.85f, 0.90f, 1f);
         // Unity에서 여우는 +Z를 바라본다 → 앞 오른쪽 위에서 비스듬히 본다.
-        var center = new Vector3(0, 0.45f, 0.06f);
+        var center = new Vector3(0, 0.45f, 0.06f) * Scale;
         cam.transform.position = center + new Vector3(3.6f, 2.4f, 3.8f);
         cam.transform.LookAt(center);
 

@@ -67,12 +67,13 @@ public class FoxAssetTests
         var head = Find(fox, "Head").position;
         var tail = Find(fox, "Tail").position;
         Assert.Greater(head.z, tail.z, "여우가 +Z(앞)를 바라봐야 함");
-        Assert.Greater(head.y, 0.4f, "머리가 위쪽에 있어야 함");
+        Assert.Greater(head.y, 0.35f, "머리가 위쪽에 있어야 함");
 
         var bounds = fox.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh.bounds;
         var size = bounds.size;
-        var height = Mathf.Max(size.x, size.y, size.z);
-        Assert.That(height, Is.InRange(1.2f, 1.6f), "몸길이(꼬리~코) 약 1.4m");
+        var length = Mathf.Max(size.x, size.y, size.z);
+        // 22복셀 × 0.0625m × 0.9 = 1.24m
+        Assert.AreEqual(1.24f, length, 0.03f, "몸길이(꼬리~코) 약 1.24m (0.9배)");
     }
 
     [Test]

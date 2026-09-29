@@ -4,7 +4,7 @@
 > 체크 후 `python tools/make_todo_html.py` 실행 → 진행률 갱신 + [todo.html](todo.html) 재생성.
 > 작업별 상세 결과: [WORKLOG.md](WORKLOG.md)
 
-**진행률: 23 / 46**
+**진행률: 29 / 52**
 
 ---
 
@@ -36,6 +36,14 @@
 - [x] `Fox.controller` Animator Controller 생성 (Speed, IsGrounded, Jump)
 - [x] 미리보기 만들기: Blender 렌더(4방향 + 애니메이션 프레임) + Unity 캡처 → [fox_preview.html](fox_preview.html)
 - [x] 씬에서 세 클립 재생 확인, 복셀 형태가 깨지지 않는지 확인 ✅ 완료 기준
+
+## 2-1. 디자인 변경: 흰 여우 · 0.9배
+- [x] 팔레트 변경: 주황 털 → 흰색 3톤, 배·볼·꼬리 끝 → 크림, 귀 안쪽 → 분홍, 다리 갈색·귀 끝·발끝 검정 → 흰색·연회색
+- [x] 크기 0.9배 (`SCALE = 0.9`, 1복셀 0.0625m → 0.05625m)
+- [x] 미리보기 다시 만들기 (흰색이 제대로 보이도록 Blender 렌더를 EEVEE + Standard 색 변환으로)
+- [x] 계획서, 미리보기 페이지, 테스트 기준값(몸길이 1.24m) 갱신
+- [x] 변경 이유 기록 → [WORKLOG.md](WORKLOG.md)
+- [x] 재생성 후 EditMode 9/9 · PlayMode 1/1 통과 ✅ 완료 기준
 
 ## 3. 4x4 타일맵 + 이동
 - [ ] 복셀 잔디 타일 프리팹 (2m × 0.5m × 2m)
@@ -81,3 +89,4 @@
 | 2026-09-29 | 1. 추가 정리 | 템플릿 샘플(SampleScene, TutorialInfo, Readme) 삭제 · 재검증 통과 · 이유: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | Git 연결 | GitHub `Notard/voxel-fox` (Public) 생성 · push · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 2. 복셀 여우 캐릭터 | 11/11 완료 · EditMode 9/9 · PlayMode 1/1 통과 · 미리보기 [fox_preview.html](fox_preview.html) · 상세: [WORKLOG.md](WORKLOG.md) |
+| 2026-09-29 | 2-1. 흰 여우 · 0.9배 | 더 예쁜 여우로 만들기 위해 붉은 여우 → 흰 여우, 크기 0.9배 · 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |

@@ -84,7 +84,7 @@ li{margin:3px 0}
   <div class="chips">
     <span class="chip">엔진 <b>Unity 6000.5.7f1</b> · URP 3D</span>
     <span class="chip">캐릭터 <b>Blender 5.2 + Python</b></span>
-    <span class="chip">동물 <b>여우</b></span>
+    <span class="chip">동물 <b>흰 여우</b></span>
     <span class="chip">맵 <b>4x4 · 구멍 2개</b></span>
     <span class="chip">플랫폼 <b>Windows</b></span>
   </div>
@@ -124,17 +124,18 @@ li{margin:3px 0}
 <div class="card" style="margin-bottom:16px">
   <p style="margin:0 0 8px"><code>C:\sample\Blender\make_fox.py</code> 스크립트 하나로 <b>모델 생성 → 리그 → 애니메이션 → FBX 내보내기</b>까지 자동으로 처리합니다.</p>
   <pre>blender --background --python make_fox.py</pre>
-  <p class="muted" style="margin:8px 0 0">파츠별 복셀 배열에서 보이는 면만 메시로 만들고, 파츠마다 해당 본에 100% 가중치를 줍니다(강체 스키닝). 그래서 애니메이션 중에도 복셀이 찌그러지지 않습니다. 1복셀은 0.0625m이고, 여우 키는 약 0.6m입니다.</p>
+  <p class="muted" style="margin:8px 0 0">파츠별 복셀 배열에서 보이는 면만 메시로 만들고, 파츠마다 해당 본에 100% 가중치를 줍니다(강체 스키닝). 그래서 애니메이션 중에도 복셀이 찌그러지지 않습니다. 1복셀은 0.05625m(0.0625m × 0.9)이고, 몸통 높이는 약 0.5m입니다.</p>
+  <p class="muted" style="margin:8px 0 0"><b>변경 (2026-09-29):</b> 더 예쁜 여우로 만들기 위해 붉은 여우를 흰 여우로 바꾸고 크기를 0.9배로 줄였습니다.</p>
 </div>
 <div class="grid2">
   <div class="card">
     <table>
       <tr><th>파츠</th><th>크기(복셀)</th><th>색</th></tr>
-      <tr><td>몸통</td><td>6×5×9</td><td>주황 · 배 흰색</td></tr>
-      <tr><td>머리</td><td>6×5×5 + 주둥이</td><td>주황 · 주둥이 흰색 · 코 검정</td></tr>
-      <tr><td>귀 ×2</td><td>2×3×1</td><td>주황 · 안쪽 어둡게</td></tr>
-      <tr><td>다리 ×4</td><td>2×4×2</td><td>발끝 검정</td></tr>
-      <tr><td>꼬리</td><td>3×3×6</td><td>주황 · 끝 흰색</td></tr>
+      <tr><td>몸통</td><td>6×5×9</td><td>흰색 · 배 크림색</td></tr>
+      <tr><td>머리</td><td>6×5×5 + 주둥이</td><td>흰색 · 볼·주둥이 크림색 · 눈·코 검정</td></tr>
+      <tr><td>귀 ×2</td><td>2×2×3</td><td>흰색 · 안쪽 분홍 · 끝 연회색</td></tr>
+      <tr><td>다리 ×4</td><td>2×4×2</td><td>흰색 · 발끝 연회색</td></tr>
+      <tr><td>꼬리</td><td>4×6×4</td><td>흰색 · 끝 크림색</td></tr>
     </table>
   </div>
   <div class="card tree">

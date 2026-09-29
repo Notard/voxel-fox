@@ -60,11 +60,11 @@ th{color:var(--muted)}
 <body>
 <div class="wrap">
   <h1>🦊 복셀 여우 · 할 일 목록</h1>
-  <p class="muted">원본: TODO.md · 상세 계획: <a href="plan.html">plan.html</a> · 여우 미리보기: <a href="fox_preview.html">fox_preview.html</a> · 작업 기록: <a href="worklog.html">worklog.html</a> · 마지막 갱신 2026-09-29 12:10</p>
+  <p class="muted">원본: TODO.md · 상세 계획: <a href="plan.html">plan.html</a> · 여우 미리보기: <a href="fox_preview.html">fox_preview.html</a> · 작업 기록: <a href="worklog.html">worklog.html</a> · 마지막 갱신 2026-09-29 12:19</p>
 
   <div class="hero">
-    <div class="big">50% <small>23 / 46 완료</small></div>
-    <div class="bar"><i style="width:50%"></i></div>
+    <div class="big">56% <small>29 / 52 완료</small></div>
+    <div class="bar"><i style="width:56%"></i></div>
   </div>
 
   
@@ -94,6 +94,15 @@ th{color:var(--muted)}
   </div>
   <div class="sbar"><i style="width:100%"></i></div>
   <ul><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt"><code>C:\sample\Blender\make_fox.py</code> 작성: 파츠별 복셀 데이터 정의 (몸통, 머리, 귀, 다리 4개, 꼬리)</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">보이는 면만 메시로 만들기 + 색상(버텍스 컬러 또는 팔레트) 적용</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">Armature 생성 (Root, Body, Head, Leg_FL/FR/BL/BR, Tail) + 강체 스키닝</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt"><code>Idle</code> 액션 (0–40, 루프)</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt"><code>Walk</code> 액션 (0–20, 루프, 대각선 다리 교차)</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt"><code>Jump</code> 액션 (0–20)</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">FBX 내보내기 → <code>Assets/Art/Characters/Fox/Fox.fbx</code></span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">Unity 임포트: Rig Generic, Idle/Walk에 Loop Time 체크</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt"><code>Fox.controller</code> Animator Controller 생성 (Speed, IsGrounded, Jump)</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">미리보기 만들기: Blender 렌더(4방향 + 애니메이션 프레임) + Unity 캡처 → <a href="fox_preview.html">fox_preview.html</a></span></li><li class="item done gate"><span class="box" aria-hidden="true"></span><span class="txt">씬에서 세 클립 재생 확인, 복셀 형태가 깨지지 않는지 확인<span class="tag">완료 기준</span></span></li></ul>
+</section>
+<section class="stage complete">
+  <div class="shead">
+    <span class="n">2-1</span>
+    <h2>디자인 변경: 흰 여우 · 0.9배</h2>
+    <span class="cnt">6 / 6</span>
+  </div>
+  <div class="sbar"><i style="width:100%"></i></div>
+  <ul><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">팔레트 변경: 주황 털 → 흰색 3톤, 배·볼·꼬리 끝 → 크림, 귀 안쪽 → 분홍, 다리 갈색·귀 끝·발끝 검정 → 흰색·연회색</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">크기 0.9배 (<code>SCALE = 0.9</code>, 1복셀 0.0625m → 0.05625m)</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">미리보기 다시 만들기 (흰색이 제대로 보이도록 Blender 렌더를 EEVEE + Standard 색 변환으로)</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">계획서, 미리보기 페이지, 테스트 기준값(몸길이 1.24m) 갱신</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">변경 이유 기록 → <a href="worklog.html">WORKLOG.md</a></span></li><li class="item done gate"><span class="box" aria-hidden="true"></span><span class="txt">재생성 후 EditMode 9/9 · PlayMode 1/1 통과<span class="tag">완료 기준</span></span></li></ul>
 </section>
 <section class="stage ">
   <div class="shead">
@@ -151,7 +160,7 @@ th{color:var(--muted)}
 </section>
 
   <h3>완료 기록</h3>
-  <table><tr><th>날짜</th><th>단계</th><th>메모</th></tr><tr><td>2026-09-29</td><td>1. Unity 프로젝트 생성</td><td>5/5 완료 · PlayMode 스모크 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>1. 추가 정리</td><td>템플릿 샘플(SampleScene, TutorialInfo, Readme) 삭제 · 재검증 통과 · 이유: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>Git 연결</td><td>GitHub <code>Notard/voxel-fox</code> (Public) 생성 · push · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>2. 복셀 여우 캐릭터</td><td>11/11 완료 · EditMode 9/9 · PlayMode 1/1 통과 · 미리보기 <a href="fox_preview.html">fox_preview.html</a> · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr></table>
+  <table><tr><th>날짜</th><th>단계</th><th>메모</th></tr><tr><td>2026-09-29</td><td>1. Unity 프로젝트 생성</td><td>5/5 완료 · PlayMode 스모크 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>1. 추가 정리</td><td>템플릿 샘플(SampleScene, TutorialInfo, Readme) 삭제 · 재검증 통과 · 이유: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>Git 연결</td><td>GitHub <code>Notard/voxel-fox</code> (Public) 생성 · push · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>2. 복셀 여우 캐릭터</td><td>11/11 완료 · EditMode 9/9 · PlayMode 1/1 통과 · 미리보기 <a href="fox_preview.html">fox_preview.html</a> · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>2-1. 흰 여우 · 0.9배</td><td>더 예쁜 여우로 만들기 위해 붉은 여우 → 흰 여우, 크기 0.9배 · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr></table>
 </div>
 </body>
 </html>

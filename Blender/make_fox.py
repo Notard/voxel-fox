@@ -10,7 +10,7 @@
 좌표 규칙
     복셀 데이터는 "모델 좌표"(x 오른쪽, y 앞쪽, z 위)로 적는다.
     Blender에서는 여우가 -Y를 바라보게 놓는다(Blender 관례: 정면 = -Y).
-    1 복셀 = 0.0625 m, 발바닥 = z 0.
+    1 복셀 = 0.0625 m × SCALE(0.9) = 0.05625 m, 발바닥 = z 0.
 """
 import math
 import random
@@ -25,31 +25,34 @@ FBX_PATH = FOX_DIR / "Fox.fbx"
 PALETTE_PATH = FOX_DIR / "Fox_Palette.png"
 BLEND_PATH = ROOT / "Blender" / "Fox.blend"
 
-V = 0.0625  # 복셀 한 칸 크기(m)
+SCALE = 0.9  # 2026-09-29 전체 크기 0.9배 (처음 설계는 1.0)
+V = 0.0625 * SCALE  # 복셀 한 칸 크기(m)
 
 # ── 팔레트 ──────────────────────────────────────────────
+# 흰 여우 (2026-09-29 붉은 여우에서 변경). 털은 차가운 흰색 3톤,
+# 배·볼·주둥이·꼬리 끝은 따뜻한 크림색으로 살짝 구분한다.
 PALETTE = [
-    (0xE8, 0x77, 0x2E),  # 0 주황
-    (0xF0, 0x8A, 0x3E),  # 1 밝은 주황
-    (0xCF, 0x63, 0x22),  # 2 어두운 주황
-    (0xFF, 0xF4, 0xE6),  # 3 흰색
-    (0xEE, 0xE0, 0xCE),  # 4 흰색 그늘
-    (0x2B, 0x24, 0x20),  # 5 검정
-    (0x7A, 0x3E, 0x2A),  # 6 귀 안쪽
-    (0x5A, 0x33, 0x22),  # 7 다리 갈색
+    (0xF5, 0xF6, 0xF8),  # 0 눈빛 흰색
+    (0xFF, 0xFF, 0xFF),  # 1 밝은 흰색
+    (0xE2, 0xE6, 0xEC),  # 2 흰색 그늘(푸른 회색)
+    (0xFF, 0xF3, 0xE4),  # 3 크림
+    (0xF3, 0xE6, 0xD6),  # 4 크림 그늘
+    (0x2B, 0x24, 0x20),  # 5 검정 (눈, 코)
+    (0xF2, 0xB5, 0xC1),  # 6 귀 안쪽 분홍
+    (0xBF, 0xC4, 0xCE),  # 7 연회색 (발끝, 귀 끝)
 ]
-ORANGE, ORANGE_L, ORANGE_D, WHITE, WHITE_S, BLACK, EAR_IN, LEG = range(8)
+SNOW, SNOW_L, SNOW_D, CREAM, CREAM_S, BLACK, EAR_IN, GRAY = range(8)
 PAL_W = 8  # 팔레트 텍스처 8x8, 한 칸 = 한 색
 
 rng = random.Random(7)
 
 
 def fur(*_):
-    return rng.choice((ORANGE, ORANGE, ORANGE, ORANGE_L, ORANGE_D))
+    return rng.choice((SNOW, SNOW, SNOW, SNOW_L, SNOW_D))
 
 
 def cream(*_):
-    return rng.choice((WHITE, WHITE, WHITE_S))
+    return rng.choice((CREAM, CREAM, CREAM_S))
 
 
 # ── 복셀 데이터 ─────────────────────────────────────────
@@ -79,15 +82,15 @@ box("Body", (-3, 3), (-4, 5), (4, 9), fur)
 paint((-2, 2), (-3, 4), (4, 5), cream)  # 배
 paint((-2, 2), (4, 5), (4, 7), cream)  # 가슴
 
-# 다리 2×2×4 (발끝 검정, 위는 갈색)
+# 다리 2×2×4 (털색, 발끝 연회색)
 for name, xr, yr in (
     ("Leg_FL", (-3, -1), (2, 4)),
     ("Leg_FR", (1, 3), (2, 4)),
     ("Leg_BL", (-3, -1), (-4, -2)),
     ("Leg_BR", (1, 3), (-4, -2)),
 ):
-    box(name, xr, yr, (0, 4), LEG)
-    paint(xr, yr, (0, 1), BLACK)
+    box(name, xr, yr, (0, 4), fur)
+    paint(xr, yr, (0, 1), GRAY)
 
 # 머리 6×5×5
 box("Head", (-3, 3), (5, 10), (7, 12), fur)
@@ -97,13 +100,13 @@ paint((-1, 1), (11, 12), (8, 9), BLACK)  # 코
 paint((-2, -1), (9, 10), (9, 11), BLACK)  # 눈
 paint((1, 2), (9, 10), (9, 11), BLACK)
 
-# 귀 2×2×3 (끝 검정, 앞면 안쪽 어둡게)
+# 귀 2×2×3 (끝 연회색, 앞면 안쪽 분홍)
 for xr, inner in (((-3, -1), (-2, -1)), ((1, 3), (1, 2))):
     box("Head", xr, (6, 8), (12, 15), fur)
     paint(inner, (7, 8), (12, 14), EAR_IN)
-    paint(xr, (6, 8), (14, 15), BLACK)
+    paint(xr, (6, 8), (14, 15), GRAY)
 
-# 꼬리 4×6×4 (끝 흰색)
+# 꼬리 4×6×4 (끝 크림색)
 box("Tail", (-2, 2), (-10, -4), (6, 10), fur)
 paint((-2, 2), (-10, -8), (6, 10), cream)
 

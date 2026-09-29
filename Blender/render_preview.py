@@ -18,7 +18,8 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "preview" / "fox"
 STEP = 2  # 30fps 액션을 2프레임 간격 → 15fps 재생
 
-CENTER = Vector((0, -0.06, 0.45))
+SCALE = 0.9  # make_fox.py의 SCALE과 같게
+CENTER = Vector((0, -0.06, 0.45)) * SCALE
 VIEWS = {  # 이름: (카메라 위치, 라벨)
     "front": (Vector((0, -6, 0.6)), "정면"),
     "side": (Vector((6, -0.06, 0.6)), "측면"),
@@ -34,17 +35,32 @@ ACTIONS = {  # 이름: (프레임 목록, 루프)
 
 def setup_scene():
     scene = bpy.context.scene
-    scene.render.engine = "BLENDER_WORKBENCH"
+    # 흰 여우는 Workbench 스튜디오 조명에서 회색으로 보인다 → EEVEE + 태양광으로
+    # Unity(URP Lit + Directional Light)와 비슷한 밝기를 낸다.
+    scene.render.engine = "BLENDER_EEVEE"
     scene.render.resolution_x = scene.render.resolution_y = 480
     scene.render.film_transparent = True
     scene.render.image_settings.file_format = "PNG"
     scene.render.image_settings.color_mode = "RGBA"
-    shading = scene.display.shading
-    shading.light = "STUDIO"
-    shading.color_type = "TEXTURE"
-    shading.show_cavity = True
-    shading.show_object_outline = True
-    shading.object_outline_color = (0.17, 0.14, 0.12)
+    # 기본 AgX는 흰색을 회색으로 누른다 → 팔레트 색이 그대로 나오게 Standard
+    scene.view_settings.view_transform = "Standard"
+
+    world = bpy.data.worlds.new("PreviewWorld")
+    world.use_nodes = True
+    nodes = world.node_tree.nodes
+    bg = nodes.get("Background") or nodes.new("ShaderNodeBackground")
+    out = nodes.get("World Output") or nodes.new("ShaderNodeOutputWorld")
+    world.node_tree.links.new(bg.outputs["Background"], out.inputs["Surface"])
+    bg.inputs["Color"].default_value = (0.72, 0.75, 0.80, 1)  # 푸른 회색 환경광
+    bg.inputs["Strength"].default_value = 1.0
+    scene.world = world
+
+    sun_data = bpy.data.lights.new("Sun", "SUN")
+    sun_data.energy = 3.2  # 흰색(알베도 0.95)이 거의 1.0에 닿는 세기
+    sun_data.angle = math.radians(20)  # 부드러운 그림자
+    sun = bpy.data.objects.new("Sun", sun_data)
+    sun.rotation_euler = (math.radians(45), 0, math.radians(40))
+    scene.collection.objects.link(sun)
 
     target = bpy.data.objects.new("CamTarget", None)
     target.location = CENTER
@@ -52,7 +68,7 @@ def setup_scene():
 
     cam_data = bpy.data.cameras.new("PreviewCam")
     cam_data.type = "ORTHO"
-    cam_data.ortho_scale = 1.75
+    cam_data.ortho_scale = 1.75 * SCALE
     cam = bpy.data.objects.new("PreviewCam", cam_data)
     scene.collection.objects.link(cam)
     track = cam.constraints.new("TRACK_TO")

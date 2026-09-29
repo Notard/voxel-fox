@@ -70,7 +70,7 @@ article hr{display:none}
 </head>
 <body>
 <div class="wrap">
-  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · 마지막 갱신 2026-09-29 12:10</p>
+  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · 마지막 갱신 2026-09-29 12:19</p>
   <article><h1>작업 기록 — 복셀 여우 타일 게임</h1>
 <blockquote>
 <p>단계별로 실제로 한 일, 결과, 검증 방법, 발생한 문제를 남긴다. 체크리스트: <a href="todo.html">TODO.md</a></p>
@@ -342,6 +342,109 @@ article hr{display:none}
 <h3>다음 단계에서 고려할 점</h3>
 <ul>
 <li>여우 몸길이(1.4m)가 타일 한 칸(2m)의 70% 정도로 크다. 3단계에서 맵에 올려 보고, 필요하면 프리팹 스케일(예: 0.6~0.7)이나 타일 크기를 조정한다.</li>
+</ul>
+<hr />
+<h2>2-1. 디자인 변경: 흰 여우 · 0.9배 — ✅ 완료 (2026-09-29)</h2>
+<p>미리보기: <strong><a href="fox_preview.html">fox_preview.html</a></strong></p>
+<h3>변경 이유</h3>
+<ul>
+<li><strong>흰 여우로:</strong> 더 예쁜 여우로 만들기 위해서다(사용자 요청). 붉은 여우의 주황색을 흰색으로 바꿨다.</li>
+<li><strong>크기 0.9배:</strong> 사용자 요청이다. 2단계에서 적어 둔 "몸길이 1.4m가 타일(2m)에 비해 크다"는 우려도 함께 줄어든다(1.4m → 1.24m, 타일의 62%).</li>
+</ul>
+<h3>색상 변경 내역</h3>
+<table>
+<thead>
+<tr>
+<th>부위</th>
+<th>이전 (붉은 여우)</th>
+<th>이후 (흰 여우)</th>
+<th>메모</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>털 (몸통·머리·꼬리·귀·다리)</td>
+<td>주황 3톤 <code>#E8772E</code> <code>#F08A3E</code> <code>#CF6322</code></td>
+<td>흰색 3톤 <code>#F5F6F8</code> <code>#FFFFFF</code> <code>#E2E6EC</code></td>
+<td>푸른빛이 도는 그늘 톤을 섞어 눈처럼 보이게 했다</td>
+</tr>
+<tr>
+<td>배·가슴·볼·주둥이·꼬리 끝</td>
+<td>흰색 <code>#FFF4E6</code> <code>#EEE0CE</code></td>
+<td>크림 <code>#FFF3E4</code> <code>#F3E6D6</code></td>
+<td>털이 흰색이 되어서, 따뜻한 크림색으로 살짝 구분했다</td>
+</tr>
+<tr>
+<td>다리</td>
+<td>갈색 <code>#5A3322</code></td>
+<td>털과 같은 흰색</td>
+<td>갈색 다리는 붉은 여우의 특징이라 흰 여우에는 맞지 않는다</td>
+</tr>
+<tr>
+<td>귀 끝·발끝</td>
+<td>검정 <code>#2B2420</code></td>
+<td>연회색 <code>#BFC4CE</code></td>
+<td>흰 몸에 검정은 너무 튀어서 부드러운 회색으로 바꿨다</td>
+</tr>
+<tr>
+<td>귀 안쪽</td>
+<td>어두운 갈색 <code>#7A3E2A</code></td>
+<td>분홍 <code>#F2B5C1</code></td>
+<td>더 귀여운 인상을 준다</td>
+</tr>
+<tr>
+<td>눈·코</td>
+<td>검정</td>
+<td>검정 (그대로)</td>
+<td>흰 얼굴에서 가장 중요한 포인트</td>
+</tr>
+</tbody>
+</table>
+<p>모양(복셀 배치), 본, 애니메이션은 바꾸지 않았다. 팔레트 인덱스만 바꿨으므로 UV와 텍스처 크기도 그대로다.</p>
+<h3>크기 변경</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>이전</th>
+<th>이후</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1복셀</td>
+<td>0.0625m</td>
+<td><strong>0.05625m</strong> (<code>make_fox.py</code>의 <code>SCALE = 0.9</code>)</td>
+</tr>
+<tr>
+<td>코~꼬리</td>
+<td>약 1.38m</td>
+<td>약 1.24m</td>
+</tr>
+<tr>
+<td>귀 끝 높이</td>
+<td>약 0.94m</td>
+<td>약 0.84m</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>크기는 Unity 프리팹 스케일이 아니라 <strong>모델 자체(FBX)</strong>에 반영했다. 나중에 CharacterController 크기를 맞출 때 스케일 1 기준으로 계산할 수 있다.</li>
+<li>본 위치와 애니메이션 이동값(몸통 바운스)도 복셀 단위로 계산하므로 함께 0.9배가 된다.</li>
+</ul>
+<h3>함께 바꾼 것</h3>
+<ul>
+<li><strong>미리보기 렌더:</strong> 흰 여우가 Blender Workbench 스튜디오 조명과 기본 색 변환(AgX)에서 회색으로 보였다. 그래서 <strong>EEVEE + 태양광 + Standard 색 변환</strong>으로 바꿨다. 이제 Unity 렌더와 비슷한 밝기로 나온다.</li>
+<li><strong>미리보기 배경:</strong> 흰 여우가 잘 보이도록 푸른 회색으로 바꿨다(<code>fox_preview.html</code>, <code>FoxPreviewCapture.cs</code>).</li>
+<li><strong>카메라:</strong> 미리보기 카메라 구도를 0.9배에 맞췄다. 그래서 미리보기 이미지에서는 여우가 이전과 비슷한 크기로 보인다. 실제 크기 차이는 위 표의 수치로 확인한다.</li>
+<li><strong>테스트:</strong> 몸길이 기준을 "1.2~1.6m 범위"에서 "1.24m ± 0.03"으로 좁혔다. 머리 높이 기준은 0.4m에서 0.35m로 낮췄다.</li>
+<li><strong>문서:</strong> plan.md와 plan.html의 색상 표와 복셀 크기, fox_preview.html의 모델 정보와 팔레트</li>
+</ul>
+<h3>검증</h3>
+<ul>
+<li><code>bash tools/build_fox.sh</code>로 전체를 다시 생성했다.</li>
+<li>EditMode <strong>9/9 통과</strong>, PlayMode <strong>1/1 통과</strong> → <code>logs/02b_editmode_results.xml</code>, <code>logs/02b_playmode_results.xml</code></li>
+<li>Blender 렌더와 Unity 렌더 모두 흰 털, 분홍 귀, 크림색 볼, 검은 눈·코가 나오는 것을 눈으로 확인했다.</li>
 </ul></article>
 </div>
 </body>

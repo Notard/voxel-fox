@@ -7,17 +7,17 @@
 <style>
 :root{
   --bg:#faf6f0; --surface:#fff; --ink:#2b2420; --muted:#7a6d64; --line:#eadfd3;
-  --fox:#e8772e; --fox-soft:#fbe6d6; --stage:#f3ece4;
+  --fox:#e8772e; --fox-soft:#fbe6d6; --stage:#cdd8e4;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#1b1715; --surface:#252020; --ink:#f1e9e2; --muted:#b0a39a; --line:#3a322d;
-    --fox-soft:#3e2a1d; --stage:#2e2825;
+    --fox-soft:#3e2a1d; --stage:#56606c;
   }
 }
 :root[data-theme="dark"]{
   --bg:#1b1715; --surface:#252020; --ink:#f1e9e2; --muted:#b0a39a; --line:#3a322d;
-  --fox-soft:#3e2a1d; --stage:#2e2825;
+  --fox-soft:#3e2a1d; --stage:#56606c;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;
@@ -70,8 +70,8 @@ code{background:var(--fox-soft);padding:1px 6px;border-radius:4px;font-size:.86e
 </head>
 <body>
 <div class="wrap">
-  <h1>🦊 복셀 여우 미리보기</h1>
-  <p class="muted">Blender 5.2 Python으로 생성(<code>Blender/make_fox.py</code>) · Workbench 렌더 · <a href="todo.html">할 일</a> · <a href="worklog.html">작업 기록</a> · <a href="plan.html">계획서</a></p>
+  <h1>🦊 복셀 흰 여우 미리보기</h1>
+  <p class="muted">Blender 5.2 Python으로 생성(<code>Blender/make_fox.py</code>) · EEVEE 렌더 · 2026-09-29 흰 여우·0.9배로 변경 · <a href="todo.html">할 일</a> · <a href="worklog.html">작업 기록</a> · <a href="plan.html">계획서</a></p>
 
   <div class="player">
     <div class="stage"><img id="frame" alt="여우 애니메이션 프레임"></div>
@@ -113,9 +113,9 @@ code{background:var(--fox-soft);padding:1px 6px;border-radius:4px;font-size:.86e
     <div class="card">
       <table>
         <tr><th>항목</th><th>값</th></tr>
-        <tr><td>복셀</td><td>612개 · 1칸 0.0625m</td></tr>
+        <tr><td>복셀</td><td>612개 · 1칸 0.05625m (0.0625m × 0.9)</td></tr>
         <tr><td>메시</td><td>면 780 · 정점 3,120 (파츠 내부 면 제거)</td></tr>
-        <tr><td>크기</td><td>길이 약 1.4m (코~꼬리) · 높이 약 0.94m (귀 끝)</td></tr>
+        <tr><td>크기</td><td>길이 약 1.24m (코~꼬리) · 높이 약 0.84m (귀 끝) · 처음 설계의 0.9배</td></tr>
         <tr><td>본</td><td>Root › Body › Head, Leg_FL/FR/BL/BR, Tail</td></tr>
         <tr><td>스키닝</td><td>파츠별 본 1개, 가중치 100%</td></tr>
         <tr><td>Unity</td><td>Generic 리그 · +Z 정면 · <code>Fox.prefab</code></td></tr>
@@ -124,16 +124,16 @@ code{background:var(--fox-soft);padding:1px 6px;border-radius:4px;font-size:.86e
     <div class="card">
       <b>팔레트</b> <span class="muted">(<code>Fox_Palette.png</code> 8×8, Point 필터)</span>
       <div class="swatches">
-        <span class="sw"><i style="background:#E8772E"></i>주황</span>
-        <span class="sw"><i style="background:#F08A3E"></i>밝은 주황</span>
-        <span class="sw"><i style="background:#CF6322"></i>어두운 주황</span>
-        <span class="sw"><i style="background:#FFF4E6"></i>흰색</span>
-        <span class="sw"><i style="background:#EEE0CE"></i>흰색 그늘</span>
-        <span class="sw"><i style="background:#2B2420"></i>검정</span>
-        <span class="sw"><i style="background:#7A3E2A"></i>귀 안쪽</span>
-        <span class="sw"><i style="background:#5A3322"></i>다리 갈색</span>
+        <span class="sw"><i style="background:#F5F6F8"></i>눈빛 흰색</span>
+        <span class="sw"><i style="background:#FFFFFF"></i>밝은 흰색</span>
+        <span class="sw"><i style="background:#E2E6EC"></i>흰색 그늘</span>
+        <span class="sw"><i style="background:#FFF3E4"></i>크림</span>
+        <span class="sw"><i style="background:#F3E6D6"></i>크림 그늘</span>
+        <span class="sw"><i style="background:#2B2420"></i>검정 (눈·코)</span>
+        <span class="sw"><i style="background:#F2B5C1"></i>귀 안쪽 분홍</span>
+        <span class="sw"><i style="background:#BFC4CE"></i>연회색 (발끝·귀 끝)</span>
       </div>
-      <p class="muted" style="margin:14px 0 0">털 복셀은 주황 3가지 톤을 고정 시드로 섞어 복셀 느낌을 냈습니다.</p>
+      <p class="muted" style="margin:14px 0 0">털 복셀은 흰색 3가지 톤을 고정 시드로 섞어 복셀 느낌을 냈습니다. 배·볼·주둥이·꼬리 끝은 크림색으로 살짝 구분했습니다.</p>
     </div>
   </div>
 </div>
