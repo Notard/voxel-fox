@@ -354,10 +354,6 @@ public static class MapSetup
         Assign(map, "tilePrefab", tilePrefab);
         Assign(map, "player", player);
         Assign(rig, "target", player.transform);
-        // 씬에 저장된 값은 코드 기본값보다 우선하므로 여기서 직접 넣는다.
-        var rigSo = new SerializedObject(rig);
-        rigSo.FindProperty("distance").floatValue = 16.5f;
-        rigSo.ApplyModifiedPropertiesWithoutUndo();
         Assign(player, "cameraRig", rig);
 
         // 에디터에서도 시작 위치와 카메라 구도가 보이게 해 둔다. 타일은 Play 때 만든다.

@@ -70,7 +70,7 @@ article hr{display:none}
 </head>
 <body>
 <div class="wrap">
-  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · 마지막 갱신 2026-09-29 15:10</p>
+  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · 마지막 갱신 2026-09-29 15:13</p>
   <article><h1>작업 기록 — 복셀 여우 타일 게임</h1>
 <blockquote>
 <p>단계별로 실제로 한 일, 결과, 검증 방법, 발생한 문제를 남긴다. 체크리스트: <a href="todo.html">TODO.md</a></p>
@@ -835,6 +835,13 @@ article hr{display:none}
 <li>새 테스트 <code>Camera_Is16_5mFromPlayer</code>: 카메라와 여우 몸통 가운데의 거리가 16.5m(±0.05)인지 확인한다.</li>
 <li>녹화 프레임에서 걷는 동안 여우가 가운데에 있고, 점프 때만 살짝 위로 올라가는 것을 확인했다.</li>
 <li>결과 파일: <code>logs/04c_editmode_results.xml</code>, <code>logs/04c_playmode_results.xml</code></li>
+</ul>
+<h3>되돌림 (2026-09-29)</h3>
+<ul>
+<li><strong>이유:</strong> 사용자가 Unity Game 창의 Scale이 <strong>5배</strong>로 되어 있었다는 것을 발견했다. 화면이 확대되어 있어서 카메라가 가깝고 여우가 가운데에서 벗어난 것처럼 보였다. 사용자 요청으로 4-2 변경을 되돌리고 원래 카메라로 다시 확인하기로 했다.</li>
+<li><strong>방법:</strong> <code>git revert</code>로 4-2의 코드·씬·테스트·계획서·미리보기 변경만 되돌렸다(<code>CameraRig</code> 거리 11m, 0.15초 부드러운 추적, <code>MapSetup</code>의 거리 설정 제거, 테스트 기준 15%로 복귀). 위 4-2 기록과 <code>logs/04c_*</code> 결과 파일은 이력으로 남겼다.</li>
+<li><strong>검증:</strong> <code>TAG=04d bash tools/build_map.sh</code> → EditMode <strong>20/20</strong>, PlayMode <strong>19/19 통과</strong>. 씬의 카메라 거리 11m를 확인했다.</li>
+<li><strong>참고:</strong> Game 창 왼쪽 위의 Scale 슬라이더를 1x로 두어야 실제 게임 화면과 같게 보인다.</li>
 </ul></article>
 </div>
 </body>
