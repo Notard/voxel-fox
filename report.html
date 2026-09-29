@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>복셀 여우 결과 보고서</title>
+<style>
+:root{
+  --bg:#faf6f0; --surface:#fff; --ink:#2b2420; --muted:#7a6d64; --line:#eadfd3;
+  --fox:#e8772e; --fox-soft:#fbe6d6; --ok:#4f9a34; --ok-soft:#e3f1da;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1715; --surface:#252020; --ink:#f1e9e2; --muted:#b0a39a; --line:#3a322d;
+    --fox-soft:#3e2a1d; --ok:#7cc55c; --ok-soft:#24331c;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1715; --surface:#252020; --ink:#f1e9e2; --muted:#b0a39a; --line:#3a322d;
+  --fox-soft:#3e2a1d; --ok:#7cc55c; --ok-soft:#24331c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;
+  font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:40px 16px 80px}
+h1{font-size:1.9rem;margin:0 0 4px;letter-spacing:-.02em}
+.muted{color:var(--muted);font-size:.9rem}
+a{color:var(--fox)}
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;margin:20px 0 28px}
+.hero .big{font-size:2.4rem;font-weight:800;font-variant-numeric:tabular-nums}
+.hero .big small{font-size:1rem;color:var(--muted);font-weight:500}
+.bar{height:14px;background:var(--fox-soft);border-radius:999px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:var(--fox);border-radius:999px}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.stage.complete{border-color:var(--ok)}
+.shead{display:flex;align-items:center;gap:10px}
+.shead h2{font-size:1.08rem;margin:0;flex:1}
+.n{background:var(--fox);color:#fff;min-width:28px;height:28px;border-radius:6px;display:inline-grid;place-items:center;font-weight:700;font-size:.9rem}
+.stage.complete .n{background:var(--ok)}
+.cnt{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.9rem}
+.sbar{height:4px;background:var(--fox-soft);border-radius:4px;margin:10px 0 6px;overflow:hidden}
+.sbar i{display:block;height:100%;background:var(--fox)}
+.stage.complete .sbar i{background:var(--ok)}
+ul{list-style:none;margin:0;padding:0}
+.item{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--line);font-size:.95rem}
+.item:last-child{border-bottom:0}
+.box{flex:none;width:18px;height:18px;border:2px solid var(--line);border-radius:5px;margin-top:2px;display:grid;place-items:center}
+.item.done .box{background:var(--ok);border-color:var(--ok)}
+.item.done .box::after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.item.done .txt{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.item.gate .txt{font-weight:600}
+.tag{display:inline-block;margin-left:8px;font-size:.72rem;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--ok-soft);color:var(--ok);text-decoration:none}
+code{background:var(--fox-soft);padding:1px 6px;border-radius:4px;font-size:.86em}
+h3{margin:36px 0 12px;font-size:1.1rem}
+table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:.92rem}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line)}
+th{color:var(--muted)}
+
+article h1{font-size:1.9rem;margin:0 0 8px;letter-spacing:-.02em}
+article h2{font-size:1.25rem;margin:36px 0 14px;padding-top:24px;border-top:2px solid var(--fox)}
+article h3{font-size:1.02rem;margin:24px 0 10px;color:var(--fox)}
+article blockquote{margin:0 0 16px;color:var(--muted);font-size:.92rem;border-left:3px solid var(--line);padding-left:12px}
+article blockquote p{margin:0}
+article pre{background:var(--fox-soft);padding:14px;border-radius:8px;overflow-x:auto;font-size:.86rem}
+article pre code{background:none;padding:0}
+article table{margin:8px 0 16px}
+article ol,article ul{padding-left:22px}
+article hr{display:none}
+article img{max-width:100%;border-radius:10px;display:block}
+article td img{margin:0 auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · <a href="worklog.html">작업 기록</a> · <a href="report.html">결과 보고서</a> · 마지막 갱신 2026-09-29 16:04</p>
+  <article><h1>결과 보고서 — 복셀 여우 타일 게임</h1>
+<blockquote>
+<p>작성일: 2026-09-29 · 저장소: <a href="https://github.com/Notard/voxel-fox">github.com/Notard/voxel-fox</a> · 상세 기록: <a href="worklog.html">WORKLOG.md</a> · 계획서: <a href="plan.html">plan.md</a> · 체크리스트: <a href="todo.html">TODO.md</a></p>
+</blockquote>
+<h2>1. 요약</h2>
+<p>복셀 스타일 <strong>흰 여우</strong>가 구멍 2개가 뚫린 4×4 타일맵을 돌아다니며 코인 4개를 모으는 짧은 3D 게임을 계획서대로 끝까지 만들었다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>완성도</td>
+<td>체크리스트 <strong>81 / 81</strong> 완료. 계획서 1~8단계 전부와 사용자 피드백으로 추가한 5개 하위 단계</td>
+</tr>
+<tr>
+<td>결과물</td>
+<td>Windows 실행 파일 <code>VoxelFox/Build/VoxelFox.exe</code> (102.7MB, 빌드 경고·에러 0). 사용자가 처음부터 끝까지 직접 플레이해 확인</td>
+</tr>
+<tr>
+<td>자동 테스트</td>
+<td>EditMode <strong>27개</strong>, PlayMode <strong>35개</strong> 모두 통과</td>
+</tr>
+<tr>
+<td>코드</td>
+<td>게임 스크립트 7개(591줄), 에디터 자동화·테스트 포함 C# 약 3,200줄. Blender Python 스크립트 2개</td>
+</tr>
+<tr>
+<td>기간</td>
+<td>2026-09-29 하루 (첫 커밋 11:31 → 마지막 커밋 16:01), 커밋 18개</td>
+</tr>
+<tr>
+<td>환경</td>
+<td>Unity 6000.5.7f1 (URP), Blender 5.2, Windows 11</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="게임 화면" src="preview/map/map_quarter.png" /></p>
+<h2>2. 게임 구성</h2>
+<table>
+<thead>
+<tr>
+<th>요소</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>캐릭터</td>
+<td>흰 복셀 여우 (복셀 612개, 코~꼬리 1.24m). Idle / Walk / Jump 동작</td>
+</tr>
+<tr>
+<td>맵</td>
+<td>4×4 타일(한 칸 2m), 구멍 2개, 둘레는 낭떠러지. 잔디 블록에 노멀맵으로 입체감</td>
+</tr>
+<tr>
+<td>조작</td>
+<td>WASD·방향키(게임패드) 이동, Space 점프, R 재시작. 화살표는 타일 격자 방향으로 곧게 움직인다</td>
+</tr>
+<tr>
+<td>카메라</td>
+<td>여우를 화면 가운데에 두고 따라가는 쿼터뷰 (45°, 방향 30°, 거리 11m)</td>
+</tr>
+<tr>
+<td>아이템</td>
+<td>복셀 코인 4개. 돌면서 둥실거리고, 닿으면 금색 반짝이와 함께 사라진다. 좌상단 <code>아이템 n / 4</code></td>
+</tr>
+<tr>
+<td>결과</td>
+<td>떨어지면(y &lt; -5) <strong>GAME OVER</strong>, 코인 4개를 모두 모으면 <strong>CLEAR!</strong>(걸린 시간 표시). 결과가 나오면 조작·시간 정지</td>
+</tr>
+<tr>
+<td>재시작</td>
+<td>R 키(언제든) 또는 결과 패널의 [다시 하기] 버튼 → 모든 것이 처음 상태로</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>여우</th>
+<th>코인</th>
+<th>아이콘</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img alt="여우" src="preview/fox/still_three_quarter.png" /></td>
+<td><img alt="코인" src="preview/map/coin_close.png" /></td>
+<td><img alt="아이콘" src="VoxelFox/Assets/Art/Icon/AppIcon.png" /></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>GAME OVER</th>
+<th>CLEAR!</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img alt="GAME OVER" src="preview/map/result_gameover.png" /></td>
+<td><img alt="CLEAR" src="preview/map/result_clear.png" /></td>
+</tr>
+</tbody>
+</table>
+<h2>3. 단계별 결과</h2>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>내용</th>
+<th>검증</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Unity 프로젝트</td>
+<td>Universal 3D 템플릿, Input System, TextMeshPro, Main 씬, 템플릿 샘플 정리, GitHub 공개 저장소(LFS)</td>
+<td>PlayMode 스모크 테스트</td>
+</tr>
+<tr>
+<td>2. 여우 캐릭터</td>
+<td>Blender Python 스크립트 하나로 복셀 모델 → 리그(본 8개, 강체 스키닝) → 동작 3개 → FBX. Unity 임포트·Animator 자동 설정</td>
+<td>EditMode 9개</td>
+</tr>
+<tr>
+<td>2-1. 흰 여우 · 0.9배</td>
+<td>사용자 요청으로 붉은 여우 → 흰 여우, 크기 0.9배</td>
+<td>재생성 후 테스트 통과</td>
+</tr>
+<tr>
+<td>3. 타일맵 + 이동</td>
+<td>문자열 레이아웃 → 타일·구멍·시작점, CharacterController 이동·점프, 쿼터뷰 카메라</td>
+<td>걷기·점프·구멍/가장자리 낙하</td>
+</tr>
+<tr>
+<td>3-1. 바닥 노멀맵</td>
+<td>사용자 요청. 팔레트 → 색·노멀 아틀라스, 잔디 덩어리 턱 + 둥근 타일 모서리</td>
+<td>노멀맵·접선 테스트</td>
+</tr>
+<tr>
+<td>4. 애니메이션 연결</td>
+<td>Speed / IsGrounded / Jump, Walk 배속을 이동 속도에 맞춤</td>
+<td><strong>발 미끄러짐 최대 1.3cm</strong></td>
+</tr>
+<tr>
+<td>4-1. 카메라 · 이동 방향</td>
+<td>사용자 피드백. 여우를 따라가는 카메라, 화살표를 격자 방향으로</td>
+<td>북쪽 직진 시 옆 이동 0m</td>
+</tr>
+<tr>
+<td>4-2. 카메라 거리 (되돌림)</td>
+<td>1.5배로 늘렸다가, 원인이 Game 창 Scale 5배로 밝혀져 되돌림</td>
+<td>—</td>
+</tr>
+<tr>
+<td>4-3. 점프 거리</td>
+<td>사용자 피드백. 2.08m → 2.68m (구멍 2m)</td>
+<td>가장자리 0.4m 앞에서 뛰어도 구멍을 넘음</td>
+</tr>
+<tr>
+<td>5. 아이템</td>
+<td>복셀 코인, 획득·반짝이, 한글 카운터</td>
+<td>획득·카운트·전부 모으기</td>
+</tr>
+<tr>
+<td>6. 게임 종료 / 성공</td>
+<td>GAME OVER / CLEAR! 패널, 조작·시간 정지</td>
+<td>두 결과, CLEAR 뒤 낙하에도 유지</td>
+</tr>
+<tr>
+<td>7. 재시작</td>
+<td>씬 다시 불러오기, R 키·버튼</td>
+<td>가상 키보드 R, 두 번 재시작 후 중복 집계 없음</td>
+</tr>
+<tr>
+<td>8. 마무리</td>
+<td>Windows 빌드, Codex로 그린 아이콘</td>
+<td>실행 로그 에러 없음, <strong>사용자 플레이 확인</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>4. 사용자 피드백으로 바뀐 것</h2>
+<p>플레이해 본 사용자의 의견을 받아 하위 단계로 고치고, 이유를 모두 기록했다.</p>
+<table>
+<thead>
+<tr>
+<th>요청</th>
+<th>원인</th>
+<th>조치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"더 예쁜 여우로"</td>
+<td>—</td>
+<td>흰 여우 3톤 털, 분홍 귀 안쪽, 크림색 볼, 0.9배 (2-1)</td>
+</tr>
+<tr>
+<td>바닥 입체감</td>
+<td>색 무늬만 있어 평평해 보임</td>
+<td>노멀맵 아틀라스 (3-1)</td>
+</tr>
+<tr>
+<td>카메라가 캐릭터를 따라가야 함</td>
+<td>맵 전체를 비추는 고정 카메라</td>
+<td>여우를 가운데 두고 따라가는 카메라 (4-1)</td>
+</tr>
+<tr>
+<td>화살표를 누르면 대각선으로 감</td>
+<td>카메라가 격자에서 30° 돌아가 있는데 입력은 화면 기준</td>
+<td>입력을 가장 가까운 격자 축으로 (4-1)</td>
+</tr>
+<tr>
+<td>카메라를 멀리, 여우를 가운데로</td>
+<td>실제 원인은 Game 창 Scale 5배</td>
+<td>변경 후 <strong>되돌림</strong>, 이력은 남김 (4-2)</td>
+</tr>
+<tr>
+<td>점프가 짧아 구멍에 잘 빠짐</td>
+<td>달리며 뛴 거리 2.08m ≈ 구멍 너비 2m</td>
+<td>높이 1.5m, 중력 -15 → 2.68m (4-3)</td>
+</tr>
+</tbody>
+</table>
+<h2>5. 주요 설계 결정</h2>
+<ul>
+<li><strong>모든 에셋을 스크립트로 만든다.</strong> 여우는 <code>Blender/make_fox.py</code>, 타일·코인·UI·씬 배치는 에디터 스크립트(<code>SceneBuild</code> = 맵 → 아이템 → UI)가 만든다. 값 하나를 바꾸고 다시 실행하면 결과가 똑같이 재현된다.</li>
+<li><strong>발 미끄러짐을 계산으로 맞춘다.</strong> Walk 클립에서 발끝 보폭을 재서 "1배속일 때 맞는 이동 속도(0.868 m/s)"를 구하고, 게임 중 실제 속도 ÷ 이 값으로 재생 배속을 정한다. 보폭을 늘리려고 다리 각도를 26° → 40°로 바꿨다.</li>
+<li><strong>타일은 실행할 때 만든다.</strong> 레이아웃 문자열만 고치면 맵이 바뀐다. 에디터에서는 기즈모로 배치를 보여 준다.</li>
+<li><strong>한글 글꼴은 설치된 맑은 고딕을 실행 중에 불러온다.</strong> 맑은 고딕은 재배포할 수 없어 공개 저장소에 넣지 않았다. Windows 전용 게임이라 항상 설치되어 있다.</li>
+<li><strong>재시작은 씬 다시 불러오기.</strong> 정적 이벤트는 <code>OnDisable</code>에서 반드시 떼어 재시작 뒤에도 코인을 두 번 세지 않는다.</li>
+<li><strong>미리보기는 Play 모드에서 찍는다.</strong> 편집 모드에서는 스키닝이 갱신되지 않아 여우가 잘못 그려졌다. 단계마다 <a href="fox_preview.html">fox_preview.html</a>, <a href="map_preview.html">map_preview.html</a>로 결과를 눈으로 확인했다.</li>
+</ul>
+<h2>6. 품질 검증</h2>
+<ul>
+<li><strong>자동 테스트 62개</strong> (EditMode 27 · PlayMode 35). 모든 단계를 만들 때마다 전체를 다시 돌렸다.</li>
+<li>에셋: 여우 본·클립·크기, 타일·코인 크기와 콜라이더, 노멀맵 설정, 씬 연결</li>
+<li>동작: 이동 속도, 점프 높이·거리, 구멍·가장자리 낙하, 격자 방향 입력, 카메라 중앙 유지</li>
+<li>애니메이션: Idle / Walk / Jump 전환, 발 미끄러짐 측정(240fps)</li>
+<li>게임 흐름: 코인 획득, GAME OVER / CLEAR, 조작·시간 정지, 재시작(가상 키보드 R 입력 포함)</li>
+<li>테스트는 <code>Time.captureFramerate</code>로 프레임 간격을 고정해 매번 같은 결과가 나온다.</li>
+<li>결과 파일은 <code>logs/*_results.xml</code>로 단계별로 남겼다.</li>
+</ul>
+<h2>7. 진행 중 겪은 문제와 교훈</h2>
+<table>
+<thead>
+<tr>
+<th>문제</th>
+<th>교훈</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>발 미끄러짐 테스트가 처음엔 "통과"였지만 실제로는 다리가 전혀 움직이지 않았다 (Animator 컬링)</td>
+<td>통과한 테스트도 측정값이 말이 되는지 확인한다. 기록을 남기는 습관이 문제를 드러냈다</td>
+</tr>
+<tr>
+<td>편집 모드 캡처에서 흰 여우가 갈색으로 보임</td>
+<td>조명 방향도 문제였지만 근본 원인은 편집 모드 렌더링. 실제 게임과 같은 조건(Play 모드)에서 확인한다</td>
+</tr>
+<tr>
+<td>카메라가 가깝고 치우쳐 보인다는 피드백</td>
+<td>원인이 Game 창 Scale 5배였다. 되돌릴 수 있게 커밋을 나누고, 되돌린 이유도 남겼다</td>
+</tr>
+<tr>
+<td>배치 모드 테스트에서 R 키 입력이 안 들어감</td>
+<td>Input System은 창 포커스가 있어야 키보드를 받는다. 테스트 동안만 설정을 바꾸고 되돌린다</td>
+</tr>
+<tr>
+<td>Unity 에디터 시작 시 Search 에러</td>
+<td>게임과 무관한 Unity 내부 에러. 색인 추가로는 안 없어졌고, 시작 시 색인 갱신을 꺼서 해결</td>
+</tr>
+</tbody>
+</table>
+<h2>8. 실행 · 다시 만들기</h2>
+<table>
+<thead>
+<tr>
+<th>목적</th>
+<th>방법</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>게임 실행</td>
+<td><code>VoxelFox/Build/VoxelFox.exe</code> (창 모드 1600×900, Alt+Enter 전체 화면)</td>
+</tr>
+<tr>
+<td>에디터에서 바로 플레이</td>
+<td>Unity 메뉴 VoxelFox &gt; Play Main Scene</td>
+</tr>
+<tr>
+<td>여우 다시 만들기</td>
+<td><code>bash tools/build_fox.sh</code> (Blender → FBX → Unity 설정 → 미리보기 → 테스트)</td>
+</tr>
+<tr>
+<td>씬 다시 조립 + 전체 테스트 + 미리보기</td>
+<td><code>bash tools/build_map.sh</code></td>
+</tr>
+<tr>
+<td>실행 파일 빌드</td>
+<td><code>bash tools/build_windows.sh</code></td>
+</tr>
+<tr>
+<td>문서 HTML 갱신</td>
+<td><code>python tools/make_todo_html.py</code> (TODO·작업 기록·이 보고서)</td>
+</tr>
+</tbody>
+</table>
+<h2>9. 남은 과제 (계획서의 범위 밖)</h2>
+<ul>
+<li>사운드 · 배경음악 (코인 획득음, 점프음, 결과 효과음)</li>
+<li>여러 스테이지, 움직이는 타일, 타이머 랭킹</li>
+<li>떨어질 때 전용 동작(현재는 걷던 자세 그대로 떨어짐)</li>
+<li>Windows 외 플랫폼: 한글 글꼴을 재배포 가능한 글꼴(예: Noto Sans KR)로 저장소에 넣어야 한다</li>
+</ul></article>
+</div>
+</body>
+</html>

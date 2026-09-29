@@ -1,4 +1,4 @@
-"""TODO.md -> todo.html, WORKLOG.md -> worklog.html 변환기.
+"""TODO.md -> todo.html, WORKLOG.md -> worklog.html, REPORT.md -> report.html 변환기.
 
 TODO.md와 WORKLOG.md가 원본이다. 체크 후 이 스크립트를 실행하면
 TODO.md의 진행률 숫자를 갱신하고 todo.html, worklog.html을 다시 만든다.
@@ -17,12 +17,14 @@ MD = ROOT / "TODO.md"
 OUT = ROOT / "todo.html"
 WORKLOG_MD = ROOT / "WORKLOG.md"
 WORKLOG_OUT = ROOT / "worklog.html"
+REPORT_MD = ROOT / "REPORT.md"
+REPORT_OUT = ROOT / "report.html"
 
 ITEM = re.compile(r"^- \[( |x|X)\] (.+)$")
 STAGE = re.compile(r"^## (.+)$")
 
 # 문서 사이 링크는 HTML 버전으로 연결한다.
-MD_TO_HTML = {"TODO.md": "todo.html", "WORKLOG.md": "worklog.html", "plan.md": "plan.html"}
+MD_TO_HTML = {"TODO.md": "todo.html", "WORKLOG.md": "worklog.html", "plan.md": "plan.html", "REPORT.md": "report.html"}
 
 
 def fix_links(text: str) -> str:
@@ -182,7 +184,7 @@ th{{color:var(--muted)}}
 <body>
 <div class="wrap">
   <h1>🦊 복셀 여우 · 할 일 목록</h1>
-  <p class="muted">원본: TODO.md · 상세 계획: <a href="plan.html">plan.html</a> · 여우 미리보기: <a href="fox_preview.html">fox_preview.html</a> · 맵 미리보기: <a href="map_preview.html">map_preview.html</a> · 작업 기록: <a href="worklog.html">worklog.html</a> · 마지막 갱신 {now}</p>
+  <p class="muted">원본: TODO.md · 상세 계획: <a href="plan.html">plan.html</a> · 여우 미리보기: <a href="fox_preview.html">fox_preview.html</a> · 맵 미리보기: <a href="map_preview.html">map_preview.html</a> · 작업 기록: <a href="worklog.html">worklog.html</a> · 결과 보고서: <a href="report.html">report.html</a> · 마지막 갱신 {now}</p>
 
   <div class="hero">
     <div class="big">{pct}% <small>{done} / {total} 완료</small></div>
@@ -210,29 +212,37 @@ article pre code{background:none;padding:0}
 article table{margin:8px 0 16px}
 article ol,article ul{padding-left:22px}
 article hr{display:none}
+article img{max-width:100%;border-radius:10px;display:block}
+article td img{margin:0 auto}
 """
 
 
 def render_worklog():
-    if not WORKLOG_MD.exists():
+    render_doc(WORKLOG_MD, WORKLOG_OUT, "복셀 여우 작업 기록")
+
+
+def render_report():
+    render_doc(REPORT_MD, REPORT_OUT, "복셀 여우 결과 보고서")
+
+
+def render_doc(src, out, title):
+    if not src.exists():
         return
-    body = markdown.markdown(
-        WORKLOG_MD.read_text(encoding="utf-8"), extensions=["tables", "fenced_code"]
-    )
+    body = markdown.markdown(src.read_text(encoding="utf-8"), extensions=["tables", "fenced_code"])
     style = TEMPLATE.split("<style>")[1].split("</style>")[0].replace("{{", "{").replace("}}", "}")
     now = datetime.now().strftime("%Y-%m-%d %H:%M")
-    WORKLOG_OUT.write_text(
+    out.write_text(
         f"""<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>복셀 여우 작업 기록</title>
+<title>{title}</title>
 <style>{style}{WORKLOG_CSS}</style>
 </head>
 <body>
 <div class="wrap">
-  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · 마지막 갱신 {now}</p>
+  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · <a href="worklog.html">작업 기록</a> · <a href="report.html">결과 보고서</a> · 마지막 갱신 {now}</p>
   <article>{fix_links(body)}</article>
 </div>
 </body>
@@ -252,7 +262,8 @@ def main():
     update_md_progress(lines, done, total)
     OUT.write_text(render(stages, log, done, total), encoding="utf-8")
     render_worklog()
-    print(f"todo.html, worklog.html 생성: {done}/{total}")
+    render_report()
+    print(f"todo.html, worklog.html, report.html 생성: {done}/{total}")
 
 
 if __name__ == "__main__":
