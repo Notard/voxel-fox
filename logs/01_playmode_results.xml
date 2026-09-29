@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-29 02:20:41Z" end-time="2026-09-29 02:20:41Z" duration="0.3606424">
+  <test-suite type="TestSuite" id="1007" name="VoxelFox" fullname="VoxelFox" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-29 02:20:41Z" end-time="2026-09-29 02:20:41Z" duration="0.360642" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1003" name="PlayModeTests.dll" fullname="C:/sample/VoxelFox/Library/ScriptAssemblies/PlayModeTests.dll" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-29 02:20:41Z" end-time="2026-09-29 02:20:41Z" duration="0.353341" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="45316" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1001" name="MainSceneSmokeTest" fullname="MainSceneSmokeTest" classname="MainSceneSmokeTest" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-29 02:20:41Z" end-time="2026-09-29 02:20:41Z" duration="0.352039" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1002" name="MainScene_RunsWithoutErrors" fullname="MainSceneSmokeTest.MainScene_RunsWithoutErrors" methodname="MainScene_RunsWithoutErrors" classname="MainSceneSmokeTest" runstate="Runnable" seed="342729944" result="Passed" start-time="2026-09-29 02:20:41Z" end-time="2026-09-29 02:20:41Z" duration="0.341245" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[Saving results to: C:/Users/elbre/AppData/LocalLow/DefaultCompany/VoxelFox\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

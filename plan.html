@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>복셀 여우 계획서</title>
+<style>
+:root{
+  --bg:#faf6f0; --surface:#ffffff; --ink:#2b2420; --muted:#7a6d64; --line:#eadfd3;
+  --fox:#e8772e; --fox-soft:#fbe6d6; --grass:#6fae4a; --dirt:#a8764a; --hole:#2b2420;
+  --coin:#f2c230; --start:#3d7bd9;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1715; --surface:#252020; --ink:#f1e9e2; --muted:#b0a39a; --line:#3a322d;
+    --fox-soft:#3e2a1d; --hole:#0c0a09;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1715; --surface:#252020; --ink:#f1e9e2; --muted:#b0a39a; --line:#3a322d;
+  --fox-soft:#3e2a1d; --hole:#0c0a09;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:40px 16px 80px}
+header h1{font-size:2rem;margin:0 0 4px;letter-spacing:-.02em}
+header p{margin:0;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 8px}
+.chip{background:var(--fox-soft);color:var(--ink);border-radius:999px;padding:4px 12px;font-size:.85rem}
+.chip b{color:var(--fox)}
+h2{font-size:1.25rem;margin:48px 0 16px;display:flex;align-items:center;gap:10px}
+h2 .n{background:var(--fox);color:#fff;width:30px;height:30px;border-radius:6px;display:inline-grid;place-items:center;font-size:.95rem;flex:none}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:720px){.grid2{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600}
+code{background:var(--fox-soft);padding:1px 6px;border-radius:4px;font-size:.88em}
+pre{background:var(--fox-soft);padding:14px;border-radius:8px;overflow-x:auto;font-size:.86rem;margin:0}
+.done{margin-top:14px;padding:10px 14px;border-left:4px solid var(--grass);background:var(--surface);border-radius:0 8px 8px 0;font-size:.92rem}
+.done::before{content:"완료 기준  ";font-weight:700;color:var(--grass)}
+ul{padding-left:20px;margin:0}
+li{margin:3px 0}
+.muted{color:var(--muted);font-size:.9rem}
+
+/* timeline */
+.steps{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:24px}
+@media (max-width:720px){.steps{grid-template-columns:repeat(2,1fr)}}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.82rem}
+.step b{display:block;color:var(--fox);font-size:1.1rem}
+
+/* map */
+.mapbox{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.map{display:grid;grid-template-columns:repeat(4,64px);gap:6px;padding:14px;background:var(--fox-soft);border-radius:12px}
+.t{width:64px;height:64px;border-radius:6px;background:var(--grass);box-shadow:inset 0 -10px 0 var(--dirt);
+   display:grid;place-items:center;font-weight:700;color:#fff;font-size:.8rem;position:relative}
+.t.alt{filter:brightness(.92)}
+.t.h{background:var(--hole);box-shadow:none;color:#888}
+.t .dot{width:22px;height:22px;border-radius:50%;margin-top:-10px}
+.t.c .dot{background:var(--coin);box-shadow:0 0 0 3px #fff6}
+.t.s .dot{background:var(--start)}
+.legend{display:grid;gap:8px;font-size:.9rem}
+.legend span{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px}
+
+/* bone tree */
+.tree{font-family:ui-monospace,Consolas,monospace;font-size:.9rem;line-height:1.9}
+.tree .b{background:var(--fox-soft);border-radius:4px;padding:1px 8px}
+
+/* state flow */
+.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.st{padding:8px 14px;border-radius:8px;font-weight:700;border:2px solid var(--line);background:var(--surface)}
+.st.play{border-color:var(--start)} .st.over{border-color:#d9483d} .st.clear{border-color:var(--grass)}
+.arrow{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>🦊 복셀 여우 타일 게임</h1>
+  <p>복셀 여우가 구멍 난 4x4 타일 위를 돌아다니며 아이템을 모두 모으면 성공, 떨어지면 실패하는 게임입니다.</p>
+  <div class="chips">
+    <span class="chip">엔진 <b>Unity 6000.5.7f1</b> · URP 3D</span>
+    <span class="chip">캐릭터 <b>Blender 5.2 + Python</b></span>
+    <span class="chip">동물 <b>여우</b></span>
+    <span class="chip">맵 <b>4x4 · 구멍 2개</b></span>
+    <span class="chip">플랫폼 <b>Windows</b></span>
+  </div>
+  <div class="steps">
+    <div class="step"><b>1</b>프로젝트 생성</div>
+    <div class="step"><b>2</b>복셀 여우 (Blender)</div>
+    <div class="step"><b>3</b>타일맵 + 이동</div>
+    <div class="step"><b>4</b>애니메이션 연결</div>
+    <div class="step"><b>5</b>아이템</div>
+    <div class="step"><b>6</b>실패 / 성공</div>
+    <div class="step"><b>7</b>재시작</div>
+  </div>
+</header>
+
+<h2><span class="n">1</span>Unity 프로젝트 생성</h2>
+<div class="grid2">
+  <div class="card">
+    <ul>
+      <li>Unity Hub → <b>6000.5.7f1</b> → <code>Universal 3D</code> 템플릿</li>
+      <li>경로: <code>C:\sample\VoxelFox</code></li>
+      <li>패키지: <b>Input System</b>, TextMeshPro</li>
+      <li>조작: WASD/방향키 이동 · Space 점프 · R 재시작</li>
+    </ul>
+  </div>
+  <div class="card">
+<pre>Assets/
+  Art/Characters/Fox/
+  Art/Tiles/
+  Prefabs/
+  Scenes/Main.unity
+  Scripts/</pre>
+  </div>
+</div>
+<div class="done">빈 씬이 Play 모드에서 에러 없이 실행된다.</div>
+
+<h2><span class="n">2</span>복셀 여우 캐릭터 · Blender Python</h2>
+<div class="card" style="margin-bottom:16px">
+  <p style="margin:0 0 8px"><code>C:\sample\Blender\make_fox.py</code> 스크립트 하나로 <b>모델 생성 → 리그 → 애니메이션 → FBX 내보내기</b>까지 자동으로 처리합니다.</p>
+  <pre>blender --background --python make_fox.py</pre>
+  <p class="muted" style="margin:8px 0 0">파츠별 복셀 배열에서 보이는 면만 메시로 만들고, 파츠마다 해당 본에 100% 가중치를 줍니다(강체 스키닝). 그래서 애니메이션 중에도 복셀이 찌그러지지 않습니다. 1복셀은 0.0625m이고, 여우 키는 약 0.6m입니다.</p>
+</div>
+<div class="grid2">
+  <div class="card">
+    <table>
+      <tr><th>파츠</th><th>크기(복셀)</th><th>색</th></tr>
+      <tr><td>몸통</td><td>6×5×9</td><td>주황 · 배 흰색</td></tr>
+      <tr><td>머리</td><td>6×5×5 + 주둥이</td><td>주황 · 주둥이 흰색 · 코 검정</td></tr>
+      <tr><td>귀 ×2</td><td>2×3×1</td><td>주황 · 안쪽 어둡게</td></tr>
+      <tr><td>다리 ×4</td><td>2×4×2</td><td>발끝 검정</td></tr>
+      <tr><td>꼬리</td><td>3×3×6</td><td>주황 · 끝 흰색</td></tr>
+    </table>
+  </div>
+  <div class="card tree">
+    <span class="b">Root</span><br>
+    └─ <span class="b">Body</span><br>
+    &nbsp;&nbsp;&nbsp;├─ <span class="b">Head</span><br>
+    &nbsp;&nbsp;&nbsp;├─ <span class="b">Leg_FL</span> <span class="muted">앞왼</span><br>
+    &nbsp;&nbsp;&nbsp;├─ <span class="b">Leg_FR</span> <span class="muted">앞오</span><br>
+    &nbsp;&nbsp;&nbsp;├─ <span class="b">Leg_BL</span> <span class="muted">뒤왼</span><br>
+    &nbsp;&nbsp;&nbsp;├─ <span class="b">Leg_BR</span> <span class="muted">뒤오</span><br>
+    &nbsp;&nbsp;&nbsp;└─ <span class="b">Tail</span>
+  </div>
+</div>
+<div class="card" style="margin-top:16px">
+  <table>
+    <tr><th>액션</th><th>프레임 (30fps)</th><th>루프</th><th>내용</th></tr>
+    <tr><td><b>Idle</b></td><td>0–40</td><td>O</td><td>몸통이 살짝 위아래로 움직이고 꼬리가 좌우로 흔들림</td></tr>
+    <tr><td><b>Walk</b></td><td>0–20</td><td>O</td><td>대각선 다리 쌍(FL+BR / FR+BL)이 ±30°로 번갈아 움직이고 몸통이 통통 튐</td></tr>
+    <tr><td><b>Jump</b></td><td>0–20</td><td>X</td><td>웅크림 → 다리 쭉 폄 → 공중 자세 → 착지 준비</td></tr>
+  </table>
+</div>
+<div class="grid2" style="margin-top:16px">
+  <div class="card">
+    <b>FBX 내보내기</b>
+    <ul class="muted">
+      <li>Apply Scalings: FBX All · Forward −Z · Up Y</li>
+      <li>Add Leaf Bones 끔</li>
+      <li>Bake Animation · All Actions 켬</li>
+      <li>→ <code>Assets/Art/Characters/Fox/Fox.fbx</code></li>
+    </ul>
+  </div>
+  <div class="card">
+    <b>Unity 임포트</b>
+    <ul class="muted">
+      <li>Rig: Generic · Avatar 생성</li>
+      <li>Idle, Walk에 Loop Time 체크</li>
+      <li>Animator 파라미터: <code>Speed</code> <code>IsGrounded</code> <code>Jump</code></li>
+    </ul>
+  </div>
+</div>
+<div class="done">여우가 Idle / Walk / Jump를 정상 재생하고, 복셀 형태가 깨지지 않는다.</div>
+
+<h2><span class="n">3</span>4x4 타일맵 + 이동</h2>
+<div class="card">
+  <div class="mapbox">
+    <div class="map" aria-label="4x4 맵 레이아웃">
+      <div class="t s"><div class="dot"></div></div><div class="t alt"></div><div class="t"></div><div class="t c alt"><div class="dot"></div></div>
+      <div class="t alt"></div><div class="t h">구멍</div><div class="t alt"></div><div class="t"></div>
+      <div class="t c"><div class="dot"></div></div><div class="t alt"></div><div class="t h">구멍</div><div class="t c alt"><div class="dot"></div></div>
+      <div class="t alt"></div><div class="t"></div><div class="t alt"></div><div class="t c"><div class="dot"></div></div>
+    </div>
+    <div class="legend">
+      <div><span style="background:var(--start)"></span>시작 지점</div>
+      <div><span style="background:var(--coin)"></span>아이템 (4개)</div>
+      <div><span style="background:var(--hole)"></span>구멍: 빠지면 낙하</div>
+      <div><span style="background:var(--grass)"></span>잔디 타일 · 1칸 2m</div>
+      <div class="muted" style="max-width:280px">맵 가장자리에는 벽이 없습니다. 레이아웃은 <code>MapBuilder</code>의 문자열 배열로 정의해서 쉽게 고칠 수 있습니다.</div>
+    </div>
+  </div>
+</div>
+<div class="grid2" style="margin-top:16px">
+  <div class="card"><b>PlayerController</b>
+    <ul class="muted">
+      <li>CharacterController 기반</li>
+      <li>이동 3 m/s · 이동 방향으로 부드럽게 회전</li>
+      <li>중력 −20 m/s² · 점프 높이 약 1.2m</li>
+    </ul></div>
+  <div class="card"><b>카메라</b>
+    <ul class="muted">
+      <li>맵 전체가 보이는 고정 쿼터뷰</li>
+      <li>위에서 약 45°로 맵 중심을 바라봄</li>
+      <li>입력 방향은 카메라 기준으로 변환</li>
+    </ul></div>
+</div>
+<div class="done">여우가 타일 위를 걷고 점프하며, 구멍에 들어가면 아래로 떨어진다.</div>
+
+<h2><span class="n">4</span>애니메이션 연결</h2>
+<div class="card">
+  <div class="flow">
+    <span class="st">Idle</span><span class="arrow">⇄ Speed &gt; 0.1</span><span class="st">Walk</span>
+    <span class="arrow">· Any → Jump (trigger) → Idle (IsGrounded)</span>
+  </div>
+  <p class="muted" style="margin:0">걷는 속도와 Walk 재생 속도를 맞춰서 발이 미끄러져 보이지 않게 합니다.</p>
+</div>
+<div class="done">멈춤 → Idle, 이동 → Walk, 점프 → Jump가 자연스럽게 전환된다.</div>
+
+<h2><span class="n">5</span>아이템</h2>
+<div class="card">
+  <ul>
+    <li>복셀 <b>코인 4개</b>를 레이아웃의 아이템 위치에 배치</li>
+    <li>제자리에서 회전하며 위아래로 둥실둥실 움직임</li>
+    <li>Trigger Collider에 닿으면 획득 → 사라지면서 간단한 파티클</li>
+    <li>좌상단 UI: <code>아이템 0 / 4</code></li>
+  </ul>
+</div>
+<div class="done">아이템을 먹으면 카운트가 오르고 아이템이 사라진다.</div>
+
+<h2><span class="n">6</span>게임 종료 / 성공</h2>
+<div class="card">
+  <div class="flow">
+    <span class="st play">Playing</span>
+    <span class="arrow">→ Y &lt; −5 →</span><span class="st over">GAME OVER</span>
+    <span class="arrow">/ 아이템 4/4 →</span><span class="st clear">CLEAR!</span>
+  </div>
+  <p class="muted" style="margin:0">두 경우 모두 결과 패널이 뜨고 조작이 멈춥니다. 성공 화면에는 걸린 시간을 보여줄 수도 있습니다(선택).</p>
+</div>
+<div class="done">두 조건 모두에서 해당 패널이 뜨고 더 이상 조작되지 않는다.</div>
+
+<h2><span class="n">7</span>재시작</h2>
+<div class="card">
+  <ul>
+    <li>결과 패널의 <b>[다시 하기]</b> 버튼, 또는 언제든 <b>R 키</b></li>
+    <li><code>SceneManager.LoadScene</code>으로 현재 씬을 다시 불러와 전체 초기화</li>
+  </ul>
+</div>
+<div class="done">재시작하면 여우 위치, 아이템, UI가 모두 처음 상태로 돌아온다.</div>
+
+<h2>스크립트 목록</h2>
+<div class="card">
+  <table>
+    <tr><th>파일</th><th>역할</th></tr>
+    <tr><td><code>MapBuilder.cs</code></td><td>문자열 레이아웃으로 타일, 아이템, 시작점 생성</td></tr>
+    <tr><td><code>PlayerController.cs</code></td><td>입력, 이동, 점프, 애니메이터 파라미터</td></tr>
+    <tr><td><code>CameraRig.cs</code></td><td>고정 쿼터뷰 카메라 위치 설정</td></tr>
+    <tr><td><code>Collectible.cs</code></td><td>아이템 회전, 획득 처리</td></tr>
+    <tr><td><code>GameManager.cs</code></td><td>아이템 카운트, 낙하 판정, 상태 전환, 재시작</td></tr>
+    <tr><td><code>GameUI.cs</code></td><td>카운터, GAME OVER / CLEAR 패널</td></tr>
+  </table>
+</div>
+
+<h2>나중에 고려 (이번 범위 밖)</h2>
+<p class="muted">사운드/BGM · 여러 스테이지 · 움직이는 타일 · 타이머 랭킹 · 게임패드 지원</p>
+
+</div>
+</body>
+</html>

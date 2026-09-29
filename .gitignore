@@ -1,0 +1,60 @@
+# ── Unity (VoxelFox/) ─────────────────────────────
+VoxelFox/[Ll]ibrary/
+VoxelFox/[Tt]emp/
+VoxelFox/[Oo]bj/
+VoxelFox/[Bb]uild/
+VoxelFox/[Bb]uilds/
+VoxelFox/[Ll]ogs/
+VoxelFox/[Uu]ser[Ss]ettings/
+VoxelFox/[Mm]emoryCaptures/
+VoxelFox/[Rr]ecordings/
+VoxelFox/Assets/Plugins/Editor/JetBrains*
+VoxelFox/Assets/AssetStoreTools*
+VoxelFox/.utmp/
+
+# IDE / 자동 생성 파일
+.vs/
+.vscode/
+.idea/
+.consulo/
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+sysinfo.txt
+crashlytics-build.properties
+
+# 빌드 결과물
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# ── Blender ──────────────────────────────────────
+*.blend1
+*.blend2
+
+# ── 실행 로그 (로컬 경로·라이선스 정보 포함, 용량 큼) ──
+# 테스트 결과 xml만 저장소에 남긴다.
+logs/*.log
+
+# ── 기타 ─────────────────────────────────────────
+__pycache__/
+*.py[cod]
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>복셀 여우 할 일</title>
+<style>
+:root{
+  --bg:#faf6f0; --surface:#fff; --ink:#2b2420; --muted:#7a6d64; --line:#eadfd3;
+  --fox:#e8772e; --fox-soft:#fbe6d6; --ok:#4f9a34; --ok-soft:#e3f1da;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1715; --surface:#252020; --ink:#f1e9e2; --muted:#b0a39a; --line:#3a322d;
+    --fox-soft:#3e2a1d; --ok:#7cc55c; --ok-soft:#24331c;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1715; --surface:#252020; --ink:#f1e9e2; --muted:#b0a39a; --line:#3a322d;
+  --fox-soft:#3e2a1d; --ok:#7cc55c; --ok-soft:#24331c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;
+  font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:40px 16px 80px}
+h1{font-size:1.9rem;margin:0 0 4px;letter-spacing:-.02em}
+.muted{color:var(--muted);font-size:.9rem}
+a{color:var(--fox)}
+.hero{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;margin:20px 0 28px}
+.hero .big{font-size:2.4rem;font-weight:800;font-variant-numeric:tabular-nums}
+.hero .big small{font-size:1rem;color:var(--muted);font-weight:500}
+.bar{height:14px;background:var(--fox-soft);border-radius:999px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:var(--fox);border-radius:999px}
+.stage{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.stage.complete{border-color:var(--ok)}
+.shead{display:flex;align-items:center;gap:10px}
+.shead h2{font-size:1.08rem;margin:0;flex:1}
+.n{background:var(--fox);color:#fff;min-width:28px;height:28px;border-radius:6px;display:inline-grid;place-items:center;font-weight:700;font-size:.9rem}
+.stage.complete .n{background:var(--ok)}
+.cnt{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.9rem}
+.sbar{height:4px;background:var(--fox-soft);border-radius:4px;margin:10px 0 6px;overflow:hidden}
+.sbar i{display:block;height:100%;background:var(--fox)}
+.stage.complete .sbar i{background:var(--ok)}
+ul{list-style:none;margin:0;padding:0}
+.item{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--line);font-size:.95rem}
+.item:last-child{border-bottom:0}
+.box{flex:none;width:18px;height:18px;border:2px solid var(--line);border-radius:5px;margin-top:2px;display:grid;place-items:center}
+.item.done .box{background:var(--ok);border-color:var(--ok)}
+.item.done .box::after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.item.done .txt{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.item.gate .txt{font-weight:600}
+.tag{display:inline-block;margin-left:8px;font-size:.72rem;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--ok-soft);color:var(--ok);text-decoration:none}
+code{background:var(--fox-soft);padding:1px 6px;border-radius:4px;font-size:.86em}
+h3{margin:36px 0 12px;font-size:1.1rem}
+table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:.92rem}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line)}
+th{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🦊 복셀 여우 · 할 일 목록</h1>
+  <p class="muted">원본: TODO.md · 상세 계획: <a href="plan.html">plan.html</a> · 작업 기록: <a href="worklog.html">worklog.html</a> · 마지막 갱신 2026-09-29 11:25</p>
+
+  <div class="hero">
+    <div class="big">13% <small>5 / 38 완료</small></div>
+    <div class="bar"><i style="width:13%"></i></div>
+  </div>
+
+  
+<section class="stage complete">
+  <div class="shead">
+    <span class="n">1</span>
+    <h2>Unity 프로젝트 생성</h2>
+    <span class="cnt">5 / 5</span>
+  </div>
+  <div class="sbar"><i style="width:100%"></i></div>
+  <ul><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">Unity 6000.5.7f1 · Universal 3D 템플릿으로 <code>C:\sample\VoxelFox</code> 프로젝트 생성</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">Input System 패키지 설치 및 Active Input Handling 설정</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">TextMeshPro 설치 (Essential Resources 임포트)</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">폴더 구조 생성 (<code>Art</code>, <code>Prefabs</code>, <code>Scenes</code>, <code>Scripts</code>)</span></li><li class="item done gate"><span class="box" aria-hidden="true"></span><span class="txt"><code>Scenes/Main.unity</code> 생성 후 Play 모드에서 에러 없이 실행 확인<span class="tag">완료 기준</span></span></li></ul>
+</section>
+<section class="stage ">
+  <div class="shead">
+    <span class="n">2</span>
+    <h2>복셀 여우 캐릭터 (Blender Python)</h2>
+    <span class="cnt">0 / 10</span>
+  </div>
+  <div class="sbar"><i style="width:0%"></i></div>
+  <ul><li class="item"><span class="box" aria-hidden="true"></span><span class="txt"><code>C:\sample\Blender\make_fox.py</code> 작성: 파츠별 복셀 데이터 정의 (몸통, 머리, 귀, 다리 4개, 꼬리)</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">보이는 면만 메시로 만들기 + 색상(버텍스 컬러 또는 팔레트) 적용</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">Armature 생성 (Root, Body, Head, Leg_FL/FR/BL/BR, Tail) + 강체 스키닝</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt"><code>Idle</code> 액션 (0–40, 루프)</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt"><code>Walk</code> 액션 (0–20, 루프, 대각선 다리 교차)</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt"><code>Jump</code> 액션 (0–20)</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">FBX 내보내기 → <code>Assets/Art/Characters/Fox/Fox.fbx</code></span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">Unity 임포트: Rig Generic, Idle/Walk에 Loop Time 체크</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt"><code>Fox.controller</code> Animator Controller 생성 (Speed, IsGrounded, Jump)</span></li><li class="item gate"><span class="box" aria-hidden="true"></span><span class="txt">씬에서 세 클립 재생 확인, 복셀 형태가 깨지지 않는지 확인<span class="tag">완료 기준</span></span></li></ul>
+</section>
+<section class="stage ">
+  <div class="shead">
+    <span class="n">3</span>
+    <h2>4x4 타일맵 + 이동</h2>
+    <span class="cnt">0 / 5</span>
+  </div>
+  <div class="sbar"><i style="width:0%"></i></div>
+  <ul><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">복셀 잔디 타일 프리팹 (2m × 0.5m × 2m)</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt"><code>MapBuilder.cs</code>: 문자열 레이아웃으로 타일, 구멍 2개, 시작점 생성</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt"><code>PlayerController.cs</code>: WASD/방향키 이동, 회전, 중력, Space 점프</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt"><code>CameraRig.cs</code>: 고정 쿼터뷰 카메라, 카메라 기준 입력 방향 변환</span></li><li class="item gate"><span class="box" aria-hidden="true"></span><span class="txt">걷기, 점프, 구멍 낙하 동작 확인<span class="tag">완료 기준</span></span></li></ul>
+</section>
+<section class="stage ">
+  <div class="shead">
+    <span class="n">4</span>
+    <h2>애니메이션 연결</h2>
+    <span class="cnt">0 / 4</span>
+  </div>
+  <div class="sbar"><i style="width:0%"></i></div>
+  <ul><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">PlayerController에서 Animator 파라미터(Speed, IsGrounded, Jump) 갱신</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">상태 전환 설정: Idle ⇄ Walk, Any → Jump → Idle</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">이동 속도에 맞춰 Walk 재생 속도 조정 (발 미끄러짐 최소화)</span></li><li class="item gate"><span class="box" aria-hidden="true"></span><span class="txt">Idle / Walk / Jump 전환이 자연스러운지 확인<span class="tag">완료 기준</span></span></li></ul>
+</section>
+<section class="stage ">
+  <div class="shead">
+    <span class="n">5</span>
+    <h2>아이템</h2>
+    <span class="cnt">0 / 5</span>
+  </div>
+  <div class="sbar"><i style="width:0%"></i></div>
+  <ul><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">복셀 코인 프리팹 제작</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt"><code>Collectible.cs</code>: 회전 + 둥실 효과, Trigger 획득, 파티클</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">MapBuilder로 코인 4개 배치</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt"><code>GameUI.cs</code>: 좌상단 <code>아이템 0 / 4</code> 카운터</span></li><li class="item gate"><span class="box" aria-hidden="true"></span><span class="txt">획득하면 카운트가 오르고 코인이 사라지는지 확인<span class="tag">완료 기준</span></span></li></ul>
+</section>
+<section class="stage ">
+  <div class="shead">
+    <span class="n">6</span>
+    <h2>게임 종료 / 성공</h2>
+    <span class="cnt">0 / 5</span>
+  </div>
+  <div class="sbar"><i style="width:0%"></i></div>
+  <ul><li class="item"><span class="box" aria-hidden="true"></span><span class="txt"><code>GameManager.cs</code>: Playing / GameOver / Clear 상태</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">Y &lt; -5이면 GAME OVER</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">아이템 4/4이면 CLEAR</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">결과 패널 UI 2종 + 결과가 나오면 조작 정지</span></li><li class="item gate"><span class="box" aria-hidden="true"></span><span class="txt">두 조건 모두 동작하는지 확인<span class="tag">완료 기준</span></span></li></ul>
+</section>
+<section class="stage ">
+  <div class="shead">
+    <span class="n">7</span>
+    <h2>재시작</h2>
+    <span class="cnt">0 / 3</span>
+  </div>
+  <div class="sbar"><i style="width:0%"></i></div>
+  <ul><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">결과 패널에 [다시 하기] 버튼 추가</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">R 키로 언제든 재시작</span></li><li class="item gate"><span class="box" aria-hidden="true"></span><span class="txt">재시작 후 여우, 아이템, UI가 모두 초기 상태로 돌아오는지 확인<span class="tag">완료 기준</span></span></li></ul>
+</section>
+<section class="stage ">
+  <div class="shead">
+    <span class="n">8</span>
+    <h2>마무리</h2>
+    <span class="cnt">0 / 1</span>
+  </div>
+  <div class="sbar"><i style="width:0%"></i></div>
+  <ul><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">Windows 빌드 (<code>Build/VoxelFox.exe</code>) 후 처음부터 끝까지 플레이 테스트</span></li></ul>
+</section>
+
+  <h3>완료 기록</h3>
+  <table><tr><th>날짜</th><th>단계</th><th>메모</th></tr><tr><td>2026-09-29</td><td>1. Unity 프로젝트 생성</td><td>5/5 완료 · PlayMode 스모크 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>1. 추가 정리</td><td>템플릿 샘플(SampleScene, TutorialInfo, Readme) 삭제 · 재검증 통과 · 이유: <a href="worklog.html">WORKLOG.md</a></td></tr></table>
+</div>
+</body>
+</html>
