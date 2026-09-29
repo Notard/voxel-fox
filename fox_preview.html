@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>복셀 여우 미리보기</title>
+<style>
+:root{
+  --bg:#faf6f0; --surface:#fff; --ink:#2b2420; --muted:#7a6d64; --line:#eadfd3;
+  --fox:#e8772e; --fox-soft:#fbe6d6; --stage:#f3ece4;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1b1715; --surface:#252020; --ink:#f1e9e2; --muted:#b0a39a; --line:#3a322d;
+    --fox-soft:#3e2a1d; --stage:#2e2825;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1b1715; --surface:#252020; --ink:#f1e9e2; --muted:#b0a39a; --line:#3a322d;
+  --fox-soft:#3e2a1d; --stage:#2e2825;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;
+  font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:36px 16px 80px}
+h1{font-size:1.9rem;margin:0 0 4px;letter-spacing:-.02em}
+h2{font-size:1.15rem;margin:40px 0 14px}
+.muted{color:var(--muted);font-size:.9rem}
+a{color:var(--fox)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+
+/* 플레이어 */
+.player{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:18px;margin-top:20px}
+@media (max-width:760px){.player{grid-template-columns:1fr}}
+.stage{background:var(--stage);border-radius:12px;aspect-ratio:1;display:grid;place-items:center;overflow:hidden}
+.stage img{width:100%;height:100%;object-fit:contain;image-rendering:auto}
+.tabs{display:flex;gap:6px;margin-bottom:14px}
+.tab{flex:1;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:9px 0;font:inherit;font-weight:700;cursor:pointer}
+.tab[aria-pressed="true"]{background:var(--fox);border-color:var(--fox);color:#fff}
+.ctrl{display:flex;gap:8px;align-items:center;margin:12px 0}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 12px;font:inherit;cursor:pointer;min-width:44px}
+input[type=range]{width:100%;accent-color:var(--fox)}
+.meta{font-size:.88rem;color:var(--muted);display:grid;gap:4px}
+.meta b{color:var(--ink);font-variant-numeric:tabular-nums}
+.desc{font-size:.9rem;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.speed{display:flex;gap:6px}
+.speed .btn{flex:1;padding:5px 0;font-size:.85rem}
+.speed .btn[aria-pressed="true"]{border-color:var(--fox);color:var(--fox);font-weight:700}
+
+/* 갤러리 */
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:760px){.gallery{grid-template-columns:repeat(2,1fr)}}
+.gallery figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.gallery img{display:block;width:100%;aspect-ratio:1;object-fit:contain;background:var(--stage)}
+.gallery figcaption{padding:8px 12px;font-size:.88rem;font-weight:600}
+.gallery.three{grid-template-columns:repeat(3,1fr)}
+@media (max-width:760px){.gallery.three{grid-template-columns:1fr}}
+
+/* 스펙 */
+.specs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:760px){.specs{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+td,th{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600}
+.swatches{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.sw{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted)}
+.sw i{width:22px;height:22px;border-radius:4px;border:1px solid var(--line)}
+code{background:var(--fox-soft);padding:1px 6px;border-radius:4px;font-size:.86em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🦊 복셀 여우 미리보기</h1>
+  <p class="muted">Blender 5.2 Python으로 생성(<code>Blender/make_fox.py</code>) · Workbench 렌더 · <a href="todo.html">할 일</a> · <a href="worklog.html">작업 기록</a> · <a href="plan.html">계획서</a></p>
+
+  <div class="player">
+    <div class="stage"><img id="frame" alt="여우 애니메이션 프레임"></div>
+    <div class="card">
+      <div class="tabs" role="group" aria-label="애니메이션">
+        <button class="tab" data-action="Idle">Idle</button>
+        <button class="tab" data-action="Walk">Walk</button>
+        <button class="tab" data-action="Jump">Jump</button>
+      </div>
+      <div class="ctrl">
+        <button class="btn" id="play" aria-label="재생/일시정지">❚❚</button>
+        <input type="range" id="scrub" min="0" value="0" aria-label="프레임">
+      </div>
+      <div class="speed" role="group" aria-label="재생 속도">
+        <button class="btn" data-speed="0.25">0.25×</button>
+        <button class="btn" data-speed="0.5">0.5×</button>
+        <button class="btn" data-speed="1">1×</button>
+      </div>
+      <div class="meta" style="margin-top:14px">
+        <div>프레임 <b id="fnum">0</b> / <b id="fmax">0</b> <span id="floop"></span></div>
+        <div>원본 30fps · 2프레임 간격 렌더</div>
+      </div>
+      <div class="desc" id="desc"></div>
+    </div>
+  </div>
+
+  <h2>4방향 정지 이미지 <span class="muted">(Idle 0프레임)</span></h2>
+  <div class="gallery" id="stills"></div>
+
+  <h2>Unity 임포트 결과 <span class="muted">(URP Lit + 팔레트 텍스처, <code>FoxPreviewCapture.cs</code>)</span></h2>
+  <div class="gallery three">
+    <figure><img src="preview/unity/unity_Idle.png" alt="Unity Idle"><figcaption>Idle</figcaption></figure>
+    <figure><img src="preview/unity/unity_Walk.png" alt="Unity Walk"><figcaption>Walk (0프레임)</figcaption></figure>
+    <figure><img src="preview/unity/unity_Jump.png" alt="Unity Jump"><figcaption>Jump (8프레임, 도약)</figcaption></figure>
+  </div>
+
+  <h2>모델 정보</h2>
+  <div class="specs">
+    <div class="card">
+      <table>
+        <tr><th>항목</th><th>값</th></tr>
+        <tr><td>복셀</td><td>612개 · 1칸 0.0625m</td></tr>
+        <tr><td>메시</td><td>면 780 · 정점 3,120 (파츠 내부 면 제거)</td></tr>
+        <tr><td>크기</td><td>길이 약 1.4m (코~꼬리) · 높이 약 0.94m (귀 끝)</td></tr>
+        <tr><td>본</td><td>Root › Body › Head, Leg_FL/FR/BL/BR, Tail</td></tr>
+        <tr><td>스키닝</td><td>파츠별 본 1개, 가중치 100%</td></tr>
+        <tr><td>Unity</td><td>Generic 리그 · +Z 정면 · <code>Fox.prefab</code></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <b>팔레트</b> <span class="muted">(<code>Fox_Palette.png</code> 8×8, Point 필터)</span>
+      <div class="swatches">
+        <span class="sw"><i style="background:#E8772E"></i>주황</span>
+        <span class="sw"><i style="background:#F08A3E"></i>밝은 주황</span>
+        <span class="sw"><i style="background:#CF6322"></i>어두운 주황</span>
+        <span class="sw"><i style="background:#FFF4E6"></i>흰색</span>
+        <span class="sw"><i style="background:#EEE0CE"></i>흰색 그늘</span>
+        <span class="sw"><i style="background:#2B2420"></i>검정</span>
+        <span class="sw"><i style="background:#7A3E2A"></i>귀 안쪽</span>
+        <span class="sw"><i style="background:#5A3322"></i>다리 갈색</span>
+      </div>
+      <p class="muted" style="margin:14px 0 0">털 복셀은 주황 3가지 톤을 고정 시드로 섞어 복셀 느낌을 냈습니다.</p>
+    </div>
+  </div>
+</div>
+
+<script src="preview/fox/manifest.js"></script>
+<script>
+(function () {
+  var data = window.FOX_PREVIEW;
+  var DESC = {
+    Idle: "제자리 대기. 몸통이 숨 쉬듯 오르내리고 꼬리가 좌우로 흔들립니다. 0–40프레임, 반복.",
+    Walk: "걷기. 대각선 다리 쌍(앞왼+뒤오 / 앞오+뒤왼)이 ±26° 교차하고, 걸음마다 몸통이 통통 튑니다. 0–20프레임, 반복.",
+    Jump: "점프. 웅크림(4) → 도약(8) → 공중 자세(13) → 기본 자세(20). 한 번만 재생됩니다."
+  };
+  var img = document.getElementById("frame");
+  var scrub = document.getElementById("scrub");
+  var playBtn = document.getElementById("play");
+  var fnum = document.getElementById("fnum"), fmax = document.getElementById("fmax");
+  var floop = document.getElementById("floop"), desc = document.getElementById("desc");
+  var action = "Walk", i = 0, playing = true, speed = 1, timer = null, hold = 0;
+
+  // 프레임 미리 불러오기
+  Object.keys(data.actions).forEach(function (k) {
+    data.actions[k].frames.forEach(function (f) { new Image().src = "preview/fox/" + f; });
+  });
+
+  function show() {
+    var a = data.actions[action];
+    img.src = "preview/fox/" + a.frames[i];
+    scrub.value = i;
+    fnum.textContent = parseInt(a.frames[i].match(/_(\d+)\.png/)[1], 10);
+  }
+  function select(name) {
+    action = name; i = 0; hold = 0;
+    var a = data.actions[name];
+    scrub.max = a.frames.length - 1;
+    fmax.textContent = parseInt(a.frames[a.frames.length - 1].match(/_(\d+)\.png/)[1], 10);
+    floop.textContent = a.loop ? "· 반복" : "· 1회 (끝나면 잠시 멈췄다 다시)";
+    desc.textContent = DESC[name];
+    document.querySelectorAll(".tab").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.action === name);
+    });
+    show(); restart();
+  }
+  function tick() {
+    var a = data.actions[action];
+    if (i === a.frames.length - 1 && !a.loop) {
+      if (++hold < 8) return;
+      hold = 0;
+    }
+    i = (i + 1) % a.frames.length;
+    show();
+  }
+  function restart() {
+    clearInterval(timer);
+    if (playing) timer = setInterval(tick, 1000 / (data.actions[action].fps * speed));
+  }
+  function setPlaying(p) {
+    playing = p; playBtn.textContent = p ? "❚❚" : "▶"; restart();
+  }
+
+  document.querySelectorAll(".tab").forEach(function (b) {
+    b.addEventListener("click", function () { select(b.dataset.action); });
+  });
+  document.querySelectorAll("[data-speed]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      speed = parseFloat(b.dataset.speed);
+      document.querySelectorAll("[data-speed]").forEach(function (x) {
+        x.setAttribute("aria-pressed", x === b);
+      });
+      restart();
+    });
+  });
+  playBtn.addEventListener("click", function () { setPlaying(!playing); });
+  scrub.addEventListener("input", function () { setPlaying(false); i = +scrub.value; show(); });
+
+  var stills = document.getElementById("stills");
+  data.stills.forEach(function (s) {
+    var fig = document.createElement("figure");
+    fig.innerHTML = '<img src="preview/fox/' + s.file + '" alt="' + s.label + '"><figcaption>' + s.label + "</figcaption>";
+    stills.appendChild(fig);
+  });
+
+  document.querySelector('[data-speed="1"]').setAttribute("aria-pressed", "true");
+  select("Walk");
+})();
+</script>
+</body>
+</html>

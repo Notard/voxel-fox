@@ -4,7 +4,7 @@
 > 체크 후 `python tools/make_todo_html.py` 실행 → 진행률 갱신 + [todo.html](todo.html) 재생성.
 > 작업별 상세 결과: [WORKLOG.md](WORKLOG.md)
 
-**진행률: 12 / 45**
+**진행률: 23 / 46**
 
 ---
 
@@ -25,16 +25,17 @@
 - [x] `main` push 후 `origin/main`과 동기화 확인 ✅ 완료 기준
 
 ## 2. 복셀 여우 캐릭터 (Blender Python)
-- [ ] `C:\sample\Blender\make_fox.py` 작성: 파츠별 복셀 데이터 정의 (몸통, 머리, 귀, 다리 4개, 꼬리)
-- [ ] 보이는 면만 메시로 만들기 + 색상(버텍스 컬러 또는 팔레트) 적용
-- [ ] Armature 생성 (Root, Body, Head, Leg_FL/FR/BL/BR, Tail) + 강체 스키닝
-- [ ] `Idle` 액션 (0–40, 루프)
-- [ ] `Walk` 액션 (0–20, 루프, 대각선 다리 교차)
-- [ ] `Jump` 액션 (0–20)
-- [ ] FBX 내보내기 → `Assets/Art/Characters/Fox/Fox.fbx`
-- [ ] Unity 임포트: Rig Generic, Idle/Walk에 Loop Time 체크
-- [ ] `Fox.controller` Animator Controller 생성 (Speed, IsGrounded, Jump)
-- [ ] 씬에서 세 클립 재생 확인, 복셀 형태가 깨지지 않는지 확인 ✅ 완료 기준
+- [x] `C:\sample\Blender\make_fox.py` 작성: 파츠별 복셀 데이터 정의 (몸통, 머리, 귀, 다리 4개, 꼬리)
+- [x] 보이는 면만 메시로 만들기 + 색상(버텍스 컬러 또는 팔레트) 적용
+- [x] Armature 생성 (Root, Body, Head, Leg_FL/FR/BL/BR, Tail) + 강체 스키닝
+- [x] `Idle` 액션 (0–40, 루프)
+- [x] `Walk` 액션 (0–20, 루프, 대각선 다리 교차)
+- [x] `Jump` 액션 (0–20)
+- [x] FBX 내보내기 → `Assets/Art/Characters/Fox/Fox.fbx`
+- [x] Unity 임포트: Rig Generic, Idle/Walk에 Loop Time 체크
+- [x] `Fox.controller` Animator Controller 생성 (Speed, IsGrounded, Jump)
+- [x] 미리보기 만들기: Blender 렌더(4방향 + 애니메이션 프레임) + Unity 캡처 → [fox_preview.html](fox_preview.html)
+- [x] 씬에서 세 클립 재생 확인, 복셀 형태가 깨지지 않는지 확인 ✅ 완료 기준
 
 ## 3. 4x4 타일맵 + 이동
 - [ ] 복셀 잔디 타일 프리팹 (2m × 0.5m × 2m)
@@ -79,3 +80,4 @@
 | 2026-09-29 | 1. Unity 프로젝트 생성 | 5/5 완료 · PlayMode 스모크 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 1. 추가 정리 | 템플릿 샘플(SampleScene, TutorialInfo, Readme) 삭제 · 재검증 통과 · 이유: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | Git 연결 | GitHub `Notard/voxel-fox` (Public) 생성 · push · 상세: [WORKLOG.md](WORKLOG.md) |
+| 2026-09-29 | 2. 복셀 여우 캐릭터 | 11/11 완료 · EditMode 9/9 · PlayMode 1/1 통과 · 미리보기 [fox_preview.html](fox_preview.html) · 상세: [WORKLOG.md](WORKLOG.md) |

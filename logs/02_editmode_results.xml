@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="9" result="Passed" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.0731702">
+  <test-suite type="TestSuite" id="1000" name="VoxelFox" fullname="VoxelFox" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.073170" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1012" name="EditModeTests.dll" fullname="C:/sample/VoxelFox/Library/ScriptAssemblies/EditModeTests.dll" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.063220" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="29816" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestFixture" id="1001" name="FoxAssetTests" fullname="FoxAssetTests" classname="FoxAssetTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.062142" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="ParameterizedMethod" id="1005" name="Clip_ExistsWithLengthAndLoop" fullname="FoxAssetTests.Clip_ExistsWithLengthAndLoop" classname="FoxAssetTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.034768" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="1002" name="Clip_ExistsWithLengthAndLoop(&quot;Idle&quot;,40,True)" fullname="FoxAssetTests.Clip_ExistsWithLengthAndLoop(&quot;Idle&quot;,40,True)" methodname="Clip_ExistsWithLengthAndLoop" classname="FoxAssetTests" runstate="Runnable" seed="1354454342" result="Passed" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.028181" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="1003" name="Clip_ExistsWithLengthAndLoop(&quot;Walk&quot;,20,True)" fullname="FoxAssetTests.Clip_ExistsWithLengthAndLoop(&quot;Walk&quot;,20,True)" methodname="Clip_ExistsWithLengthAndLoop" classname="FoxAssetTests" runstate="Runnable" seed="2026801030" result="Passed" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.000564" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="1004" name="Clip_ExistsWithLengthAndLoop(&quot;Jump&quot;,20,False)" fullname="FoxAssetTests.Clip_ExistsWithLengthAndLoop(&quot;Jump&quot;,20,False)" methodname="Clip_ExistsWithLengthAndLoop" classname="FoxAssetTests" runstate="Runnable" seed="1489773325" result="Passed" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.000281" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-case id="1010" name="Controller_HasParametersAndStates" fullname="FoxAssetTests.Controller_HasParametersAndStates" methodname="Controller_HasParametersAndStates" classname="FoxAssetTests" runstate="Runnable" seed="489168745" result="Passed" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.005278" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1007" name="Mesh_IsRigidSkinned" fullname="FoxAssetTests.Mesh_IsRigidSkinned" methodname="Mesh_IsRigidSkinned" classname="FoxAssetTests" runstate="Runnable" seed="505458051" result="Passed" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.004377" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1008" name="Model_IsUprightFacingForwardAndSized" fullname="FoxAssetTests.Model_IsUprightFacingForwardAndSized" methodname="Model_IsUprightFacingForwardAndSized" classname="FoxAssetTests" runstate="Runnable" seed="1943440090" result="Passed" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.004938" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1011" name="Prefab_UsesPaletteMaterial" fullname="FoxAssetTests.Prefab_UsesPaletteMaterial" methodname="Prefab_UsesPaletteMaterial" classname="FoxAssetTests" runstate="Runnable" seed="110113557" result="Passed" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.002548" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1006" name="Rig_HasAllBones" fullname="FoxAssetTests.Rig_HasAllBones" methodname="Rig_HasAllBones" classname="FoxAssetTests" runstate="Runnable" seed="1110639621" result="Passed" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.000675" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1009" name="Walk_MovesLegsInOpposition" fullname="FoxAssetTests.Walk_MovesLegsInOpposition" methodname="Walk_MovesLegsInOpposition" classname="FoxAssetTests" runstate="Runnable" seed="892093499" result="Passed" start-time="2026-09-29 03:07:49Z" end-time="2026-09-29 03:07:49Z" duration="0.001155" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[Saving results to: C:/Users/elbre/AppData/LocalLow/DefaultCompany/VoxelFox\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

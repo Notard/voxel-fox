@@ -95,3 +95,53 @@ Universal 3D 템플릿에 기본으로 들어 있는 샘플/안내용 파일을 
 ### 공개 저장소 주의
 - 커밋 작성자 이메일(git 전역 설정)이 공개된다.
 - `logs/*_results.xml` 안에 Windows 사용자 폴더 경로가 들어 있다.
+
+---
+
+## 2단계. 복셀 여우 캐릭터 (Blender Python) — ✅ 완료 (2026-09-29)
+
+미리보기: **[fox_preview.html](fox_preview.html)** (애니메이션 플레이어, 4방향 이미지, Unity 임포트 결과)
+
+### 결과 요약
+| 항목 | 결과 |
+|---|---|
+| 생성 스크립트 | `Blender/make_fox.py`: 복셀 데이터 → 메시 → 팔레트 머티리얼 → 리그 → 액션 3개 → FBX, `.blend` 저장 |
+| 모델 | 복셀 612개, 면 780, 정점 3,120. 코~꼬리 약 1.4m, 귀 끝까지 높이 약 0.94m (1복셀 = 0.0625m) |
+| 색상 | 버텍스 컬러 대신 **팔레트 텍스처**(`Fox_Palette.png` 8×8)를 쓰고, 면마다 UV로 색 칸을 지정했다. URP Lit을 그대로 쓸 수 있다. |
+| 리그 | Root › Body › Head / Leg_FL·FR·BL·BR / Tail. 모든 본이 위를 향하게 해서 회전축을 직관적으로 맞췄다. |
+| 스키닝 | 파츠마다 본 하나에 가중치 100% (강체) |
+| 애니메이션 | Idle 0–40 루프 · Walk 0–20 루프 · Jump 0–20 (웅크림 4 → 도약 8 → 공중 13 → 기본 20) |
+| Unity 에셋 | `Fox.fbx` (Generic, 클립 이름 Idle/Walk/Jump, Idle·Walk Loop), `Fox.mat` (URP Lit, Point 필터 팔레트), `Fox.controller`, `Prefabs/Fox.prefab` |
+| 미리보기 | `Blender/render_preview.py`(Workbench, 정지 4장 + 애니메이션 41프레임), `FoxPreviewCapture.cs`(Unity URP 렌더 3장) |
+
+### 설계 메모
+- **면 제거 규칙:** 같은 파츠 안에서 맞닿은 면만 지웠다. 파츠 경계(예: 다리 윗면과 몸통 아랫면)의 면은 남겨서 관절이 회전해도 구멍이 보이지 않는다.
+- **Animator Controller:**
+  - 파라미터: `Speed`(float), `IsGrounded`(bool, 기본값 true), `Jump`(trigger)
+  - 전환: Idle → Walk (Speed > 0.1), Walk → Idle (Speed < 0.1), Any State → Jump (Jump 트리거)
+  - Jump → Idle: IsGrounded 조건에 exit time 0.5를 더했다. 점프 직후 한 프레임은 아직 땅에 붙어 있어서, 조건만 두면 바로 Idle로 돌아가기 때문이다. 4단계에서 실제 이동과 맞추며 다시 조정한다.
+- **임포트 설정 자동화:** `FoxAssetPostprocessor.cs`가 FBX와 팔레트의 임포트 설정을 맡는다. Blender에서 다시 내보내도 설정이 유지된다.
+- **전체 재생성:** `bash tools/build_fox.sh` (Blender 생성 → 미리보기 → Unity 설정 → 캡처 → 테스트)
+
+### 검증 (완료 기준)
+EditMode `FoxAssetTests` **9/9 통과**:
+- 클립 3개의 길이와 루프 설정 (Idle 1.33s 루프, Walk 0.67s 루프, Jump 0.67s 1회)
+- 본 8개가 모두 있는지
+- 모든 정점의 가중치가 1인지 (복셀이 찌그러지지 않음)
+- 여우가 +Z를 바라보고 서 있는지, 크기가 맞는지
+- Walk에서 좌우 앞다리가 반대로 40° 넘게 움직이는지
+- Animator 파라미터, 상태, 기본 상태
+- 프리팹 머티리얼과 Point 필터
+
+PlayMode 스모크 테스트 **1/1 통과** (회귀 확인). 결과 파일: `logs/02_editmode_results.xml`, `logs/02_playmode_results.xml`
+
+Unity 렌더 캡처로 방향(+Z 정면), 색, Walk/Jump 포즈가 Blender 결과와 같은 것을 눈으로 확인했다.
+
+### 발생한 문제와 해결
+| 문제 | 원인 | 해결 |
+|---|---|---|
+| Unity 캡처에서 Jump 포즈가 Idle과 똑같이 나옴 | 배치 모드에서는 플레이어 루프가 돌지 않아 SkinnedMeshRenderer 스키닝이 갱신되지 않음 | 포즈마다 `BakeMesh`로 메시를 굳혀 따로 렌더 |
+| `file://`로 연 미리보기 페이지를 브라우저 창에서 조작할 수 없음 | 로컬 파일은 정적 스냅샷으로만 열림 | 로컬 서버(`python -m http.server`)로 띄워 재생, 탭, 스크롤을 확인 |
+
+### 다음 단계에서 고려할 점
+- 여우 몸길이(1.4m)가 타일 한 칸(2m)의 70% 정도로 크다. 3단계에서 맵에 올려 보고, 필요하면 프리팹 스케일(예: 0.6~0.7)이나 타일 크기를 조정한다.
