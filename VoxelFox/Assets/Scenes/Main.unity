@@ -154,7 +154,7 @@ MonoBehaviour:
   - C.HC
   - ...C
   tilePrefab: {fileID: 7082293857977079147, guid: b343a0d037fc7614485f93dcf0223bd0, type: 3}
-  player: {fileID: 597688312}
+  player: {fileID: 760266431}
   checkerShade: 0.9
 --- !u!4 &587528911
 Transform:
@@ -171,7 +171,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &597688311
+--- !u!1001 &760266430
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -232,10 +232,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46f64ed42f739064c843ebcaeb97ae96, type: 3}
---- !u!114 &597688312 stripped
+--- !u!114 &760266431 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8997347150076841083, guid: 46f64ed42f739064c843ebcaeb97ae96, type: 3}
-  m_PrefabInstance: {fileID: 597688311}
+  m_PrefabInstance: {fileID: 760266430}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -243,10 +243,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59a44aa4d09af1d4f890de05a3295223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: VoxelFox::PlayerController
---- !u!4 &597688313 stripped
+--- !u!4 &760266432 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9139859108339945897, guid: 46f64ed42f739064c843ebcaeb97ae96, type: 3}
-  m_PrefabInstance: {fileID: 597688311}
+  m_PrefabInstance: {fileID: 760266430}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1719065931
 GameObject:
@@ -353,7 +353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4a39b839c7b0e4e926faf0d995e119, type: 3}
   m_Name: 
   m_EditorClassIdentifier: VoxelFox::CameraRig
-  target: {fileID: 597688313}
+  target: {fileID: 760266432}
   pitch: 45
   yaw: 30
   distance: 11
@@ -464,4 +464,4 @@ SceneRoots:
   - {fileID: 1719065934}
   - {fileID: 1985478374}
   - {fileID: 587528911}
-  - {fileID: 597688311}
+  - {fileID: 760266430}

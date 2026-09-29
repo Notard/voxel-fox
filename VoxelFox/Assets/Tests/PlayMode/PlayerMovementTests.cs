@@ -111,6 +111,31 @@ public class PlayerMovementTests
         Assert.Less(top - ground, player.JumpHeight + 0.1f);
     }
 
+    // 4-3: 구멍 가장자리 0.4m 앞에서 뛰면 구멍(2m)을 넘어 건너편 타일에 착지한다.
+    [UnityTest]
+    public IEnumerator RunningJump_ClearsHole()
+    {
+        // (0, 2)에서 동쪽으로 달리면 (1, 2)가 구멍이고 그 너머 (2, 2)는 타일이다.
+        player.Teleport(map.CellToWorld(new Vector2Int(0, 2)), Quaternion.identity);
+        yield return WaitUntilGrounded();
+        float holeNear = map.CellToWorld(new Vector2Int(1, 2)).x - MapBuilder.TileSize / 2f;
+        float holeFar = holeNear + MapBuilder.TileSize;
+
+        player.MoveInput = InputFor(Vector3.right);
+        while (player.transform.position.x < holeNear - 0.4f) yield return null;
+        player.RequestJump();
+        for (int i = 0; i < Fps * 2; i++) yield return null;
+        player.MoveInput = Vector2.zero;
+
+        var p = player.transform.position;
+        Assert.AreEqual(0f, p.y, 0.05f, "구멍에 빠지지 않고 타일 위에 있어야 함");
+        Assert.Greater(p.x, holeFar, "구멍 건너편 (2, 2)에 착지");
+    }
+
+    [Test]
+    public void JumpDistance_IsWellOverHoleWidth() =>
+        Assert.Greater(player.MoveSpeed * player.AirTime, MapBuilder.TileSize * 1.3f, "달리며 뛴 거리 > 구멍 너비 2m × 1.3");
+
     [UnityTest]
     public IEnumerator WalkIntoHole_Falls()
     {

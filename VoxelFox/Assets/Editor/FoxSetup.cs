@@ -88,8 +88,9 @@ public static class FoxSetup
         walk.speedParameter = "WalkSpeed";
         walk.speedParameterActive = true;
         jump.motion = Clip("Jump");
-        // 체공 시간(점프 1.2m, 중력 -20 → 약 0.69초)에 남은 클립(프레임 6~20, 0.47초)을 맞춘다.
-        jump.speed = 0.7f;
+        // 체공 시간(점프 1.5m, 중력 -15 → 약 0.89초)에 남은 클립(프레임 6~20, 0.47초)을 맞춘다.
+        // 4-3에서 0.7 → 0.53 (점프를 높고 길게 바꿔서)
+        jump.speed = 0.53f;
         sm.defaultState = idle;
 
         var toWalk = idle.AddTransition(walk);

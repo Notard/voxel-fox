@@ -10,8 +10,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float moveSpeed = 3f;
     [Tooltip("회전 속도 (도/초)")]
     [SerializeField] float turnSpeed = 720f;
-    [SerializeField] float gravity = -20f;
-    [SerializeField] float jumpHeight = 1.2f;
+    // 4-3에서 변경 (사용자 피드백: 점프가 짧아 구멍에 잘 빠짐): 중력 -20 → -15, 높이 1.2 → 1.5m
+    // 체공 0.69초 → 0.89초, 3 m/s로 달리며 뛰면 2.08m → 2.68m (구멍 너비 2m)
+    [SerializeField] float gravity = -15f;
+    [SerializeField] float jumpHeight = 1.5f;
     [SerializeField] CameraRig cameraRig;
     [SerializeField] InputActionAsset actions;
     [SerializeField] Animator animator;
@@ -29,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
     public float MoveSpeed => moveSpeed;
     public float JumpHeight => jumpHeight;
+    public float AirTime => 2f * Mathf.Sqrt(2f * jumpHeight / -gravity);
     public bool IsGrounded => Controller.isGrounded;
     public Vector3 Velocity => velocity;
     public Animator Animator => animator;

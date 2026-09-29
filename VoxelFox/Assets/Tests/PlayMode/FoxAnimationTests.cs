@@ -63,7 +63,7 @@ public class FoxAnimationTests
         AssertState("Jump");
         Assert.IsFalse(animator.GetBool("IsGrounded"), "공중에서는 IsGrounded = false");
 
-        yield return Frames(0.8f); // 체공 약 0.69초
+        yield return Frames(player.AirTime - 0.2f + 0.15f); // 체공(약 0.89초)이 끝나고 착지 전환(0.1초)까지
         Assert.IsTrue(player.IsGrounded);
         AssertState("Idle");
     }
@@ -76,7 +76,7 @@ public class FoxAnimationTests
         player.RequestJump();
         yield return Frames(0.2f);
         AssertState("Jump");
-        yield return Frames(0.8f);
+        yield return Frames(player.AirTime - 0.2f + 0.15f);
         AssertState("Walk");
     }
 
