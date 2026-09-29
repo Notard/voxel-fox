@@ -25,9 +25,6 @@ public class MapBuilder : MonoBehaviour
     public Transform TileRoot { get; private set; }
     public PlayerController Player => player;
 
-    // 맵 중심에서 가장자리까지 (x, z) 거리 (카메라 구도 계산용)
-    public Vector2 HalfExtents => 0.5f * TileSize * new Vector2(Layout.Width, Layout.Depth);
-
     void Awake() => Build();
 
     void OnValidate() => parsed = null;

@@ -138,7 +138,7 @@ public class FoxAnimationTests
     }
 
     Vector2 InputFor(Vector3 world) =>
-        new(Vector3.Dot(world, rig.FlatRight), Vector3.Dot(world, rig.FlatForward));
+        new(Vector3.Dot(world, rig.MoveRight), Vector3.Dot(world, rig.MoveForward));
 
     static IEnumerator Frames(float seconds)
     {

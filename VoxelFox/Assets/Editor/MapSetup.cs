@@ -353,12 +353,12 @@ public static class MapSetup
 
         Assign(map, "tilePrefab", tilePrefab);
         Assign(map, "player", player);
-        Assign(rig, "map", map);
+        Assign(rig, "target", player.transform);
         Assign(player, "cameraRig", rig);
 
         // 에디터에서도 시작 위치와 카메라 구도가 보이게 해 둔다. 타일은 Play 때 만든다.
         map.PlaceAtStart(player);
-        rig.Apply();
+        rig.SnapToTarget();
 
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);

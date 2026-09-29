@@ -70,7 +70,7 @@ article hr{display:none}
 </head>
 <body>
 <div class="wrap">
-  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · 마지막 갱신 2026-09-29 14:37</p>
+  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · 마지막 갱신 2026-09-29 15:05</p>
   <article><h1>작업 기록 — 복셀 여우 타일 게임</h1>
 <blockquote>
 <p>단계별로 실제로 한 일, 결과, 검증 방법, 발생한 문제를 남긴다. 체크리스트: <a href="todo.html">TODO.md</a></p>
@@ -722,7 +722,75 @@ article hr{display:none}
 <li><code>logs/04_fox_setup.log</code>, <code>logs/04_unity_capture.log</code>: 여우 재생성</li>
 <li><code>logs/04_map_setup.log</code>: 플레이어 프리팹(보폭 측정값 포함)</li>
 <li><code>logs/04_editmode.log</code>, <code>logs/04_editmode_results.xml</code>, <code>logs/04_playmode.log</code>, <code>logs/04_playmode_results.xml</code></li>
-</ul></article>
+</ul>
+<hr />
+<h2>4-1. 카메라 추적 + 격자 방향 이동 — ✅ 완료 (2026-09-29)</h2>
+<p>미리보기: <strong><a href="map_preview.html">map_preview.html</a></strong></p>
+<h3>변경 이유 (사용자 피드백)</h3>
+<p>Unity에서 직접 플레이해 본 사용자가 두 가지를 요청했다.
+1. <strong>"캐릭터 중심으로 카메라가 따라가야 해."</strong> 3단계 카메라는 맵 전체가 보이는 고정 카메라여서 여우가 화면 구석에서 작게 움직였다.
+2. <strong>"쿼터뷰인데 화살표를 누르면 대각선으로 움직여."</strong> 카메라가 격자에서 30° 돌아가 있는데, 입력은 "화면 위쪽 = ↑"로 바꾸고 있었다. 화면 위쪽은 타일 격자 기준으로 비스듬한 방향이라, ↑를 누르면 여우가 타일 줄을 비스듬히 가로질렀다.</p>
+<h3>바뀐 것</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>이전 (3단계)</th>
+<th>이후</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>카메라</td>
+<td>맵 모서리가 모두 들어오는 고정 위치</td>
+<td>여우 몸통 가운데를 화면 중앙에 두고 따라감. 거리 11m, 따라가는 부드러움 0.15초</td>
+</tr>
+<tr>
+<td>카메라 각도</td>
+<td>내려다보는 각 45°, 방향 30°, 화각 40°</td>
+<td>그대로</td>
+</tr>
+<tr>
+<td>떨어질 때</td>
+<td>해당 없음</td>
+<td>높이 -1.5m 아래로는 따라가지 않음 → 여우가 아래로 사라지는 모습이 보인다</td>
+</tr>
+<tr>
+<td>↑ 입력</td>
+<td>화면 위쪽 (격자에서 30° 틀어짐)</td>
+<td><strong>북쪽(+Z)</strong>: 화면 위쪽에서 가장 가까운 격자 축</td>
+</tr>
+<tr>
+<td>→ 입력</td>
+<td>화면 오른쪽</td>
+<td><strong>동쪽(+X)</strong></td>
+</tr>
+<tr>
+<td>두 키 동시</td>
+<td>화면 기준 대각선</td>
+<td>격자 대각선 (예: ↑+→ = 북동)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>격자 축은 카메라 방향(yaw)을 90° 단위로 반올림해 구한다. 30°는 0°가 되므로 ↑ = 북쪽이다. 나중에 카메라 방향을 바꿔도 가장 가까운 축을 따라간다.</li>
+<li>카메라 각도(30°)는 바꾸지 않았다. 대안으로 카메라를 격자에 정면(0°)으로 맞추면 ↑가 화면 위쪽과 북쪽이 모두 되지만, 타일 옆면이 거의 안 보여 쿼터뷰 느낌이 사라진다(3단계 설계 메모).</li>
+<li><code>MapBuilder.HalfExtents</code>는 고정 카메라 구도 계산에만 쓰여서 지웠다.</li>
+</ul>
+<h3>검증</h3>
+<ul>
+<li><code>TAG=04b bash tools/build_map.sh</code>로 씬을 다시 배치하고 테스트했다.</li>
+<li>EditMode <strong>20/20 통과</strong>. <code>MainScene_IsWired</code>는 이제 카메라가 여우를 따라가도록 연결되어 있는지, 45°로 여우를 화면 중앙에 두는지 확인한다.</li>
+<li>PlayMode <strong>19/19 통과</strong>. 새 테스트 3개:</li>
+<li><code>Input_FollowsGridAxes</code>: ↑ = +Z, → = +X이고, ↑가 화면 안쪽과 45° 이내</li>
+<li><code>UpArrow_MovesStraightNorth</code>: ↑를 1초 누르면 북쪽으로 3m(±0.1), 옆으로 0m(±0.02) → 사용자가 말한 대각선 이동이 없음</li>
+<li><code>Camera_FollowsPlayerAtCenter</code>: 시작할 때와 멈춘 뒤에는 여우가 화면 중앙(2% 이내), 걷는 동안에도 15% 이내</li>
+<li>기존 이동·애니메이션 테스트도 모두 통과했다(발 미끄러짐 최대 1.3cm 그대로).</li>
+<li>녹화 프레임에서 여우가 늘 화면 중앙에 있고, 구멍에 빠지면 카메라가 멈춘 채 여우가 아래로 사라지는 것을 확인했다.</li>
+<li>결과 파일: <code>logs/04b_editmode_results.xml</code>, <code>logs/04b_playmode_results.xml</code></li>
+</ul>
+<h3>참고: Unity 에디터 시작 시 Search 에러</h3>
+<p>에디터를 켤 때 Console에 <code>ArgumentOutOfRangeException (SearchDatabase.GetDefaultSearchDatabase)</code>가 한 번 나왔다. Unity 내부 검색 색인 기능의 에러이고 게임 코드와는 관계없다. 기본 색인(<code>UserSettings/Search.index</code>)이 있는 상태에서도 나서, 색인을 새로 만드는 방법은 효과가 없었다. 대신 에디터를 켤 때 색인을 갱신하는 설정을 껐다(<code>UserSettings/Search.settings</code>의 <code>indexOnEditorStartup = false</code>). 그 뒤 실행에서는 에러가 나지 않았다. 이 설정은 PC별 설정이라 Git에는 포함되지 않는다.</p></article>
 </div>
 </body>
 </html>

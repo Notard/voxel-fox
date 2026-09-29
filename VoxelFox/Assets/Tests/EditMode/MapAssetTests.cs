@@ -111,12 +111,13 @@ public class MapAssetTests
         Assert.IsNotNull(rig, "CameraRig 없음");
         Assert.IsNotNull(map.Player, "MapBuilder에 Player 연결 안 됨");
         Assert.AreEqual("MainCamera", rig.tag);
+        Assert.AreSame(map.Player.transform, rig.Target, "카메라가 여우를 따라가야 함");
 
-        // 카메라가 맵 중심을 위에서 비스듬히 본다.
+        // 카메라가 여우(몸통 가운데)를 위에서 45°로 비스듬히 본다.
         var forward = rig.transform.forward;
         Assert.AreEqual(45f, Vector3.Angle(forward, Vector3.ProjectOnPlane(forward, Vector3.up)), 1f, "내려다보는 각도");
-        var toCenter = map.transform.position - rig.transform.position;
-        Assert.Less(Vector3.Angle(forward, toCenter), 1f, "맵 중심을 바라봐야 함");
+        var toFox = map.Player.transform.position + Vector3.up * 0.4f - rig.transform.position;
+        Assert.Less(Vector3.Angle(forward, toFox), 1f, "여우를 화면 중앙에 둬야 함");
     }
 
     static void AssertVector(Vector3 expected, Vector3 actual, string message) =>

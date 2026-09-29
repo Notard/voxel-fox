@@ -133,18 +133,60 @@ public class PlayerMovementTests
         yield return WalkUntilFallen(Vector3.left);
     }
 
+    // 4-1: 쿼터뷰(카메라 30°)에서도 화살표는 타일 줄을 따라 곧게 간다.
     [Test]
-    public void Input_IsCameraRelative()
+    public void Input_FollowsGridAxes()
     {
-        var camForward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up).normalized;
-        var camRight = Vector3.ProjectOnPlane(Camera.main.transform.right, Vector3.up).normalized;
-        Assert.Greater(Vector3.Dot(rig.InputToWorld(Vector2.up), camForward), 0.999f, "위 = 화면 안쪽");
-        Assert.Greater(Vector3.Dot(rig.InputToWorld(Vector2.right), camRight), 0.999f, "오른쪽 = 화면 오른쪽");
+        Assert.AreEqual(Vector3.forward, rig.InputToWorld(Vector2.up), "↑ = 북쪽 (+Z)");
+        Assert.AreEqual(Vector3.right, rig.InputToWorld(Vector2.right), "→ = 동쪽 (+X)");
+        // 화면 안쪽 방향과 가장 가까운 격자 축이어야 한다 (45° 이내).
+        var camForward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up);
+        Assert.Less(Vector3.Angle(camForward, rig.InputToWorld(Vector2.up)), 45f);
+    }
+
+    [UnityTest]
+    public IEnumerator UpArrow_MovesStraightNorth()
+    {
+        // 시작 칸 (0, 3)은 북쪽 끝이므로 한 칸 아래 (0, 1)에서 북쪽으로 걷는다. (0, 2)도 타일이다.
+        player.Teleport(map.CellToWorld(new Vector2Int(0, 1)), Quaternion.identity);
+        yield return WaitUntilGrounded();
+        var start = player.transform.position;
+        player.MoveInput = Vector2.up;
+        for (int i = 0; i < Fps; i++) yield return null;
+        player.MoveInput = Vector2.zero;
+
+        var moved = player.transform.position - start;
+        Assert.AreEqual(player.MoveSpeed, moved.z, 0.1f, "북쪽으로 3m");
+        Assert.AreEqual(0f, moved.x, 0.02f, "옆으로(대각선으로) 새지 않아야 함");
+    }
+
+    [UnityTest]
+    public IEnumerator Camera_FollowsPlayerAtCenter()
+    {
+        var cam = Camera.main;
+        Assert.Less(ScreenOffset(cam), 0.02f, "시작할 때 여우가 화면 중앙");
+
+        player.MoveInput = Vector2.right;
+        for (int i = 0; i < Fps * 1.5f; i++)
+        {
+            yield return null;
+            Assert.Less(ScreenOffset(cam), 0.15f, "걷는 동안에도 여우가 화면 중앙 근처");
+        }
+        player.MoveInput = Vector2.zero;
+        for (int i = 0; i < Fps; i++) yield return null;
+        Assert.Less(ScreenOffset(cam), 0.02f, "멈추면 다시 화면 중앙");
+    }
+
+    // 여우 몸통 가운데가 화면 중앙에서 얼마나 떨어져 있는지 (화면 비율, 0 = 중앙)
+    float ScreenOffset(Camera cam)
+    {
+        var v = cam.WorldToViewportPoint(player.transform.position + Vector3.up * 0.4f);
+        return new Vector2(v.x - 0.5f, v.y - 0.5f).magnitude;
     }
 
     // 월드 방향으로 걷도록 카메라 기준 입력을 거꾸로 계산한다.
     Vector2 InputFor(Vector3 world) =>
-        new(Vector3.Dot(world, rig.FlatRight), Vector3.Dot(world, rig.FlatForward));
+        new(Vector3.Dot(world, rig.MoveRight), Vector3.Dot(world, rig.MoveForward));
 
     IEnumerator Walk(Vector3 world, float seconds)
     {

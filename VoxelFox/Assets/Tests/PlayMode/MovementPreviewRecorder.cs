@@ -44,7 +44,7 @@ public class MovementPreviewRecorder
         // 정지 이미지
         var still = new RenderTexture(1280, 720, 24, RenderTextureFormat.ARGB32);
         cam.aspect = 16f / 9f;
-        rig.Apply();
+        rig.SnapToTarget();
         Save(still, "map_quarter.png");
 
         cam.transform.SetPositionAndRotation(new Vector3(0, 17, 0), Quaternion.Euler(90, 0, 0));
@@ -55,7 +55,7 @@ public class MovementPreviewRecorder
         cam.transform.LookAt(fox + Vector3.up * 0.35f);
         Save(still, "map_start_close.png");
         Object.Destroy(still);
-        rig.Apply();
+        rig.SnapToTarget();
 
         // 이동 녹화
         var rt = new RenderTexture(640, 360, 24, RenderTextureFormat.ARGB32);
@@ -84,7 +84,7 @@ public class MovementPreviewRecorder
             frames.Add((file, phase));
         }
         Vector2 InputFor(Vector3 world) =>
-            new(Vector3.Dot(world, rig.FlatRight), Vector3.Dot(world, rig.FlatForward));
+            new(Vector3.Dot(world, rig.MoveRight), Vector3.Dot(world, rig.MoveForward));
 
         phase = "대기";
         for (int i = 0; i < 24; i++) yield return Step();

@@ -4,7 +4,7 @@
 > 체크 후 `python tools/make_todo_html.py` 실행 → 진행률 갱신 + [todo.html](todo.html) 재생성.
 > 작업별 상세 결과: [WORKLOG.md](WORKLOG.md)
 
-**진행률: 45 / 59**
+**진행률: 50 / 64**
 
 ---
 
@@ -67,6 +67,13 @@
 - [x] 미리보기에 여우 근접 녹화 추가 → [map_preview.html](map_preview.html)
 - [x] Idle / Walk / Jump 전환이 자연스러운지 확인 ✅ 완료 기준
 
+## 4-1. 카메라 추적 + 격자 방향 이동 (사용자 피드백)
+- [x] 카메라가 여우를 화면 중앙에 두고 부드럽게 따라가기 (쿼터뷰 45°/30° 유지, 거리 11m)
+- [x] 화살표 입력을 가장 가까운 격자 축으로: ↑ 북쪽, → 동쪽 (타일 줄을 따라 곧게)
+- [x] 테스트 추가 (↑ 1초 = 북쪽 3m·옆으로 0m, 카메라 중앙 유지, 입력 = 격자 축)
+- [x] 변경 이유 기록 → [WORKLOG.md](WORKLOG.md)
+- [x] 재배치 후 EditMode 20/20 · PlayMode 19/19 통과 ✅ 완료 기준
+
 ## 5. 아이템
 - [ ] 복셀 코인 프리팹 제작
 - [ ] `Collectible.cs`: 회전 + 둥실 효과, Trigger 획득, 파티클
@@ -102,3 +109,4 @@
 | 2026-09-29 | 3. 4x4 타일맵 + 이동 | 6/6 완료 · EditMode 18/18 · PlayMode 11/11 통과 · 미리보기 [map_preview.html](map_preview.html) · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 3-1. 바닥 노멀맵 | 바닥이 평평해 보여서 노멀맵으로 입체감 추가(사용자 요청) · 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 4. 애니메이션 연결 | 5/5 완료 · Walk 다리 각도 26°→40° · 발 미끄러짐 최대 1.3cm · EditMode 20/20 · PlayMode 17/17 · 상세: [WORKLOG.md](WORKLOG.md) |
+| 2026-09-29 | 4-1. 카메라 추적 + 격자 이동 | 사용자 피드백: 카메라가 여우를 따라가야 하고, 화살표가 대각선으로 움직임 → 수정 · 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |
