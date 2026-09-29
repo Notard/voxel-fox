@@ -69,3 +69,4 @@
 |---|---|---|
 | 2026-09-29 | 1. Unity 프로젝트 생성 | 5/5 완료 · PlayMode 스모크 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 1. 추가 정리 | 템플릿 샘플(SampleScene, TutorialInfo, Readme) 삭제 · 재검증 통과 · 이유: [WORKLOG.md](WORKLOG.md) |
+| 2026-09-29 | Git 연결 | GitHub `Notard/voxel-fox` (Public) 생성 · push · 상세: [WORKLOG.md](WORKLOG.md) |

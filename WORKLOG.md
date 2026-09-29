@@ -74,3 +74,24 @@ Universal 3D 템플릿에 기본으로 들어 있는 샘플/안내용 파일을 
 
 ### 다음 단계
 2단계: Blender Python으로 복셀 여우 모델, 리그, 애니메이션을 만들고 FBX로 내보낸다.
+
+---
+
+## Git 저장소 연결 — ✅ 완료 (2026-09-29)
+
+| 항목 | 내용 |
+|---|---|
+| 원격 저장소 | [github.com/Notard/voxel-fox](https://github.com/Notard/voxel-fox) (**Public**) |
+| 저장소 루트 | `C:\sample` (문서 + `VoxelFox/` Unity 프로젝트 + `tools/`) |
+| 기본 브랜치 | `main` → `origin/main` 추적 |
+| 첫 커밋 | `d5ca66f` 1단계: Unity 프로젝트 생성 및 계획 문서 |
+
+### 설정
+- `.gitignore`: Unity 자동 생성 폴더(`Library`, `Temp`, `Obj`, `Logs`, `UserSettings`, `Build`), IDE 파일(`*.csproj`, `*.sln`, `.vs`), Blender 백업(`*.blend1`), 실행 로그 `logs/*.log`는 제외했다.
+  - 로그를 뺀 이유: 로컬 경로와 라이선스 정보가 들어 있고 용량도 크다(프로젝트 생성 로그만 2MB). 테스트 결과 `*.xml`만 저장소에 남긴다.
+- `.gitattributes`: 줄바꿈은 자동 정리하고, Unity YAML 에셋은 LF로 통일했다. 바이너리(`fbx`, `blend`, `png`, `ttf`, `wav` 등)는 **Git LFS**로 관리한다.
+- 현재 LFS 파일: `LiberationSans.ttf` (TMP 기본 폰트, 350KB)
+
+### 공개 저장소 주의
+- 커밋 작성자 이메일(git 전역 설정)이 공개된다.
+- `logs/*_results.xml` 안에 Windows 사용자 폴더 경로가 들어 있다.

@@ -70,7 +70,7 @@ article hr{display:none}
 </head>
 <body>
 <div class="wrap">
-  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · 마지막 갱신 2026-09-29 11:25</p>
+  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · 마지막 갱신 2026-09-29 11:33</p>
   <article><h1>작업 기록 — 복셀 여우 타일 게임</h1>
 <blockquote>
 <p>단계별로 실제로 한 일, 결과, 검증 방법, 발생한 문제를 남긴다. 체크리스트: <a href="todo.html">TODO.md</a></p>
@@ -209,7 +209,47 @@ article hr{display:none}
 <li><code>logs/01b_cleanup_playmode.log</code>, <code>logs/01b_cleanup_playmode_results.xml</code>: 샘플 정리 후 재검증</li>
 </ul>
 <h3>다음 단계</h3>
-<p>2단계: Blender Python으로 복셀 여우 모델, 리그, 애니메이션을 만들고 FBX로 내보낸다.</p></article>
+<p>2단계: Blender Python으로 복셀 여우 모델, 리그, 애니메이션을 만들고 FBX로 내보낸다.</p>
+<hr />
+<h2>Git 저장소 연결 — ✅ 완료 (2026-09-29)</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>원격 저장소</td>
+<td><a href="https://github.com/Notard/voxel-fox">github.com/Notard/voxel-fox</a> (<strong>Public</strong>)</td>
+</tr>
+<tr>
+<td>저장소 루트</td>
+<td><code>C:\sample</code> (문서 + <code>VoxelFox/</code> Unity 프로젝트 + <code>tools/</code>)</td>
+</tr>
+<tr>
+<td>기본 브랜치</td>
+<td><code>main</code> → <code>origin/main</code> 추적</td>
+</tr>
+<tr>
+<td>첫 커밋</td>
+<td><code>d5ca66f</code> 1단계: Unity 프로젝트 생성 및 계획 문서</td>
+</tr>
+</tbody>
+</table>
+<h3>설정</h3>
+<ul>
+<li><code>.gitignore</code>: Unity 자동 생성 폴더(<code>Library</code>, <code>Temp</code>, <code>Obj</code>, <code>Logs</code>, <code>UserSettings</code>, <code>Build</code>), IDE 파일(<code>*.csproj</code>, <code>*.sln</code>, <code>.vs</code>), Blender 백업(<code>*.blend1</code>), 실행 로그 <code>logs/*.log</code>는 제외했다.</li>
+<li>로그를 뺀 이유: 로컬 경로와 라이선스 정보가 들어 있고 용량도 크다(프로젝트 생성 로그만 2MB). 테스트 결과 <code>*.xml</code>만 저장소에 남긴다.</li>
+<li><code>.gitattributes</code>: 줄바꿈은 자동 정리하고, Unity YAML 에셋은 LF로 통일했다. 바이너리(<code>fbx</code>, <code>blend</code>, <code>png</code>, <code>ttf</code>, <code>wav</code> 등)는 <strong>Git LFS</strong>로 관리한다.</li>
+<li>현재 LFS 파일: <code>LiberationSans.ttf</code> (TMP 기본 폰트, 350KB)</li>
+</ul>
+<h3>공개 저장소 주의</h3>
+<ul>
+<li>커밋 작성자 이메일(git 전역 설정)이 공개된다.</li>
+<li><code>logs/*_results.xml</code> 안에 Windows 사용자 폴더 경로가 들어 있다.</li>
+</ul></article>
 </div>
 </body>
 </html>
