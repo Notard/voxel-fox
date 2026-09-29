@@ -4,7 +4,7 @@
 > 체크 후 `python tools/make_todo_html.py` 실행 → 진행률 갱신 + [todo.html](todo.html) 재생성.
 > 작업별 상세 결과: [WORKLOG.md](WORKLOG.md)
 
-**진행률: 67 / 76**
+**진행률: 74 / 78**
 
 ---
 
@@ -98,11 +98,13 @@
 - [x] 획득하면 카운트가 오르고 코인이 사라지는지 확인 ✅ 완료 기준
 
 ## 6. 게임 종료 / 성공
-- [ ] `GameManager.cs`: Playing / GameOver / Clear 상태
-- [ ] Y < -5이면 GAME OVER
-- [ ] 아이템 4/4이면 CLEAR
-- [ ] 결과 패널 UI 2종 + 결과가 나오면 조작 정지
-- [ ] 두 조건 모두 동작하는지 확인 ✅ 완료 기준
+- [x] `GameManager.cs`: Playing / GameOver / Clear 상태
+- [x] Y < -5이면 GAME OVER
+- [x] 아이템 4/4이면 CLEAR
+- [x] 결과 패널 UI 2종 + 결과가 나오면 조작 정지
+- [x] (선택) CLEAR에 걸린 시간 표시
+- [x] 미리보기: GAME OVER / CLEAR 결과 화면 → [map_preview.html](map_preview.html)
+- [x] 두 조건 모두 동작하는지 확인 ✅ 완료 기준
 
 ## 7. 재시작
 - [ ] 결과 패널에 [다시 하기] 버튼 추가
@@ -130,3 +132,4 @@
 | 2026-09-29 | 4-2 되돌림 | Game 창 Scale 5배 때문에 크게 보였던 것 → 4-1 카메라로 복귀 · 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 4-3. 점프 거리 | 사용자 피드백: 점프가 짧아 구멍에 잘 빠짐 → 높이 1.5m·중력 -15, 2.08m → 2.68m · 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 5. 아이템 | 6/6 완료 · 복셀 코인 4개 · 반짝이 · 한글 카운터(맑은 고딕) · EditMode 23/23 · PlayMode 26/26 · 상세: [WORKLOG.md](WORKLOG.md) |
+| 2026-09-29 | 6. 게임 종료 / 성공 | 7/7 완료 · GAME OVER / CLEAR! 패널 · 조작·시간 정지 · EditMode 25/25 · PlayMode 31/31 · 상세: [WORKLOG.md](WORKLOG.md) |

@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour
     [Tooltip("끄면 키보드 대신 MoveInput / RequestJump로 조종한다 (테스트용)")]
     public bool readDeviceInput = true;
     public Vector2 MoveInput { get; set; }
+    // 끄면 이동·점프 입력을 무시한다 (6단계: 결과가 나오면 GameManager가 끈다). 중력은 계속 받는다.
+    public bool ControlEnabled { get; set; } = true;
 
     public float MoveSpeed => moveSpeed;
     public float JumpHeight => jumpHeight;
@@ -77,7 +79,8 @@ public class PlayerController : MonoBehaviour
             if (jumpAction.WasPressedThisFrame()) jumpQueued = true;
         }
 
-        var input = Vector2.ClampMagnitude(MoveInput, 1f);
+        var input = ControlEnabled ? Vector2.ClampMagnitude(MoveInput, 1f) : Vector2.zero;
+        if (!ControlEnabled) jumpQueued = false;
         var direction = cameraRig != null ? cameraRig.InputToWorld(input) : new Vector3(input.x, 0, input.y);
 
         bool grounded = Controller.isGrounded;

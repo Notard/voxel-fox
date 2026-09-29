@@ -10,7 +10,7 @@ using UnityEngine.TestTools;
 using Object = UnityEngine.Object;
 
 // 미리보기용 캡처 (preview/map):
-//   정지 이미지 4장 (쿼터뷰 · 위에서 · 시작 지점 근접 · 코인 근접)
+//   정지 이미지 4장 (쿼터뷰 · 위에서 · 시작 지점 근접 · 코인 근접) + 결과 화면 2장 (GAME OVER · CLEAR!)
 //   이동 녹화: 시작 → 동쪽으로 걷다 점프 → 코인 (3, 3) → 남쪽 코인 (3, 1) → 서쪽 구멍 (2, 1)에 빠짐
 //     게임 화면에는 좌상단 아이템 카운터(UI)도 함께 찍는다 (5단계)
 //     move_###.jpg 게임 화면(쿼터뷰), close_###.jpg 여우를 따라가는 근접 화면 (4단계: 동작 확인용)
@@ -74,7 +74,6 @@ public class MovementPreviewRecorder
         // 이동 녹화
         var rt = new RenderTexture(640, 360, 24, RenderTextureFormat.ARGB32);
         cam.targetTexture = rt;
-        Object.Destroy(still);
         yield return null;
         rig.SnapToTarget();
         var closeRt = new RenderTexture(480, 270, 24, RenderTextureFormat.ARGB32);
@@ -131,20 +130,53 @@ public class MovementPreviewRecorder
             yield return Step();
         }
         player.MoveInput = Vector2.zero;
-        phase = "낙하 (화면 밖)";
-        for (int i = 0; i < 16; i++) yield return Step();
+        Assert.AreEqual(2, game.ItemsCollected, "가는 길에 코인 (3, 3), (3, 1)을 먹어야 함");
+        phase = "GAME OVER";
+        for (int i = 0; i < 50; i++) yield return Step();
+        Assert.AreEqual(GameManager.State.GameOver, game.Current, "떨어지면 GAME OVER");
+        cam.targetTexture = still = new RenderTexture(1280, 720, 24, RenderTextureFormat.ARGB32);
+        yield return null;
+        Save(still, "result_gameover.png");
+
+        // CLEAR 결과 화면: 씬을 다시 불러 코인 4개를 차례로 먹는다 (옆 타일로 옮긴 뒤 코인 쪽으로 걷기).
+        yield return SceneManager.LoadSceneAsync("Main");
+        map = Object.FindAnyObjectByType<MapBuilder>();
+        rig = Object.FindAnyObjectByType<CameraRig>();
+        game = Object.FindAnyObjectByType<GameManager>();
+        player = map.Player;
+        player.readDeviceInput = false;
+        cam = rig.GetComponent<Camera>();
+        canvas = Object.FindAnyObjectByType<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceCamera;
+        canvas.worldCamera = cam;
+        canvas.planeDistance = 1f;
+        cam.targetTexture = still;
+        foreach (var cell in map.Layout.Coins)
+        {
+            var from = new[] { Vector2Int.left, Vector2Int.right, Vector2Int.up, Vector2Int.down }
+                .Select(d => cell + d).First(map.Layout.Tiles.Contains);
+            player.Teleport(map.CellToWorld(from), Quaternion.identity);
+            yield return null;
+            var dir = map.CellToWorld(cell) - map.CellToWorld(from);
+            player.MoveInput = InputFor(dir.normalized);
+            for (int i = 0; i < 48; i++) yield return null;
+            player.MoveInput = Vector2.zero;
+        }
+        for (int i = 0; i < 30; i++) yield return null;
+        Assert.AreEqual(GameManager.State.Clear, game.Current, "코인 4개를 다 먹으면 CLEAR");
+        Save(still, "result_clear.png");
 
         Time.captureFramerate = 0;
         cam.targetTexture = null;
         Object.Destroy(rt);
+        Object.Destroy(still);
         Object.Destroy(closeRt);
 
         var list = string.Join(",\n", frames.Select(f => $"  {{\"file\": \"{f.file}\", \"phase\": \"{f.phase}\"}}"));
         File.WriteAllText(Path.Combine(outDir, "manifest.js"),
             $"window.MAP_PREVIEW = {{\n \"fps\": {Fps / Every},\n \"frames\": [\n{list}\n ]\n}};\n");
         Debug.Log($"[MovementPreviewRecorder] 정지 4장 + {frames.Count}프레임 → {outDir}");
-        Assert.AreEqual(2, game.ItemsCollected, "가는 길에 코인 (3, 3), (3, 1)을 먹어야 함");
-        Assert.Less(player.transform.position.y, -5f, "녹화 끝에는 구멍으로 떨어져 있어야 함");
+
     }
 
     // .png는 무손실(정지 이미지), .jpg는 용량을 줄인 녹화 프레임

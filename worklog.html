@@ -70,7 +70,7 @@ article hr{display:none}
 </head>
 <body>
 <div class="wrap">
-  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · 마지막 갱신 2026-09-29 15:28</p>
+  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · 마지막 갱신 2026-09-29 15:43</p>
   <article><h1>작업 기록 — 복셀 여우 타일 게임</h1>
 <blockquote>
 <p>단계별로 실제로 한 일, 결과, 검증 방법, 발생한 문제를 남긴다. 체크리스트: <a href="todo.html">TODO.md</a></p>
@@ -996,6 +996,79 @@ article hr{display:none}
 <h3>로그 파일</h3>
 <ul>
 <li><code>logs/05_map_setup.log</code>, <code>logs/05_item_setup.log</code>, <code>logs/05_editmode.log</code>, <code>logs/05_playmode.log</code>, 결과 <code>logs/05_*_results.xml</code></li>
+</ul>
+<hr />
+<h2>6단계. 게임 종료 / 성공 — ✅ 완료 (2026-09-29)</h2>
+<p>미리보기: <strong><a href="map_preview.html">map_preview.html</a></strong> (GAME OVER / CLEAR! 결과 화면, 이동 녹화 끝의 GAME OVER)</p>
+<h3>결과 요약</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GameManager.cs</code></td>
+<td>상태 <code>Playing</code> → <code>GameOver</code> 또는 <code>Clear</code>. Playing 동안 걸린 시간을 잰다. 여우가 y &lt; -5로 떨어지면 GAME OVER, 코인을 모두 모으면 CLEAR. 결과가 나오면 <code>StateChanged</code> 이벤트를 보내고 여우 조작을 끈다</td>
+</tr>
+<tr>
+<td>조작 정지</td>
+<td><code>PlayerController.ControlEnabled</code>: 끄면 이동·점프 입력을 무시한다. 중력은 계속 받는다</td>
+</tr>
+<tr>
+<td>결과 패널 2종</td>
+<td>GAME OVER(붉은 상자, 분홍 제목, "떨어졌어요 · 아이템 n / 4"), CLEAR!(갈색 상자, 금색 제목, "아이템 4개 모두 모음 · 12.3초"). 화면 전체를 살짝 어둡게 덮고, 상자는 화면 위쪽에 둔다</td>
+</tr>
+<tr>
+<td>UI 설정 분리</td>
+<td>UI 만드는 코드를 <code>ItemSetup</code>에서 <code>Editor/UISetup.cs</code>로 옮겼다(카운터 + 결과 패널). <code>Editor/SceneBuild.cs</code>가 맵 → 아이템 → UI 설정을 Unity 한 번 실행으로 이어서 한다(<code>tools/build_map.sh</code> 1단계)</td>
+</tr>
+</tbody>
+</table>
+<h3>설계 메모</h3>
+<ul>
+<li><strong>결과 패널을 화면 위쪽에:</strong> 처음에는 화면 가운데에 두었는데, 카메라가 여우를 가운데에 두므로 CLEAR 순간 여우가 패널 뒤에 가려졌다. 상자를 250px 위로 올려 여우가 보이게 했다.</li>
+<li><strong>GAME OVER 뒤에도 떨어짐:</strong> 조작만 끄고 중력은 그대로 둬서, 여우가 화면 밖으로 떨어지는 모습이 이어진다.</li>
+<li><strong>CLEAR는 뒤집히지 않음:</strong> 결과가 한 번 나오면 상태가 바뀌지 않는다. CLEAR 뒤에 떨어져도 GAME OVER가 되지 않고, GAME OVER 뒤에 코인에 닿아도 세지 않는다.</li>
+<li><strong>걸린 시간:</strong> 계획서의 선택 항목이다. Playing 동안만 흐르고, 결과가 나오면 멈춘다. CLEAR 패널에 0.1초 단위로 보여 준다.</li>
+<li><strong>글꼴:</strong> 결과 패널 글자도 한글이 섞여 있어서, <code>GameUI</code>가 UI 아래 모든 글자에 맑은 고딕을 입힌다.</li>
+</ul>
+<h3>검증 (완료 기준)</h3>
+<p>EditMode <strong>25/25 통과</strong>. <code>MainScene_HasHiddenResultPanel</code> 2개 추가: 패널·제목·설명이 연결되어 있고 처음에는 꺼져 있다.</p>
+<p>PlayMode <strong>31/31 통과</strong>. 새 <code>GameFlowTests</code> 5개:
+- 시작하면 Playing, 패널 둘 다 꺼짐, 조작 가능
+- 서쪽 맵 밖으로 떨어지면 y &lt; -5에서 GAME OVER: GAME OVER 패널만 켜지고 제목 "GAME OVER", 조작 꺼짐. 입력을 넣어도 옆으로 움직이지 않음
+- 코인 4개를 모두 먹으면 CLEAR: CLEAR 패널만 켜지고 제목 "CLEAR!", 설명에 걸린 시간. 이후 이동·점프 입력을 넣어도 움직이지 않고, 걸린 시간도 멈춤
+- CLEAR 뒤에 맵 밖으로 떨어져도 GAME OVER로 바뀌지 않음
+- Playing 동안 걸린 시간이 실제 시간만큼 흐름 (1초 ± 0.05)</p>
+<p>미리보기: 이동 녹화 끝에 구멍에 떨어지면 GAME OVER 패널이 뜨고, 씬을 다시 불러 코인 4개를 먹으면 CLEAR! 패널이 뜨는 것을 캡처해 확인했다. 결과 파일: <code>logs/06_editmode_results.xml</code>, <code>logs/06_playmode_results.xml</code></p>
+<h3>발생한 문제와 해결</h3>
+<table>
+<thead>
+<tr>
+<th>문제</th>
+<th>원인</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UISetup</code> 컴파일 에러 CS1503</td>
+<td>글자 생성 함수에 GameObject를 넘김 (Transform이 필요)</td>
+<td><code>itemPanel.transform</code>으로 고침</td>
+</tr>
+<tr>
+<td>CLEAR 화면에서 여우가 패널에 가려짐</td>
+<td>카메라가 여우를 가운데에 두는데 패널도 가운데</td>
+<td>패널 상자를 화면 위쪽(+250px)으로 옮김</td>
+</tr>
+</tbody>
+</table>
+<h3>로그 파일</h3>
+<ul>
+<li><code>logs/06_scene_build.log</code>, <code>logs/06_editmode.log</code>, <code>logs/06_playmode.log</code>, 결과 <code>logs/06_*_results.xml</code></li>
 </ul></article>
 </div>
 </body>

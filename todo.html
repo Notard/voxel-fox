@@ -60,11 +60,11 @@ th{color:var(--muted)}
 <body>
 <div class="wrap">
   <h1>🦊 복셀 여우 · 할 일 목록</h1>
-  <p class="muted">원본: TODO.md · 상세 계획: <a href="plan.html">plan.html</a> · 여우 미리보기: <a href="fox_preview.html">fox_preview.html</a> · 맵 미리보기: <a href="map_preview.html">map_preview.html</a> · 작업 기록: <a href="worklog.html">worklog.html</a> · 마지막 갱신 2026-09-29 15:28</p>
+  <p class="muted">원본: TODO.md · 상세 계획: <a href="plan.html">plan.html</a> · 여우 미리보기: <a href="fox_preview.html">fox_preview.html</a> · 맵 미리보기: <a href="map_preview.html">map_preview.html</a> · 작업 기록: <a href="worklog.html">worklog.html</a> · 마지막 갱신 2026-09-29 15:43</p>
 
   <div class="hero">
-    <div class="big">88% <small>67 / 76 완료</small></div>
-    <div class="bar"><i style="width:88%"></i></div>
+    <div class="big">95% <small>74 / 78 완료</small></div>
+    <div class="bar"><i style="width:95%"></i></div>
   </div>
 
   
@@ -167,14 +167,14 @@ th{color:var(--muted)}
   <div class="sbar"><i style="width:100%"></i></div>
   <ul><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">복셀 코인 프리팹 제작</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt"><code>Collectible.cs</code>: 회전 + 둥실 효과, Trigger 획득, 파티클</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">MapBuilder로 코인 4개 배치</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt"><code>GameUI.cs</code>: 좌상단 <code>아이템 0 / 4</code> 카운터</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">미리보기: 코인 근접 이미지 + 코인 2개를 먹는 이동 녹화(카운터 포함) → <a href="map_preview.html">map_preview.html</a></span></li><li class="item done gate"><span class="box" aria-hidden="true"></span><span class="txt">획득하면 카운트가 오르고 코인이 사라지는지 확인<span class="tag">완료 기준</span></span></li></ul>
 </section>
-<section class="stage ">
+<section class="stage complete">
   <div class="shead">
     <span class="n">6</span>
     <h2>게임 종료 / 성공</h2>
-    <span class="cnt">0 / 5</span>
+    <span class="cnt">7 / 7</span>
   </div>
-  <div class="sbar"><i style="width:0%"></i></div>
-  <ul><li class="item"><span class="box" aria-hidden="true"></span><span class="txt"><code>GameManager.cs</code>: Playing / GameOver / Clear 상태</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">Y &lt; -5이면 GAME OVER</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">아이템 4/4이면 CLEAR</span></li><li class="item"><span class="box" aria-hidden="true"></span><span class="txt">결과 패널 UI 2종 + 결과가 나오면 조작 정지</span></li><li class="item gate"><span class="box" aria-hidden="true"></span><span class="txt">두 조건 모두 동작하는지 확인<span class="tag">완료 기준</span></span></li></ul>
+  <div class="sbar"><i style="width:100%"></i></div>
+  <ul><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt"><code>GameManager.cs</code>: Playing / GameOver / Clear 상태</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">Y &lt; -5이면 GAME OVER</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">아이템 4/4이면 CLEAR</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">결과 패널 UI 2종 + 결과가 나오면 조작 정지</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">(선택) CLEAR에 걸린 시간 표시</span></li><li class="item done"><span class="box" aria-hidden="true"></span><span class="txt">미리보기: GAME OVER / CLEAR 결과 화면 → <a href="map_preview.html">map_preview.html</a></span></li><li class="item done gate"><span class="box" aria-hidden="true"></span><span class="txt">두 조건 모두 동작하는지 확인<span class="tag">완료 기준</span></span></li></ul>
 </section>
 <section class="stage ">
   <div class="shead">
@@ -196,7 +196,7 @@ th{color:var(--muted)}
 </section>
 
   <h3>완료 기록</h3>
-  <table><tr><th>날짜</th><th>단계</th><th>메모</th></tr><tr><td>2026-09-29</td><td>1. Unity 프로젝트 생성</td><td>5/5 완료 · PlayMode 스모크 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>1. 추가 정리</td><td>템플릿 샘플(SampleScene, TutorialInfo, Readme) 삭제 · 재검증 통과 · 이유: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>Git 연결</td><td>GitHub <code>Notard/voxel-fox</code> (Public) 생성 · push · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>2. 복셀 여우 캐릭터</td><td>11/11 완료 · EditMode 9/9 · PlayMode 1/1 통과 · 미리보기 <a href="fox_preview.html">fox_preview.html</a> · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>2-1. 흰 여우 · 0.9배</td><td>더 예쁜 여우로 만들기 위해 붉은 여우 → 흰 여우, 크기 0.9배 · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>3. 4x4 타일맵 + 이동</td><td>6/6 완료 · EditMode 18/18 · PlayMode 11/11 통과 · 미리보기 <a href="map_preview.html">map_preview.html</a> · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>3-1. 바닥 노멀맵</td><td>바닥이 평평해 보여서 노멀맵으로 입체감 추가(사용자 요청) · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>4. 애니메이션 연결</td><td>5/5 완료 · Walk 다리 각도 26°→40° · 발 미끄러짐 최대 1.3cm · EditMode 20/20 · PlayMode 17/17 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>4-1. 카메라 추적 + 격자 이동</td><td>사용자 피드백: 카메라가 여우를 따라가야 하고, 화살표가 대각선으로 움직임 → 수정 · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>4-2. 카메라 거리 · 가운데 고정</td><td>사용자 피드백: 카메라를 1.5배 멀리, 여우를 가운데에 → 16.5m, 수평 지연 제거 · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>4-2 되돌림</td><td>Game 창 Scale 5배 때문에 크게 보였던 것 → 4-1 카메라로 복귀 · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>4-3. 점프 거리</td><td>사용자 피드백: 점프가 짧아 구멍에 잘 빠짐 → 높이 1.5m·중력 -15, 2.08m → 2.68m · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>5. 아이템</td><td>6/6 완료 · 복셀 코인 4개 · 반짝이 · 한글 카운터(맑은 고딕) · EditMode 23/23 · PlayMode 26/26 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr></table>
+  <table><tr><th>날짜</th><th>단계</th><th>메모</th></tr><tr><td>2026-09-29</td><td>1. Unity 프로젝트 생성</td><td>5/5 완료 · PlayMode 스모크 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>1. 추가 정리</td><td>템플릿 샘플(SampleScene, TutorialInfo, Readme) 삭제 · 재검증 통과 · 이유: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>Git 연결</td><td>GitHub <code>Notard/voxel-fox</code> (Public) 생성 · push · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>2. 복셀 여우 캐릭터</td><td>11/11 완료 · EditMode 9/9 · PlayMode 1/1 통과 · 미리보기 <a href="fox_preview.html">fox_preview.html</a> · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>2-1. 흰 여우 · 0.9배</td><td>더 예쁜 여우로 만들기 위해 붉은 여우 → 흰 여우, 크기 0.9배 · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>3. 4x4 타일맵 + 이동</td><td>6/6 완료 · EditMode 18/18 · PlayMode 11/11 통과 · 미리보기 <a href="map_preview.html">map_preview.html</a> · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>3-1. 바닥 노멀맵</td><td>바닥이 평평해 보여서 노멀맵으로 입체감 추가(사용자 요청) · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>4. 애니메이션 연결</td><td>5/5 완료 · Walk 다리 각도 26°→40° · 발 미끄러짐 최대 1.3cm · EditMode 20/20 · PlayMode 17/17 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>4-1. 카메라 추적 + 격자 이동</td><td>사용자 피드백: 카메라가 여우를 따라가야 하고, 화살표가 대각선으로 움직임 → 수정 · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>4-2. 카메라 거리 · 가운데 고정</td><td>사용자 피드백: 카메라를 1.5배 멀리, 여우를 가운데에 → 16.5m, 수평 지연 제거 · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>4-2 되돌림</td><td>Game 창 Scale 5배 때문에 크게 보였던 것 → 4-1 카메라로 복귀 · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>4-3. 점프 거리</td><td>사용자 피드백: 점프가 짧아 구멍에 잘 빠짐 → 높이 1.5m·중력 -15, 2.08m → 2.68m · 테스트 통과 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>5. 아이템</td><td>6/6 완료 · 복셀 코인 4개 · 반짝이 · 한글 카운터(맑은 고딕) · EditMode 23/23 · PlayMode 26/26 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr><tr><td>2026-09-29</td><td>6. 게임 종료 / 성공</td><td>7/7 완료 · GAME OVER / CLEAR! 패널 · 조작·시간 정지 · EditMode 25/25 · PlayMode 31/31 · 상세: <a href="worklog.html">WORKLOG.md</a></td></tr></table>
 </div>
 </body>
 </html>

@@ -499,3 +499,45 @@ PlayMode **26/26 통과**. 새 `ItemTests` 5개:
 
 ### 로그 파일
 - `logs/05_map_setup.log`, `logs/05_item_setup.log`, `logs/05_editmode.log`, `logs/05_playmode.log`, 결과 `logs/05_*_results.xml`
+
+---
+
+## 6단계. 게임 종료 / 성공 — ✅ 완료 (2026-09-29)
+
+미리보기: **[map_preview.html](map_preview.html)** (GAME OVER / CLEAR! 결과 화면, 이동 녹화 끝의 GAME OVER)
+
+### 결과 요약
+| 항목 | 결과 |
+|---|---|
+| `GameManager.cs` | 상태 `Playing` → `GameOver` 또는 `Clear`. Playing 동안 걸린 시간을 잰다. 여우가 y < -5로 떨어지면 GAME OVER, 코인을 모두 모으면 CLEAR. 결과가 나오면 `StateChanged` 이벤트를 보내고 여우 조작을 끈다 |
+| 조작 정지 | `PlayerController.ControlEnabled`: 끄면 이동·점프 입력을 무시한다. 중력은 계속 받는다 |
+| 결과 패널 2종 | GAME OVER(붉은 상자, 분홍 제목, "떨어졌어요 · 아이템 n / 4"), CLEAR!(갈색 상자, 금색 제목, "아이템 4개 모두 모음 · 12.3초"). 화면 전체를 살짝 어둡게 덮고, 상자는 화면 위쪽에 둔다 |
+| UI 설정 분리 | UI 만드는 코드를 `ItemSetup`에서 `Editor/UISetup.cs`로 옮겼다(카운터 + 결과 패널). `Editor/SceneBuild.cs`가 맵 → 아이템 → UI 설정을 Unity 한 번 실행으로 이어서 한다(`tools/build_map.sh` 1단계) |
+
+### 설계 메모
+- **결과 패널을 화면 위쪽에:** 처음에는 화면 가운데에 두었는데, 카메라가 여우를 가운데에 두므로 CLEAR 순간 여우가 패널 뒤에 가려졌다. 상자를 250px 위로 올려 여우가 보이게 했다.
+- **GAME OVER 뒤에도 떨어짐:** 조작만 끄고 중력은 그대로 둬서, 여우가 화면 밖으로 떨어지는 모습이 이어진다.
+- **CLEAR는 뒤집히지 않음:** 결과가 한 번 나오면 상태가 바뀌지 않는다. CLEAR 뒤에 떨어져도 GAME OVER가 되지 않고, GAME OVER 뒤에 코인에 닿아도 세지 않는다.
+- **걸린 시간:** 계획서의 선택 항목이다. Playing 동안만 흐르고, 결과가 나오면 멈춘다. CLEAR 패널에 0.1초 단위로 보여 준다.
+- **글꼴:** 결과 패널 글자도 한글이 섞여 있어서, `GameUI`가 UI 아래 모든 글자에 맑은 고딕을 입힌다.
+
+### 검증 (완료 기준)
+EditMode **25/25 통과**. `MainScene_HasHiddenResultPanel` 2개 추가: 패널·제목·설명이 연결되어 있고 처음에는 꺼져 있다.
+
+PlayMode **31/31 통과**. 새 `GameFlowTests` 5개:
+- 시작하면 Playing, 패널 둘 다 꺼짐, 조작 가능
+- 서쪽 맵 밖으로 떨어지면 y < -5에서 GAME OVER: GAME OVER 패널만 켜지고 제목 "GAME OVER", 조작 꺼짐. 입력을 넣어도 옆으로 움직이지 않음
+- 코인 4개를 모두 먹으면 CLEAR: CLEAR 패널만 켜지고 제목 "CLEAR!", 설명에 걸린 시간. 이후 이동·점프 입력을 넣어도 움직이지 않고, 걸린 시간도 멈춤
+- CLEAR 뒤에 맵 밖으로 떨어져도 GAME OVER로 바뀌지 않음
+- Playing 동안 걸린 시간이 실제 시간만큼 흐름 (1초 ± 0.05)
+
+미리보기: 이동 녹화 끝에 구멍에 떨어지면 GAME OVER 패널이 뜨고, 씬을 다시 불러 코인 4개를 먹으면 CLEAR! 패널이 뜨는 것을 캡처해 확인했다. 결과 파일: `logs/06_editmode_results.xml`, `logs/06_playmode_results.xml`
+
+### 발생한 문제와 해결
+| 문제 | 원인 | 해결 |
+|---|---|---|
+| `UISetup` 컴파일 에러 CS1503 | 글자 생성 함수에 GameObject를 넘김 (Transform이 필요) | `itemPanel.transform`으로 고침 |
+| CLEAR 화면에서 여우가 패널에 가려짐 | 카메라가 여우를 가운데에 두는데 패널도 가운데 | 패널 상자를 화면 위쪽(+250px)으로 옮김 |
+
+### 로그 파일
+- `logs/06_scene_build.log`, `logs/06_editmode.log`, `logs/06_playmode.log`, 결과 `logs/06_*_results.xml`

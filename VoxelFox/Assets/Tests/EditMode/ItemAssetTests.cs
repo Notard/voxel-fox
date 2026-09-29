@@ -66,4 +66,18 @@ public class ItemAssetTests
         Assert.AreEqual(new Vector2(0, 1), panel.anchorMin);
         Assert.AreEqual(new Vector2(0, 1), panel.anchorMax);
     }
+
+    // 6단계: 결과 패널 2종이 연결되어 있고 처음에는 꺼져 있다.
+    [TestCase("gameOverPanel", "gameOverTitle", "gameOverDetail")]
+    [TestCase("clearPanel", "clearTitle", "clearDetail")]
+    public void MainScene_HasHiddenResultPanel(string panelField, string titleField, string detailField)
+    {
+        EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+        var ui = new SerializedObject(Object.FindAnyObjectByType<GameUI>());
+        var panel = (GameObject)ui.FindProperty(panelField).objectReferenceValue;
+        Assert.IsNotNull(panel, $"{panelField} 연결");
+        Assert.IsFalse(panel.activeSelf, "처음에는 꺼져 있어야 함");
+        Assert.IsNotNull(ui.FindProperty(titleField).objectReferenceValue);
+        Assert.IsNotNull(ui.FindProperty(detailField).objectReferenceValue);
+    }
 }

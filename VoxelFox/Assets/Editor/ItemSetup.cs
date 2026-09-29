@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
-using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.UI;
 
 // 5단계 아이템 설정: 복셀 코인(팔레트·메시·머티리얼·프리팹), 획득 반짝이 프리팹,
-// Main 씬에 GameManager와 UI(아이템 카운터) 배치. 여러 번 실행해도 안전하다.
-// MapSetup 다음에 실행한다 (tools/build_map.sh).
+// Main 씬에 GameManager 배치. 여러 번 실행해도 안전하다. (UI는 6단계부터 UISetup이 만든다)
+// MapSetup 다음에 실행한다 (SceneBuild.Run).
 // 배치 실행: Unity.exe -batchmode -quit -projectPath . -executeMethod ItemSetup.Run
 public static class ItemSetup
 {
@@ -240,46 +238,9 @@ public static class ItemSetup
         if (!gameGo.TryGetComponent(out GameManager game)) game = gameGo.AddComponent<GameManager>();
         Assign(game, "map", map);
 
-        // UI를 매번 새로 만든다 (설정이 바뀌어도 씬에 옛 값이 남지 않게).
-        var old = GameObject.Find("UI");
-        if (old != null) Object.DestroyImmediate(old);
-        var canvasGo = new GameObject("UI", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-        canvasGo.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
-        var scaler = canvasGo.GetComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920, 1080);
-        scaler.matchWidthOrHeight = 0.5f;
-
-        // 좌상단 반투명 판 + 글자
-        var panel = new GameObject("ItemPanel", typeof(RectTransform), typeof(Image));
-        panel.transform.SetParent(canvasGo.transform, false);
-        var panelRect = (RectTransform)panel.transform;
-        panelRect.anchorMin = panelRect.anchorMax = panelRect.pivot = new Vector2(0, 1);
-        panelRect.anchoredPosition = new Vector2(32, -32);
-        panelRect.sizeDelta = new Vector2(300, 84);
-        panel.GetComponent<Image>().color = new Color(0.08f, 0.12f, 0.16f, 0.55f);
-
-        var textGo = new GameObject("ItemText", typeof(RectTransform), typeof(TextMeshProUGUI));
-        textGo.transform.SetParent(panel.transform, false);
-        var textRect = (RectTransform)textGo.transform;
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.offsetMin = new Vector2(24, 0);
-        textRect.offsetMax = new Vector2(-16, 0);
-        var text = textGo.GetComponent<TextMeshProUGUI>();
-        text.text = ""; // 글자는 GameUI가 한글 글꼴을 입힌 뒤 채운다 (기본 글꼴에는 한글이 없음)
-        text.fontSize = 44;
-        text.color = new Color(1f, 0.93f, 0.62f); // 코인과 어울리는 밝은 금색
-        text.alignment = TextAlignmentOptions.MidlineLeft;
-        text.textWrappingMode = TextWrappingModes.NoWrap;
-
-        var ui = canvasGo.AddComponent<GameUI>();
-        Assign(ui, "game", game);
-        Assign(ui, "itemText", text);
-
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
-        Debug.Log($"[ItemSetup] 씬 배치: GameManager, UI → {MapSetup.ScenePath}");
+        Debug.Log($"[ItemSetup] 씬 배치: 코인 프리팹, GameManager → {MapSetup.ScenePath}");
     }
 
     static void Assign(Object target, string field, Object value)
