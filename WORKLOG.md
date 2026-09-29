@@ -582,3 +582,29 @@ PlayMode **35/35 통과**. 새 `RestartTests` 4개. R 키는 가상 키보드 �
 
 ### 로그 파일
 - `logs/07_scene_build.log`, `logs/07_editmode.log`, `logs/07_playmode.log`, 결과 `logs/07_*_results.xml`
+
+---
+
+## 8단계. 마무리 (Windows 빌드) — 🔶 진행 중 (2026-09-29)
+
+### 결과 요약
+| 항목 | 결과 |
+|---|---|
+| 실행 파일 | `VoxelFox/Build/VoxelFox.exe` (폴더 전체 102.7MB, 첫 빌드 99초, 경고 0 · 에러 0). `VoxelFox/Build/`는 `.gitignore`에 있어 저장소에 올리지 않는다 |
+| 빌드 방법 | `bash tools/build_windows.sh` → `Editor/BuildWindows.cs` (메뉴 VoxelFox > Build Windows), 64비트 Windows, Main 씬 하나 |
+| 화면 | 창 모드 1600×900으로 시작, 창 크기 조절 가능, Alt+Enter로 전체 화면 전환. 원래 설정은 "전체 화면 창"이었는데 확인하기 편하도록 바꿨다 |
+| 아이콘 | `Assets/Art/Icon/AppIcon.png` (1024×1024, 둥근 사각형 바깥 투명). 모든 플랫폼 공통 기본 아이콘으로 지정. 빌드된 `.exe`에서 아이콘을 뽑아 32×32로 들어간 것을 확인했다 |
+
+### 아이콘 (사용자 요청: ChatGPT OAuth로 그리기)
+- Codex CLI(`codex exec`, ChatGPT 계정 로그인)의 이미지 생성 도구로 그렸다. 게임 여우 근접 렌더(`preview/map/map_start_close.png`)를 참고 이미지로 붙였다.
+- 요청 조건: 흰 여우 얼굴 하나를 크게, 게임 디자인 그대로(복셀 블록, 분홍 귀 안쪽, 연회색 귀 끝, 크림색 주둥이·볼, 검은 눈과 코), 하늘색 둥근 사각형 배경 + 아래 잔디 한 줄, 글자 없음, 16×16으로 줄여도 알아볼 것.
+- 확인: 256·48·32px로 줄여도 여우 얼굴로 보인다. 16px에서는 귀와 눈 정도만 구분된다.
+- 참고: Codex CLI는 `npm install -g @openai/codex`(0.158.0)로 설치했다. Claude가 `codex exec`를 실행할 수 있게, 사용자가 Claude Code 권한 규칙 `Bash(codex exec:*)`를 직접 추가했다.
+
+### 실행 확인
+- `VoxelFox.exe -logFile logs/08_player.log`로 실행: 엔진 초기화(Direct3D 12), 씬 로드까지 로그에 에러·예외가 없다.
+- 한글 글꼴 경고(`[GameUI] 한글 글꼴… 못 찾아`)가 없다 → 빌드된 게임에서도 맑은 고딕으로 한글 UI가 만들어졌다.
+- 게임 흐름(이동, 점프, 코인, GAME OVER / CLEAR, 재시작)은 에디터 PlayMode 테스트 35개로 확인했다(7단계). **실행 파일로 처음부터 끝까지 직접 플레이하는 확인은 사용자에게 남아 있다.**
+
+### 로그 파일
+- `logs/08_build_windows.log`: 빌드, `logs/08_player.log`: 실행 파일 로그

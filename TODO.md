@@ -4,7 +4,7 @@
 > 체크 후 `python tools/make_todo_html.py` 실행 → 진행률 갱신 + [todo.html](todo.html) 재생성.
 > 작업별 상세 결과: [WORKLOG.md](WORKLOG.md)
 
-**진행률: 77 / 78**
+**진행률: 80 / 81**
 
 ---
 
@@ -112,7 +112,10 @@
 - [x] 재시작 후 여우, 아이템, UI가 모두 초기 상태로 돌아오는지 확인 ✅ 완료 기준
 
 ## 8. 마무리
-- [ ] Windows 빌드 (`Build/VoxelFox.exe`) 후 처음부터 끝까지 플레이 테스트
+- [x] Windows 빌드 `VoxelFox/Build/VoxelFox.exe` (창 모드 1600×900, `bash tools/build_windows.sh`)
+- [x] 실행 파일 아이콘: Codex(ChatGPT 이미지 생성)로 흰 여우 얼굴 아이콘 → `Art/Icon/AppIcon.png`
+- [x] 실행 확인: 로그에 에러 없음, 한글 글꼴 정상
+- [ ] 실행 파일로 처음부터 끝까지 플레이 테스트 (사용자) ✅ 완료 기준
 
 ---
 
@@ -134,3 +137,4 @@
 | 2026-09-29 | 5. 아이템 | 6/6 완료 · 복셀 코인 4개 · 반짝이 · 한글 카운터(맑은 고딕) · EditMode 23/23 · PlayMode 26/26 · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 6. 게임 종료 / 성공 | 7/7 완료 · GAME OVER / CLEAR! 패널 · 조작·시간 정지 · EditMode 25/25 · PlayMode 31/31 · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 7. 재시작 | 3/3 완료 · [다시 하기] 버튼 · R 키(게임패드 Start) · 씬 다시 불러오기 · EditMode 27/27 · PlayMode 35/35 · 상세: [WORKLOG.md](WORKLOG.md) |
+| 2026-09-29 | 8. 마무리 (진행 중) | Windows 빌드 102.7MB · 경고·에러 0 · 아이콘(Codex) · 실행 로그 깨끗 · 사용자 플레이 테스트 남음 · 상세: [WORKLOG.md](WORKLOG.md) |
