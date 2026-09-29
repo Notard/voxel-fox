@@ -138,8 +138,10 @@ public class MovementPreviewRecorder
         yield return null;
         Save(still, "result_gameover.png");
 
-        // CLEAR 결과 화면: 씬을 다시 불러 코인 4개를 차례로 먹는다 (옆 타일로 옮긴 뒤 코인 쪽으로 걷기).
-        yield return SceneManager.LoadSceneAsync("Main");
+        // CLEAR 결과 화면: GAME OVER에서 [다시 하기](GameManager.Restart)로 처음부터 시작해
+        // 코인 4개를 차례로 먹는다 (옆 타일로 옮긴 뒤 코인 쪽으로 걷기).
+        game.Restart();
+        for (int i = 0; i < 5; i++) yield return null;
         map = Object.FindAnyObjectByType<MapBuilder>();
         rig = Object.FindAnyObjectByType<CameraRig>();
         game = Object.FindAnyObjectByType<GameManager>();

@@ -69,7 +69,7 @@ th{color:var(--muted);font-weight:600}
 <body>
 <div class="wrap">
   <h1>🟩 복셀 여우 게임 미리보기</h1>
-  <p class="muted">3~6단계 (맵 · 이동 · 애니메이션 · 아이템 · 결과) · Unity Play 모드에서 캡처 (<code>MovementPreviewRecorder</code>) · <a href="todo.html">할 일</a> · <a href="worklog.html">작업 기록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a></p>
+  <p class="muted">3~7단계 (맵 · 이동 · 애니메이션 · 아이템 · 결과 · 재시작) · Unity Play 모드에서 캡처 (<code>MovementPreviewRecorder</code>) · <a href="todo.html">할 일</a> · <a href="worklog.html">작업 기록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a></p>
 
   <div class="player">
     <div>
@@ -108,8 +108,8 @@ th{color:var(--muted);font-weight:600}
     <figure><img src="preview/map/map_top.png" alt="위에서 본 맵"><figcaption>위에서 본 레이아웃</figcaption></figure>
     <figure><img src="preview/map/map_start_close.png" alt="시작 지점 근접"><figcaption>시작 지점 (여우 크기 비교)</figcaption></figure>
     <figure><img src="preview/map/coin_close.png" alt="코인 근접"><figcaption>복셀 코인 (지름 0.6m, 돌면서 둥실)</figcaption></figure>
-    <figure><img src="preview/map/result_gameover.png" alt="GAME OVER 화면"><figcaption>GAME OVER (떨어져서 y &lt; -5)</figcaption></figure>
-    <figure><img src="preview/map/result_clear.png" alt="CLEAR 화면"><figcaption>CLEAR! (코인 4개, 걸린 시간)</figcaption></figure>
+    <figure><img src="preview/map/result_gameover.png" alt="GAME OVER 화면"><figcaption>GAME OVER (떨어져서 y &lt; -5) · [다시 하기] 버튼</figcaption></figure>
+    <figure><img src="preview/map/result_clear.png" alt="CLEAR 화면"><figcaption>CLEAR! (GAME OVER에서 다시 하기 → 코인 4개, 걸린 시간)</figcaption></figure>
   </div>
 
   <h2>맵 · 조작 정보</h2>
@@ -136,7 +136,7 @@ th{color:var(--muted);font-weight:600}
         <tr><td>결과</td><td>y &lt; -5 → GAME OVER · 코인 4/4 → CLEAR!(걸린 시간) · 결과가 나오면 조작·시간 정지</td></tr>
         <tr><td>충돌</td><td>CharacterController 높이 0.8m · 반지름 0.3m</td></tr>
         <tr><td>카메라</td><td>여우를 따라가는 쿼터뷰 · 45° · 방향 30° · 거리 11m · 화각 40°</td></tr>
-        <tr><td>조작</td><td>WASD / 방향키 / 게임패드 · Space 점프</td></tr>
+        <tr><td>조작</td><td>WASD / 방향키 / 게임패드 · Space 점프 · R 재시작 (게임패드 Start)</td></tr>
       </table>
     </div>
   </div>

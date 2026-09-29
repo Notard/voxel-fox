@@ -541,3 +541,44 @@ PlayMode **31/31 통과**. 새 `GameFlowTests` 5개:
 
 ### 로그 파일
 - `logs/06_scene_build.log`, `logs/06_editmode.log`, `logs/06_playmode.log`, 결과 `logs/06_*_results.xml`
+
+---
+
+## 7단계. 재시작 — ✅ 완료 (2026-09-29)
+
+미리보기: **[map_preview.html](map_preview.html)** (GAME OVER 패널의 [다시 하기] 버튼, GAME OVER → 다시 하기 → CLEAR!)
+
+### 결과 요약
+| 항목 | 결과 |
+|---|---|
+| 재시작 방식 | `GameManager.Restart()`: 계획대로 현재 씬을 다시 불러 모든 것을 처음 상태로. 같은 프레임에 여러 번 불려도 한 번만 한다 |
+| R 키 | 결과가 나오기 전 플레이 중에도 언제든 누를 수 있다. 게임패드 Start도 같다. `InputSystem_Actions`에 재시작 동작이 없어서 `GameManager`가 직접 만든다 |
+| [다시 하기] 버튼 | GAME OVER / CLEAR! 상자 아래쪽 금색 버튼 "다시 하기  (R)". `UISetup`이 버튼 → `GameManager.Restart`를 씬에 저장되는 영구 연결로 잇는다. 결과가 나오면 버튼이 선택되어 Enter(게임패드 A)로도 누를 수 있다 |
+| EventSystem | 버튼을 누르려면 필요하다. 이 프로젝트는 Input System 패키지만 켜져 있으므로 `InputSystemUIInputModule`을 쓴다(기본 UI 입력 동작 연결) |
+| 결과 상자 | 버튼 자리를 위해 높이 340 → 440, 화면 가운데에서 230px 위 |
+
+### 설계 메모
+- **정적 이벤트 정리:** 코인 획득은 정적 이벤트(`Collectible.Collected`)로 알린다. 씬을 다시 불러도 옛 GameManager가 이벤트에 남아 있으면 코인을 두 번 센다. 그래서 `OnDisable`에서 반드시 떼고, 두 번 재시작한 뒤에도 한 번만 세는지 테스트로 확인했다.
+- **한글 글꼴:** 실행 중에 만든 맑은 고딕 글꼴은 정적 변수에 두고 재시작 뒤에도 다시 쓴다. 사라졌으면 Unity의 null 검사로 알아채 다시 만든다.
+
+### 검증 (완료 기준)
+EditMode **27/27 통과**. `MainScene_RestartButtonCallsGameManagerRestart` 2개 추가: 두 결과 패널의 버튼이 `GameManager.Restart`에 연결되어 있고, `InputSystemUIInputModule`이 붙은 EventSystem이 있다.
+
+PlayMode **35/35 통과**. 새 `RestartTests` 4개. R 키는 가상 키보드 장치를 붙여 실제 키 입력으로 눌렀다.
+- 플레이 중(코인 1개 먹은 상태)에 R → 옛 GameManager가 사라지고 처음 상태
+- GAME OVER 뒤 [다시 하기] 버튼(글자 "다시 하기  (R)") → 처음 상태
+- CLEAR 뒤 R → 처음 상태
+- 두 번 재시작한 뒤 코인 하나를 먹으면 `아이템 1 / 4` (두 번 세지 않음)
+
+"처음 상태"는 Playing, 아이템 0 / 4(글자 포함), 걸린 시간 0.5초 미만, 결과 패널 둘 다 꺼짐, 여우가 시작 칸 위, 조작 가능, 코인 4개가 모두 있는 것이다.
+
+미리보기 녹화도 GAME OVER 뒤에 `Restart()`로 다시 시작해 코인 4개를 먹고 CLEAR!까지 간다. 결과 파일: `logs/07_editmode_results.xml`, `logs/07_playmode_results.xml`
+
+### 발생한 문제와 해결
+| 문제 | 원인 | 해결 |
+|---|---|---|
+| R 키 테스트 2개 실패 (버튼 테스트는 통과) | Input System은 기본적으로 Game 창에 포커스가 있을 때만 키보드를 받는데, 배치 모드 테스트에는 포커스가 없다 | 테스트 동안만 입력 설정을 "포커스와 관계없이 받기"로 바꾸고 끝나면 원래 값으로 되돌림. 프로젝트 설정 파일은 바뀌지 않는다 |
+| 위 설정을 되돌릴 때 테스트 정리 단계 에러 | 설정 객체를 통째로 바꿨다가, 되돌릴 원래 객체가 씬 전환 중 사라짐 | 객체를 바꾸지 않고 두 값만 바꿨다가 되돌림 |
+
+### 로그 파일
+- `logs/07_scene_build.log`, `logs/07_editmode.log`, `logs/07_playmode.log`, 결과 `logs/07_*_results.xml`

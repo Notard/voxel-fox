@@ -67,6 +67,26 @@ public class ItemAssetTests
         Assert.AreEqual(new Vector2(0, 1), panel.anchorMax);
     }
 
+    // 7단계: 결과 패널마다 [다시 하기] 버튼이 GameManager.Restart에 연결되어 있고, 버튼 입력용 EventSystem이 있다.
+    [TestCase("gameOverPanel")]
+    [TestCase("clearPanel")]
+    public void MainScene_RestartButtonCallsGameManagerRestart(string panelField)
+    {
+        EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+        var ui = new SerializedObject(Object.FindAnyObjectByType<GameUI>());
+        var panel = (GameObject)ui.FindProperty(panelField).objectReferenceValue;
+        var button = panel.transform.Find("Box/RestartButton").GetComponent<UnityEngine.UI.Button>();
+        Assert.IsNotNull(button, "다시 하기 버튼");
+        Assert.AreEqual(1, button.onClick.GetPersistentEventCount());
+        Assert.IsInstanceOf<GameManager>(button.onClick.GetPersistentTarget(0));
+        Assert.AreEqual(nameof(GameManager.Restart), button.onClick.GetPersistentMethodName(0));
+
+        var eventSystem = Object.FindAnyObjectByType<UnityEngine.EventSystems.EventSystem>();
+        Assert.IsNotNull(eventSystem, "EventSystem 없음 → 버튼을 누를 수 없음");
+        Assert.IsNotNull(eventSystem.GetComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>(),
+            "Input System 전용 입력 모듈");
+    }
+
     // 6단계: 결과 패널 2종이 연결되어 있고 처음에는 꺼져 있다.
     [TestCase("gameOverPanel", "gameOverTitle", "gameOverDetail")]
     [TestCase("clearPanel", "clearTitle", "clearDetail")]

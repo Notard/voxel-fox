@@ -1,10 +1,14 @@
 using TMPro;
 using UnityEditor;
+using UnityEditor.Events;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
-// 화면 UI를 Main 씬에 만든다: 좌상단 아이템 카운터(5단계), GAME OVER / CLEAR! 결과 패널(6단계).
+// 화면 UI를 Main 씬에 만든다: 좌상단 아이템 카운터(5단계), GAME OVER / CLEAR! 결과 패널(6단계),
+// 결과 패널의 [다시 하기] 버튼과 버튼 입력용 EventSystem(7단계).
 // 매번 UI를 통째로 새로 만든다 (설정이 바뀌어도 씬에 옛 값이 남지 않게). ItemSetup 다음에 실행한다.
 // 글자 내용은 비워 두고 실행할 때 GameUI가 한글 글꼴을 입힌 뒤 채운다 (기본 글꼴에는 한글이 없음).
 // 배치 실행: Unity.exe -batchmode -quit -projectPath . -executeMethod UISetup.Run
@@ -18,8 +22,14 @@ public static class UISetup
         var scene = EditorSceneManager.OpenScene(MapSetup.ScenePath, OpenSceneMode.Single);
         var game = Object.FindAnyObjectByType<GameManager>();
 
-        var old = GameObject.Find("UI");
-        if (old != null) Object.DestroyImmediate(old);
+        foreach (var name in new[] { "UI", "EventSystem" })
+        {
+            var old = GameObject.Find(name);
+            if (old != null) Object.DestroyImmediate(old);
+        }
+        // 버튼 클릭용. Input System 패키지만 켜져 있으므로 InputSystemUIInputModule을 쓴다.
+        var eventSystem = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
+        eventSystem.GetComponent<InputSystemUIInputModule>().AssignDefaultActions();
         var canvasGo = new GameObject("UI", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
         canvasGo.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
         var scaler = canvasGo.GetComponent<CanvasScaler>();
@@ -35,9 +45,9 @@ public static class UISetup
         Stretch(itemText.rectTransform, new Vector2(24, 0), new Vector2(-16, 0));
 
         // 결과 패널 2종: 화면 전체를 살짝 어둡게 + 가운데 상자 (제목, 설명)
-        var gameOver = ResultPanel("GameOverPanel", root,
+        var gameOver = ResultPanel("GameOverPanel", root, game,
             box: new Color(0.24f, 0.07f, 0.09f, 0.9f), title: new Color(1f, 0.55f, 0.55f), out var gameOverTitle, out var gameOverDetail);
-        var clear = ResultPanel("ClearPanel", root,
+        var clear = ResultPanel("ClearPanel", root, game,
             box: new Color(0.18f, 0.13f, 0.03f, 0.9f), title: new Color(1f, 0.84f, 0.3f), out var clearTitle, out var clearDetail);
 
         var ui = canvasGo.AddComponent<GameUI>();
@@ -57,7 +67,7 @@ public static class UISetup
         Debug.Log($"[UISetup] 씬 배치: 아이템 카운터, 결과 패널 2종 → {MapSetup.ScenePath}");
     }
 
-    static GameObject ResultPanel(string name, Transform root, Color box, Color title,
+    static GameObject ResultPanel(string name, Transform root, GameManager game, Color box, Color title,
         out TMP_Text titleText, out TMP_Text detailText)
     {
         var dim = Box(name, root, new Color(0f, 0f, 0f, 0.35f));
@@ -65,14 +75,32 @@ public static class UISetup
 
         // 카메라가 여우를 화면 가운데에 두므로 상자는 위쪽에 둔다 → 결과가 나온 순간의 여우가 가려지지 않는다.
         var panel = Box("Box", dim.transform, box);
-        Anchor(panel, new Vector2(0.5f, 0.5f), new Vector2(0, 250), new Vector2(760, 340));
+        Anchor(panel, new Vector2(0.5f, 0.5f), new Vector2(0, 230), new Vector2(760, 440));
 
         titleText = Text("Title", panel.transform, 110, title, TextAlignmentOptions.Center);
         titleText.fontStyle = FontStyles.Bold;
-        Place(titleText.rectTransform, new Vector2(0, 50), new Vector2(720, 150));
+        Place(titleText.rectTransform, new Vector2(0, 110), new Vector2(720, 150));
 
         detailText = Text("Detail", panel.transform, 40, Gold, TextAlignmentOptions.Center);
-        Place(detailText.rectTransform, new Vector2(0, -80), new Vector2(720, 80));
+        Place(detailText.rectTransform, new Vector2(0, -10), new Vector2(720, 80));
+
+        // [다시 하기] 버튼 → GameManager.Restart (씬에 저장되는 영구 연결)
+        var buttonGo = new GameObject("RestartButton", typeof(RectTransform), typeof(Image), typeof(Button));
+        buttonGo.transform.SetParent(panel.transform, false);
+        Place((RectTransform)buttonGo.transform, new Vector2(0, -135), new Vector2(360, 96));
+        var image = buttonGo.GetComponent<Image>();
+        image.color = Color.white; // 버튼 색은 Button의 상태별 색이 정한다
+        var button = buttonGo.GetComponent<Button>();
+        var colors = button.colors;
+        colors.normalColor = new Color(0.98f, 0.8f, 0.3f);
+        colors.highlightedColor = new Color(1f, 0.9f, 0.5f);
+        colors.pressedColor = new Color(0.85f, 0.65f, 0.2f);
+        colors.selectedColor = colors.normalColor;
+        button.colors = colors;
+        UnityEventTools.AddPersistentListener(button.onClick, game.Restart);
+        var label = Text("Label", buttonGo.transform, 42, new Color(0.25f, 0.16f, 0.02f), TextAlignmentOptions.Center);
+        label.fontStyle = FontStyles.Bold;
+        Stretch(label.rectTransform, Vector2.zero, Vector2.zero);
 
         dim.SetActive(false); // 결과가 나올 때 GameUI가 켠다
         return dim;

@@ -174,6 +174,8 @@ z=0  [   ][   ][   ][ C ]
 
 **완료 기준:** 재시작 시 여우 위치, 아이템, UI가 모두 처음 상태로 돌아온다.
 
+- 7단계에서 정함: 게임패드 Start도 재시작. 결과가 나오면 [다시 하기] 버튼이 선택되어 Enter(게임패드 A)로도 누를 수 있다. 버튼 입력은 Input System 전용 EventSystem(InputSystemUIInputModule)
+
 ---
 
 ## 스크립트 목록

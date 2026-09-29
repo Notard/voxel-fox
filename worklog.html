@@ -70,7 +70,7 @@ article hr{display:none}
 </head>
 <body>
 <div class="wrap">
-  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · 마지막 갱신 2026-09-29 15:43</p>
+  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · 마지막 갱신 2026-09-29 15:52</p>
   <article><h1>작업 기록 — 복셀 여우 타일 게임</h1>
 <blockquote>
 <p>단계별로 실제로 한 일, 결과, 검증 방법, 발생한 문제를 남긴다. 체크리스트: <a href="todo.html">TODO.md</a></p>
@@ -1069,6 +1069,80 @@ article hr{display:none}
 <h3>로그 파일</h3>
 <ul>
 <li><code>logs/06_scene_build.log</code>, <code>logs/06_editmode.log</code>, <code>logs/06_playmode.log</code>, 결과 <code>logs/06_*_results.xml</code></li>
+</ul>
+<hr />
+<h2>7단계. 재시작 — ✅ 완료 (2026-09-29)</h2>
+<p>미리보기: <strong><a href="map_preview.html">map_preview.html</a></strong> (GAME OVER 패널의 [다시 하기] 버튼, GAME OVER → 다시 하기 → CLEAR!)</p>
+<h3>결과 요약</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>재시작 방식</td>
+<td><code>GameManager.Restart()</code>: 계획대로 현재 씬을 다시 불러 모든 것을 처음 상태로. 같은 프레임에 여러 번 불려도 한 번만 한다</td>
+</tr>
+<tr>
+<td>R 키</td>
+<td>결과가 나오기 전 플레이 중에도 언제든 누를 수 있다. 게임패드 Start도 같다. <code>InputSystem_Actions</code>에 재시작 동작이 없어서 <code>GameManager</code>가 직접 만든다</td>
+</tr>
+<tr>
+<td>[다시 하기] 버튼</td>
+<td>GAME OVER / CLEAR! 상자 아래쪽 금색 버튼 "다시 하기  (R)". <code>UISetup</code>이 버튼 → <code>GameManager.Restart</code>를 씬에 저장되는 영구 연결로 잇는다. 결과가 나오면 버튼이 선택되어 Enter(게임패드 A)로도 누를 수 있다</td>
+</tr>
+<tr>
+<td>EventSystem</td>
+<td>버튼을 누르려면 필요하다. 이 프로젝트는 Input System 패키지만 켜져 있으므로 <code>InputSystemUIInputModule</code>을 쓴다(기본 UI 입력 동작 연결)</td>
+</tr>
+<tr>
+<td>결과 상자</td>
+<td>버튼 자리를 위해 높이 340 → 440, 화면 가운데에서 230px 위</td>
+</tr>
+</tbody>
+</table>
+<h3>설계 메모</h3>
+<ul>
+<li><strong>정적 이벤트 정리:</strong> 코인 획득은 정적 이벤트(<code>Collectible.Collected</code>)로 알린다. 씬을 다시 불러도 옛 GameManager가 이벤트에 남아 있으면 코인을 두 번 센다. 그래서 <code>OnDisable</code>에서 반드시 떼고, 두 번 재시작한 뒤에도 한 번만 세는지 테스트로 확인했다.</li>
+<li><strong>한글 글꼴:</strong> 실행 중에 만든 맑은 고딕 글꼴은 정적 변수에 두고 재시작 뒤에도 다시 쓴다. 사라졌으면 Unity의 null 검사로 알아채 다시 만든다.</li>
+</ul>
+<h3>검증 (완료 기준)</h3>
+<p>EditMode <strong>27/27 통과</strong>. <code>MainScene_RestartButtonCallsGameManagerRestart</code> 2개 추가: 두 결과 패널의 버튼이 <code>GameManager.Restart</code>에 연결되어 있고, <code>InputSystemUIInputModule</code>이 붙은 EventSystem이 있다.</p>
+<p>PlayMode <strong>35/35 통과</strong>. 새 <code>RestartTests</code> 4개. R 키는 가상 키보드 장치를 붙여 실제 키 입력으로 눌렀다.
+- 플레이 중(코인 1개 먹은 상태)에 R → 옛 GameManager가 사라지고 처음 상태
+- GAME OVER 뒤 [다시 하기] 버튼(글자 "다시 하기  (R)") → 처음 상태
+- CLEAR 뒤 R → 처음 상태
+- 두 번 재시작한 뒤 코인 하나를 먹으면 <code>아이템 1 / 4</code> (두 번 세지 않음)</p>
+<p>"처음 상태"는 Playing, 아이템 0 / 4(글자 포함), 걸린 시간 0.5초 미만, 결과 패널 둘 다 꺼짐, 여우가 시작 칸 위, 조작 가능, 코인 4개가 모두 있는 것이다.</p>
+<p>미리보기 녹화도 GAME OVER 뒤에 <code>Restart()</code>로 다시 시작해 코인 4개를 먹고 CLEAR!까지 간다. 결과 파일: <code>logs/07_editmode_results.xml</code>, <code>logs/07_playmode_results.xml</code></p>
+<h3>발생한 문제와 해결</h3>
+<table>
+<thead>
+<tr>
+<th>문제</th>
+<th>원인</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R 키 테스트 2개 실패 (버튼 테스트는 통과)</td>
+<td>Input System은 기본적으로 Game 창에 포커스가 있을 때만 키보드를 받는데, 배치 모드 테스트에는 포커스가 없다</td>
+<td>테스트 동안만 입력 설정을 "포커스와 관계없이 받기"로 바꾸고 끝나면 원래 값으로 되돌림. 프로젝트 설정 파일은 바뀌지 않는다</td>
+</tr>
+<tr>
+<td>위 설정을 되돌릴 때 테스트 정리 단계 에러</td>
+<td>설정 객체를 통째로 바꿨다가, 되돌릴 원래 객체가 씬 전환 중 사라짐</td>
+<td>객체를 바꾸지 않고 두 값만 바꿨다가 되돌림</td>
+</tr>
+</tbody>
+</table>
+<h3>로그 파일</h3>
+<ul>
+<li><code>logs/07_scene_build.log</code>, <code>logs/07_editmode.log</code>, <code>logs/07_playmode.log</code>, 결과 <code>logs/07_*_results.xml</code></li>
 </ul></article>
 </div>
 </body>
