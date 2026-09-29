@@ -4,7 +4,7 @@
 > 체크 후 `python tools/make_todo_html.py` 실행 → 진행률 갱신 + [todo.html](todo.html) 재생성.
 > 작업별 상세 결과: [WORKLOG.md](WORKLOG.md)
 
-**진행률: 29 / 52**
+**진행률: 35 / 53**
 
 ---
 
@@ -46,11 +46,12 @@
 - [x] 재생성 후 EditMode 9/9 · PlayMode 1/1 통과 ✅ 완료 기준
 
 ## 3. 4x4 타일맵 + 이동
-- [ ] 복셀 잔디 타일 프리팹 (2m × 0.5m × 2m)
-- [ ] `MapBuilder.cs`: 문자열 레이아웃으로 타일, 구멍 2개, 시작점 생성
-- [ ] `PlayerController.cs`: WASD/방향키 이동, 회전, 중력, Space 점프
-- [ ] `CameraRig.cs`: 고정 쿼터뷰 카메라, 카메라 기준 입력 방향 변환
-- [ ] 걷기, 점프, 구멍 낙하 동작 확인 ✅ 완료 기준
+- [x] 복셀 잔디 타일 프리팹 (2m × 0.5m × 2m)
+- [x] `MapBuilder.cs`: 문자열 레이아웃으로 타일, 구멍 2개, 시작점 생성
+- [x] `PlayerController.cs`: WASD/방향키 이동, 회전, 중력, Space 점프
+- [x] `CameraRig.cs`: 고정 쿼터뷰 카메라, 카메라 기준 입력 방향 변환
+- [x] 미리보기 만들기: Play 모드 캡처(정지 3장 + 이동 녹화) → [map_preview.html](map_preview.html)
+- [x] 걷기, 점프, 구멍 낙하 동작 확인 ✅ 완료 기준
 
 ## 4. 애니메이션 연결
 - [ ] PlayerController에서 Animator 파라미터(Speed, IsGrounded, Jump) 갱신
@@ -90,3 +91,4 @@
 | 2026-09-29 | Git 연결 | GitHub `Notard/voxel-fox` (Public) 생성 · push · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 2. 복셀 여우 캐릭터 | 11/11 완료 · EditMode 9/9 · PlayMode 1/1 통과 · 미리보기 [fox_preview.html](fox_preview.html) · 상세: [WORKLOG.md](WORKLOG.md) |
 | 2026-09-29 | 2-1. 흰 여우 · 0.9배 | 더 예쁜 여우로 만들기 위해 붉은 여우 → 흰 여우, 크기 0.9배 · 테스트 통과 · 상세: [WORKLOG.md](WORKLOG.md) |
+| 2026-09-29 | 3. 4x4 타일맵 + 이동 | 6/6 완료 · EditMode 18/18 · PlayMode 11/11 통과 · 미리보기 [map_preview.html](map_preview.html) · 상세: [WORKLOG.md](WORKLOG.md) |

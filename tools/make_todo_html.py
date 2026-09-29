@@ -182,7 +182,7 @@ th{{color:var(--muted)}}
 <body>
 <div class="wrap">
   <h1>🦊 복셀 여우 · 할 일 목록</h1>
-  <p class="muted">원본: TODO.md · 상세 계획: <a href="plan.html">plan.html</a> · 여우 미리보기: <a href="fox_preview.html">fox_preview.html</a> · 작업 기록: <a href="worklog.html">worklog.html</a> · 마지막 갱신 {now}</p>
+  <p class="muted">원본: TODO.md · 상세 계획: <a href="plan.html">plan.html</a> · 여우 미리보기: <a href="fox_preview.html">fox_preview.html</a> · 맵 미리보기: <a href="map_preview.html">map_preview.html</a> · 작업 기록: <a href="worklog.html">worklog.html</a> · 마지막 갱신 {now}</p>
 
   <div class="hero">
     <div class="big">{pct}% <small>{done} / {total} 완료</small></div>
@@ -232,7 +232,7 @@ def render_worklog():
 </head>
 <body>
 <div class="wrap">
-  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · 마지막 갱신 {now}</p>
+  <p class="muted"><a href="todo.html">← 할 일 목록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a> · <a href="map_preview.html">맵 미리보기</a> · 마지막 갱신 {now}</p>
   <article>{fix_links(body)}</article>
 </div>
 </body>

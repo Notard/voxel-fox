@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>타일맵 미리보기</title>
+<style>
+:root{
+  --bg:#f4f8f1; --surface:#fff; --ink:#23291f; --muted:#6b7563; --line:#dde6d6;
+  --accent:#4f9a2f; --accent-soft:#e3f1da; --stage:#9ecbee;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161a14; --surface:#1f241c; --ink:#e8efe3; --muted:#a3ad9b; --line:#343c2f;
+    --accent:#7cc95a; --accent-soft:#2c3b24; --stage:#3d5566;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161a14; --surface:#1f241c; --ink:#e8efe3; --muted:#a3ad9b; --line:#343c2f;
+  --accent:#7cc95a; --accent-soft:#2c3b24; --stage:#3d5566;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;
+  font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:36px 16px 80px}
+h1{font-size:1.9rem;margin:0 0 4px;letter-spacing:-.02em}
+h2{font-size:1.15rem;margin:40px 0 14px}
+.muted{color:var(--muted);font-size:.9rem}
+a{color:var(--accent)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+code{background:var(--accent-soft);padding:1px 6px;border-radius:4px;font-size:.86em}
+
+.player{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:18px;margin-top:20px}
+@media (max-width:760px){.player{grid-template-columns:1fr}}
+.stage{background:var(--stage);border-radius:12px;aspect-ratio:16/9;overflow:hidden}
+.stage img{display:block;width:100%;height:100%;object-fit:contain}
+.ctrl{display:flex;gap:8px;align-items:center;margin:0 0 12px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 12px;font:inherit;cursor:pointer;min-width:44px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.speed{display:flex;gap:6px}
+.speed .btn{flex:1;padding:5px 0;font-size:.85rem}
+.speed .btn[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);font-weight:700}
+.phase{font-size:1.05rem;font-weight:700;margin:14px 0 4px;color:var(--accent)}
+.meta{font-size:.88rem;color:var(--muted)}
+.meta b{color:var(--ink);font-variant-numeric:tabular-nums}
+.steps{margin:14px 0 0;padding:12px 0 0 18px;border-top:1px solid var(--line);font-size:.88rem}
+.steps li{margin:2px 0}
+
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:760px){.gallery{grid-template-columns:1fr}}
+.gallery figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.gallery img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--stage)}
+.gallery figcaption{padding:8px 12px;font-size:.88rem;font-weight:600}
+
+.specs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:760px){.specs{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+td,th{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;max-width:260px;margin:10px 0}
+.grid span{aspect-ratio:1;border-radius:4px;display:grid;place-items:center;font-weight:700;font-size:.85rem;background:#6fbf47;color:#fff}
+.grid .h{background:transparent;border:2px dashed var(--muted);color:var(--muted)}
+.grid .s{background:#3b8ed0}
+.grid .c{background:#e0b020}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🟩 4x4 타일맵 + 이동 미리보기</h1>
+  <p class="muted">3단계 · Unity Play 모드에서 캡처 (<code>MovementPreviewRecorder</code>) · <a href="todo.html">할 일</a> · <a href="worklog.html">작업 기록</a> · <a href="plan.html">계획서</a> · <a href="fox_preview.html">여우 미리보기</a></p>
+
+  <div class="player">
+    <div class="stage"><img id="frame" alt="이동 녹화 프레임"></div>
+    <div class="card">
+      <div class="ctrl">
+        <button class="btn" id="play" aria-label="재생/일시정지">❚❚</button>
+        <input type="range" id="scrub" min="0" value="0" aria-label="프레임">
+      </div>
+      <div class="speed" role="group" aria-label="재생 속도">
+        <button class="btn" data-speed="0.5">0.5×</button>
+        <button class="btn" data-speed="1">1×</button>
+      </div>
+      <div class="phase" id="phase"></div>
+      <div class="meta">프레임 <b id="fnum">0</b> / <b id="fmax">0</b> · 15fps</div>
+      <ol class="steps">
+        <li>시작 칸 (0, 3)에서 대기</li>
+        <li>동쪽으로 걷다가 Space 점프 (높이 1.2m)</li>
+        <li>(2, 3)에서 남쪽으로 꺾음</li>
+        <li>구멍 (2, 1)에 빠져 아래로 떨어짐</li>
+      </ol>
+      <p class="muted" style="margin:12px 0 0">걷는 동안에도 여우는 Idle 동작입니다. 이동에 맞춘 Walk/Jump 동작 연결은 4단계에서 합니다.</p>
+    </div>
+  </div>
+
+  <h2>정지 이미지</h2>
+  <div class="gallery">
+    <figure><img src="preview/map/map_quarter.png" alt="쿼터뷰"><figcaption>게임 화면 (쿼터뷰)</figcaption></figure>
+    <figure><img src="preview/map/map_top.png" alt="위에서 본 맵"><figcaption>위에서 본 레이아웃</figcaption></figure>
+    <figure><img src="preview/map/map_start_close.png" alt="시작 지점 근접"><figcaption>시작 지점 (여우 크기 비교)</figcaption></figure>
+  </div>
+
+  <h2>맵 · 조작 정보</h2>
+  <div class="specs">
+    <div class="card">
+      <b>레이아웃</b> <span class="muted">(<code>MapBuilder</code>의 문자열, 첫 줄 = 북쪽)</span>
+      <div class="grid" aria-label="4x4 레이아웃">
+        <span class="s">S</span><span></span><span></span><span class="c">C</span>
+        <span></span><span class="h">H</span><span></span><span></span>
+        <span class="c">C</span><span></span><span class="h">H</span><span class="c">C</span>
+        <span></span><span></span><span></span><span class="c">C</span>
+      </div>
+      <p class="muted" style="margin:0">S 시작 · H 구멍 · C 아이템 자리 (코인은 5단계에서 놓음)</p>
+    </div>
+    <div class="card">
+      <table>
+        <tr><th>항목</th><th>값</th></tr>
+        <tr><td>타일</td><td>2m × 0.5m × 2m · 복셀 16×4×16 (0.125m)</td></tr>
+        <tr><td>이동</td><td>3 m/s · 카메라 기준 방향 · 회전 720°/s</td></tr>
+        <tr><td>점프</td><td>높이 1.2m · 중력 -20 m/s²</td></tr>
+        <tr><td>충돌</td><td>CharacterController 높이 0.8m · 반지름 0.3m</td></tr>
+        <tr><td>카메라</td><td>고정 쿼터뷰 · 내려다보는 각 45° · 방향 30° · 화각 40°</td></tr>
+        <tr><td>조작</td><td>WASD / 방향키 / 게임패드 · Space 점프</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="preview/map/manifest.js"></script>
+<script>
+(function () {
+  var data = window.MAP_PREVIEW, frames = data.frames;
+  var img = document.getElementById("frame"), scrub = document.getElementById("scrub");
+  var playBtn = document.getElementById("play"), phase = document.getElementById("phase");
+  var fnum = document.getElementById("fnum");
+  var i = 0, playing = true, speed = 1, timer = null, hold = 0;
+
+  frames.forEach(function (f) { new Image().src = "preview/map/" + f.file; });
+  scrub.max = frames.length - 1;
+  document.getElementById("fmax").textContent = frames.length - 1;
+
+  function show() {
+    img.src = "preview/map/" + frames[i].file;
+    phase.textContent = frames[i].phase;
+    scrub.value = i;
+    fnum.textContent = i;
+  }
+  function tick() {
+    if (i === frames.length - 1 && ++hold < 12) return; // 끝에서 잠깐 멈췄다가 처음부터
+    hold = 0;
+    i = (i + 1) % frames.length;
+    show();
+  }
+  function restart() {
+    clearInterval(timer);
+    if (playing) timer = setInterval(tick, 1000 / (data.fps * speed));
+  }
+  function setPlaying(p) { playing = p; playBtn.textContent = p ? "❚❚" : "▶"; restart(); }
+
+  playBtn.addEventListener("click", function () { setPlaying(!playing); });
+  scrub.addEventListener("input", function () { setPlaying(false); i = +scrub.value; show(); });
+  document.querySelectorAll("[data-speed]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      speed = parseFloat(b.dataset.speed);
+      document.querySelectorAll("[data-speed]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
+      restart();
+    });
+  });
+  document.querySelector('[data-speed="1"]').setAttribute("aria-pressed", "true");
+  show(); restart();
+})();
+</script>
+</body>
+</html>

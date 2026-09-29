@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="11" result="Passed" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-29 03:36:48Z" end-time="2026-09-29 03:36:52Z" duration="4.1635793">
+  <test-suite type="TestSuite" id="1019" name="VoxelFox" fullname="VoxelFox" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-09-29 03:36:48Z" end-time="2026-09-29 03:36:52Z" duration="4.163579" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1015" name="PlayModeTests.dll" fullname="C:/sample/VoxelFox/Library/ScriptAssemblies/PlayModeTests.dll" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-09-29 03:36:48Z" end-time="2026-09-29 03:36:52Z" duration="4.153769" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="12700" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1001" name="MainSceneSmokeTest" fullname="MainSceneSmokeTest" classname="MainSceneSmokeTest" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-29 03:36:48Z" end-time="2026-09-29 03:36:49Z" duration="0.344387" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1002" name="MainScene_RunsWithoutErrors" fullname="MainSceneSmokeTest.MainScene_RunsWithoutErrors" methodname="MainScene_RunsWithoutErrors" classname="MainSceneSmokeTest" runstate="Runnable" seed="1843814858" result="Passed" start-time="2026-09-29 03:36:48Z" end-time="2026-09-29 03:36:49Z" duration="0.332007" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1003" name="MovementPreviewRecorder" fullname="MovementPreviewRecorder" classname="MovementPreviewRecorder" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-09-29 03:36:49Z" end-time="2026-09-29 03:36:50Z" duration="1.239933" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1004" name="Record_WalkJumpFall" fullname="MovementPreviewRecorder.Record_WalkJumpFall" methodname="Record_WalkJumpFall" classname="MovementPreviewRecorder" runstate="Runnable" seed="1421135039" result="Passed" start-time="2026-09-29 03:36:49Z" end-time="2026-09-29 03:36:50Z" duration="1.238573" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[[MovementPreviewRecorder] 정지 3장 + 56프레임 → C:\sample\preview\map
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1005" name="PlayerMovementTests" fullname="PlayerMovementTests" classname="PlayerMovementTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-09-29 03:36:50Z" end-time="2026-09-29 03:36:52Z" duration="2.567713" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1014" name="Input_IsCameraRelative" fullname="PlayerMovementTests.Input_IsCameraRelative" methodname="Input_IsCameraRelative" classname="PlayerMovementTests" runstate="Runnable" seed="113824608" result="Passed" start-time="2026-09-29 03:36:50Z" end-time="2026-09-29 03:36:50Z" duration="0.274640" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1011" name="Jump_IgnoredInAir" fullname="PlayerMovementTests.Jump_IgnoredInAir" methodname="Jump_IgnoredInAir" classname="PlayerMovementTests" runstate="Runnable" seed="1012804237" result="Passed" start-time="2026-09-29 03:36:50Z" end-time="2026-09-29 03:36:50Z" duration="0.288419" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1010" name="Jump_ReachesJumpHeightAndLands" fullname="PlayerMovementTests.Jump_ReachesJumpHeightAndLands" methodname="Jump_ReachesJumpHeightAndLands" classname="PlayerMovementTests" runstate="Runnable" seed="1207521898" result="Passed" start-time="2026-09-29 03:36:50Z" end-time="2026-09-29 03:36:51Z" duration="0.295486" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1006" name="Map_BuildsTilesAndHoles" fullname="PlayerMovementTests.Map_BuildsTilesAndHoles" methodname="Map_BuildsTilesAndHoles" classname="PlayerMovementTests" runstate="Runnable" seed="1779022071" result="Passed" start-time="2026-09-29 03:36:51Z" end-time="2026-09-29 03:36:51Z" duration="0.271367" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1007" name="Player_StartsOnStartTile" fullname="PlayerMovementTests.Player_StartsOnStartTile" methodname="Player_StartsOnStartTile" classname="PlayerMovementTests" runstate="Runnable" seed="291811846" result="Passed" start-time="2026-09-29 03:36:51Z" end-time="2026-09-29 03:36:51Z" duration="0.269999" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1009" name="Walk_AcrossRow_StaysOnTiles" fullname="PlayerMovementTests.Walk_AcrossRow_StaysOnTiles" methodname="Walk_AcrossRow_StaysOnTiles" classname="PlayerMovementTests" runstate="Runnable" seed="1741153543" result="Passed" start-time="2026-09-29 03:36:51Z" end-time="2026-09-29 03:36:52Z" duration="0.301673" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1008" name="Walk_MovesAtMoveSpeedAndFacesDirection" fullname="PlayerMovementTests.Walk_MovesAtMoveSpeedAndFacesDirection" methodname="Walk_MovesAtMoveSpeedAndFacesDirection" classname="PlayerMovementTests" runstate="Runnable" seed="965034645" result="Passed" start-time="2026-09-29 03:36:52Z" end-time="2026-09-29 03:36:52Z" duration="0.288552" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1012" name="WalkIntoHole_Falls" fullname="PlayerMovementTests.WalkIntoHole_Falls" methodname="WalkIntoHole_Falls" classname="PlayerMovementTests" runstate="Runnable" seed="2035163156" result="Passed" start-time="2026-09-29 03:36:52Z" end-time="2026-09-29 03:36:52Z" duration="0.285413" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1013" name="WalkOffEdge_Falls" fullname="PlayerMovementTests.WalkOffEdge_Falls" methodname="WalkOffEdge_Falls" classname="PlayerMovementTests" runstate="Runnable" seed="1905775524" result="Passed" start-time="2026-09-29 03:36:52Z" end-time="2026-09-29 03:36:52Z" duration="0.287548" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[Saving results to: C:/Users/elbre/AppData/LocalLow/DefaultCompany/VoxelFox\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
